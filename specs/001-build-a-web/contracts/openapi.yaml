@@ -1,0 +1,673 @@
+openapi: 3.0.0
+info:
+  title: Rentsight Analytics API
+  version: 1.0.0
+  description: API for managing rental income, expenses, and analytics for renters.
+servers:
+  - url: https://your-supabase-project-id.supabase.co/rest/v1
+    description: Supabase REST API endpoint
+paths:
+  /rent_entries:
+    get:
+      summary: Get all rent entries for the authenticated user
+      parameters:
+        - in: query
+          name: select
+          schema:
+            type: string
+            default: '*,tags(id,name)'
+          description: Columns to retrieve, including related tags
+        - in: query
+          name: tag_id
+          schema:
+            type: string
+          description: Filter by tag ID
+      responses:
+        '200':
+          description: A list of rent entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RentEntry'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    post:
+      summary: Create a new rent entry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewRentEntry'
+      responses:
+        '201':
+          description: Rent entry created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RentEntry'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /rent_entries/{id}:
+    get:
+      summary: Get a single rent entry by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID of the rent entry to retrieve
+        - in: query
+          name: select
+          schema:
+            type: string
+            default: '*,tags(id,name)'
+          description: Columns to retrieve, including related tags
+      responses:
+        '200':
+          description: A single rent entry
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RentEntry'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    put:
+      summary: Update a rent entry
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID of the rent entry to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRentEntry'
+      responses:
+        '200':
+          description: Rent entry updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RentEntry'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+    delete:
+      summary: Delete a rent entry
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID of the rent entry to delete
+      responses:
+        '204':
+          description: Rent entry deleted successfully
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+  /expense_entries:
+    get:
+      summary: Get all expense entries for the authenticated user
+      parameters:
+        - in: query
+          name: select
+          schema:
+            type: string
+            default: '*,tags(id,name)'
+          description: Columns to retrieve, including related tags
+        - in: query
+          name: tag_id
+          schema:
+            type: string
+          description: Filter by tag ID
+      responses:
+        '200':
+          description: A list of expense entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExpenseEntry'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    post:
+      summary: Create a new expense entry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewExpenseEntry'
+      responses:
+        '201':
+          description: Expense entry created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExpenseEntry'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /expense_entries/{id}:
+    get:
+      summary: Get a single expense entry by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID of the expense entry to retrieve
+        - in: query
+          name: select
+          schema:
+            type: string
+            default: '*,tags(id,name)'
+          description: Columns to retrieve, including related tags
+      responses:
+        '200':
+          description: A single expense entry
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExpenseEntry'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    put:
+      summary: Update an expense entry
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID of the expense entry to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateExpenseEntry'
+      responses:
+        '200':
+          description: Expense entry updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExpenseEntry'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+    delete:
+      summary: Delete an expense entry
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID of the expense entry to delete
+      responses:
+        '204':
+          description: Expense entry deleted successfully
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+  /tags:
+    get:
+      summary: Get all tags for the authenticated user
+      responses:
+        '200':
+          description: A list of tags
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tag'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    post:
+      summary: Create a new tag
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewTag'
+      responses:
+        '201':
+          description: Tag created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /tags/{id}:
+    get:
+      summary: Get a single tag by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID of the tag to retrieve
+      responses:
+        '200':
+          description: A single tag
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+    put:
+      summary: Update a tag
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID of the tag to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTag'
+      responses:
+        '200':
+          description: Tag updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+    delete:
+      summary: Delete a tag
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: ID of the tag to delete
+      responses:
+        '204':
+          description: Tag deleted successfully
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+  /analytics/summary:
+    get:
+      summary: Get aggregated rent and expense analytics summary
+      responses:
+        '200':
+          description: Aggregated analytics data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticsSummary'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /analytics/export:
+    get:
+      summary: Export analytics data
+      parameters:
+        - in: query
+          name: format
+          required: true
+          schema:
+            type: string
+            enum: [pdf, csv, excel]
+          description: Desired export format
+        - in: query
+          name: tag_ids
+          schema:
+            type: array
+            items:
+              type: string
+              format: uuid
+          description: Optional list of tag IDs to filter data for export
+      responses:
+        '200':
+          description: Exported data file
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+            text/csv:
+              schema:
+                type: string
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+              schema:
+                type: string
+                format: binary
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+components:
+  schemas:
+    RentEntry:
+      type: object
+      required:
+        - id
+        - user_id
+        - amount
+        - booked_days
+        - platform
+        - start_date
+        - end_date
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+        amount:
+          type: number
+          format: float
+          minimum: 0
+        booked_days:
+          type: integer
+          minimum: 0
+        platform:
+          type: string
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+    NewRentEntry:
+      type: object
+      required:
+        - amount
+        - booked_days
+        - platform
+        - start_date
+        - end_date
+      properties:
+        amount:
+          type: number
+          format: float
+          minimum: 0
+        booked_days:
+          type: integer
+          minimum: 0
+        platform:
+          type: string
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        tag_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: Optional list of tag IDs to associate with the rent entry
+    UpdateRentEntry:
+      type: object
+      properties:
+        amount:
+          type: number
+          format: float
+          minimum: 0
+        booked_days:
+          type: integer
+          minimum: 0
+        platform:
+          type: string
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        tag_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: Optional list of tag IDs to update association with the rent entry
+    ExpenseEntry:
+      type: object
+      required:
+        - id
+        - user_id
+        - amount
+        - category
+        - date
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+        amount:
+          type: number
+          format: float
+          minimum: 0
+        category:
+          type: string
+        description:
+          type: string
+        date:
+          type: string
+          format: date
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+    NewExpenseEntry:
+      type: object
+      required:
+        - amount
+        - category
+        - date
+      properties:
+        amount:
+          type: number
+          format: float
+          minimum: 0
+        category:
+          type: string
+        description:
+          type: string
+        date:
+          type: string
+          format: date
+        tag_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: Optional list of tag IDs to associate with the expense entry
+    UpdateExpenseEntry:
+      type: object
+      properties:
+        amount:
+          type: number
+          format: float
+          minimum: 0
+        category:
+          type: string
+        description:
+          type: string
+        date:
+          type: string
+          format: date
+        tag_ids:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: Optional list of tag IDs to update association with the expense entry
+    Tag:
+      type: object
+      required:
+        - id
+        - user_id
+        - name
+        - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+    NewTag:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+    UpdateTag:
+      type: object
+      properties:
+        name:
+          type: string
+    AnalyticsSummary:
+      type: object
+      properties:
+        total_rent_income:
+          type: number
+          format: float
+        total_booked_days:
+          type: integer
+        total_platform_income:
+          type: number
+          format: float
+        average_days_per_rent:
+          type: number
+          format: float
+        total_expenses:
+          type: number
+          format: float
+
+  responses:
+    UnauthorizedError:
+      description: Authentication required or invalid token
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Unauthorized"
+    BadRequestError:
+      description: Invalid request payload or parameters
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Bad Request"
+    NotFoundError:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Not Found"
+security:
+  - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
