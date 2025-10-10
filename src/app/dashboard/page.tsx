@@ -13,8 +13,8 @@ export default async function DashboardPage() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
-      <h1 className="text-4xl font-bold mb-8">Rentsight Analytics Dashboard</h1>
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-4xl font-bold mb-8 text-center">Rentsight Analytics Dashboard</h1>
       <Suspense fallback={<div>Loading analytics...</div>}>
         <DashboardContent userId={user.id} />
       </Suspense>

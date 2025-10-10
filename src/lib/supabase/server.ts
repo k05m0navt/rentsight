@@ -9,11 +9,11 @@ export function createClient() {
     {
       cookies: {
         async get(name: string) {
-          const cookieStore = cookies()
+          const cookieStore = await cookies()
           return cookieStore.get(name)?.value
         },
         async set(name: string, value: string, options: CookieOptions) {
-          const cookieStore = cookies()
+          const cookieStore = await cookies()
           try {
             cookieStore.set({ name, value, ...options })
           } catch (error) {
@@ -22,7 +22,7 @@ export function createClient() {
           }
         },
         async remove(name: string, options: CookieOptions) {
-          const cookieStore = cookies()
+          const cookieStore = await cookies()
           try {
             cookieStore.set({ name, value: '', ...options })
           } catch (error) {

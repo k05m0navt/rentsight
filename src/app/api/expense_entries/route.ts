@@ -13,13 +13,13 @@ export async function GET(request: Request) {
   }
 
   const { searchParams } = new URL(request.url);
-  const tag_id = searchParams.get('tag_id');
+  const tagIds = searchParams.getAll('tag_id');
 
   try {
     const whereClause: any = { user_id: user.id };
-    if (tag_id) {
+    if (tagIds.length > 0) {
       whereClause.tags = {
-        some: { tag_id: tag_id },
+        some: { tag_id: { in: tagIds } },
       };
     }
 

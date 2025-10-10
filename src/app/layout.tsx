@@ -1,6 +1,9 @@
 import { Inter } from 'next/font/google'
 import "./globals.css";
 import { cn } from '@/lib/utils'
+import ThemeProvider from '@/components/ThemeProvider'
+import ThemeToggle from '@/components/ui/ThemeToggle'
+import Navbar from '@/components/navbar';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -16,13 +19,20 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+      </head>
       <body
         className={cn(
           'min-h-screen bg-background font-sans antialiased',
           inter.variable
         )}
       >
-        {children}
+        <ThemeProvider>
+          <Navbar />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   )

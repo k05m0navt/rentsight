@@ -55,7 +55,7 @@ export function RentAnalytics({ userId }: { userId: string }) {
   return (
     <div className="space-y-4">
       <h2 className="text-2xl font-bold">Rent Income Analytics</h2>
-      <TagManager userId={userId} onTagsChange={(tags) => setSelectedTagIds(tags.map(tag => tag.id))} />
+      <TagManager userId={userId} selectedTagIds={selectedTagIds} onSelectedTagIdsChange={setSelectedTagIds} />
       {rentEntries.length === 0 ? (
         <div>No rent entries available for the selected filters.</div>
       ) : (

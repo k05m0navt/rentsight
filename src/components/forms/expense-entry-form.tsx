@@ -85,7 +85,7 @@ export function ExpenseEntryForm({ userId }: ExpenseEntryFormProps) {
           onTagsChange={(tags) => setSelectedTagIds(tags.map(tag => tag.id))}
         />
       </div>
-      <Button type="submit">Add Expense Entry</Button>
+      <Button type="submit" className="w-full sm:w-auto">Add Expense Entry</Button>
     </form>
   );
 }

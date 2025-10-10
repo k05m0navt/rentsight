@@ -11,10 +11,11 @@ interface Tag {
 
 interface TagManagerProps {
   userId: string;
-  onTagsChange?: (tags: Tag[]) => void;
+  selectedTagIds: string[];
+  onSelectedTagIdsChange: (tagIds: string[]) => void;
 }
 
-export function TagManager({ userId, onTagsChange }: TagManagerProps) {
+export function TagManager({ userId, selectedTagIds, onSelectedTagIdsChange }: TagManagerProps) {
   const [tags, setTags] = useState<Tag[]>([]);
   const [newTagName, setNewTagName] = useState('');
   const [loading, setLoading] = useState(false);
@@ -35,7 +36,6 @@ export function TagManager({ userId, onTagsChange }: TagManagerProps) {
       }
       const data: Tag[] = await response.json();
       setTags(data);
-      onTagsChange?.(data);
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -58,7 +58,7 @@ export function TagManager({ userId, onTagsChange }: TagManagerProps) {
       }
       const newTag: Tag = await response.json();
       setTags((prev) => [...prev, newTag]);
-      onTagsChange?.([...tags, newTag]);
+      // No onSelectedTagIdsChange here, as adding a tag doesn't automatically select it
       setNewTagName('');
     } catch (err: any) {
       setError(err.message);
@@ -78,7 +78,10 @@ export function TagManager({ userId, onTagsChange }: TagManagerProps) {
         throw new Error(`Error: ${response.status}`);
       }
       setTags((prev) => prev.filter((tag) => tag.id !== tagId));
-      onTagsChange?.(tags.filter((tag) => tag.id !== tagId));
+      // If the deleted tag was selected, update the selectedTagIds as well
+      if (selectedTagIds.includes(tagId)) {
+        onSelectedTagIdsChange(selectedTagIds.filter((id: string) => id !== tagId));
+      }
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -87,7 +90,7 @@ export function TagManager({ userId, onTagsChange }: TagManagerProps) {
   };
 
   if (loading) return <div>Loading tags...</div>;
-  if (error) return <div className="text-red-500">Error: {error}</div>;
+  if (error) return <div className="text-destructive">Error: {error}</div>;
 
   return (
     <div className="space-y-4">
@@ -108,20 +111,36 @@ export function TagManager({ userId, onTagsChange }: TagManagerProps) {
         </Button>
       </div>
       <div className="flex flex-wrap gap-2">
-        {tags.map((tag) => (
-          <Badge key={tag.id} variant="secondary" className="flex items-center gap-1">
-            {tag.name}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => handleDeleteTag(tag.id)}
-              disabled={loading}
-              className="h-auto p-0 ml-1 leading-none text-red-500"
+        {tags.map((tag) => {
+          const isSelected = selectedTagIds.includes(tag.id);
+          return (
+            <Badge
+              key={tag.id}
+              variant={isSelected ? "default" : "secondary"}
+              className="flex items-center gap-1 cursor-pointer"
+              onClick={() => {
+                const newSelectedTagIds = isSelected
+                  ? selectedTagIds.filter((id) => id !== tag.id)
+                  : [...selectedTagIds, tag.id];
+                onSelectedTagIdsChange(newSelectedTagIds);
+              }}
             >
-              x
-            </Button>
-          </Badge>
-        ))}
+              {tag.name}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevent badge onClick from firing
+                  handleDeleteTag(tag.id);
+                }}
+                disabled={loading}
+                className="h-auto p-0 ml-1 leading-none text-destructive"
+              >
+                x
+              </Button>
+            </Badge>
+          );
+        })}
       </div>
     </div>
   );

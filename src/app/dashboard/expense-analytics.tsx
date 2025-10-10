@@ -54,7 +54,7 @@ export function ExpenseAnalytics({ userId }: { userId: string }) {
   return (
     <div className="space-y-4">
       <h2 className="text-2xl font-bold">Expense Analytics</h2>
-      <TagManager userId={userId} onTagsChange={(tags) => setSelectedTagIds(tags.map(tag => tag.id))} />
+      <TagManager userId={userId} selectedTagIds={selectedTagIds} onSelectedTagIdsChange={setSelectedTagIds} />
       {expenseEntries.length === 0 ? (
         <div>No expense entries available for the selected filters.</div>
       ) : (

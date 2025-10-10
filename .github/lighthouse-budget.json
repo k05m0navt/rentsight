@@ -1,0 +1,20 @@
+[
+  {
+    "path": "/*",
+    "resourceSizes": {
+      "total": 1000,
+      "document": 100,
+      "script": 350,
+      "stylesheet": 100,
+      "image": 200,
+      "media": 0,
+      "font": 100,
+      "other": 150
+    },
+    "timings": {
+      "first-contentful-paint": 1500,
+      "largest-contentful-paint": 2500,
+      "interactive": 3000
+    }
+  }
+]

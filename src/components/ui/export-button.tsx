@@ -59,7 +59,7 @@ export function ExportButton({ selectedTagIds }: ExportButtonProps) {
           <DropdownMenuItem onClick={() => handleExport('excel')}>Export as Excel (Coming Soon)</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      {error && <p className="text-red-500 text-sm mt-2">Error: {error}</p>}
+      {error && <p className="text-destructive text-sm mt-2">Error: {error}</p>}
     </div>
   );
 }

@@ -115,7 +115,7 @@ export function RentEntryForm({ userId }: RentEntryFormProps) {
           onTagsChange={(tags) => setSelectedTagIds(tags.map(tag => tag.id))}
         />
       </div>
-      <Button type="submit">Add Rent Entry</Button>
+      <Button type="submit" className="w-full sm:w-auto">Add Rent Entry</Button>
     </form>
   );
 }
