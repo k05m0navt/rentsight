@@ -82,10 +82,13 @@ export function ExpenseEntryForm({ userId }: ExpenseEntryFormProps) {
         <h3 className="text-lg font-medium mb-2">Manage Tags</h3>
         <TagManager
           userId={userId}
-          onTagsChange={(tags) => setSelectedTagIds(tags.map(tag => tag.id))}
+          selectedTagIds={selectedTagIds}
+          onSelectedTagIdsChange={setSelectedTagIds}
         />
       </div>
-      <Button type="submit">Add Expense Entry</Button>
+      <Button type="submit" className="w-full sm:w-auto">
+        Add Expense Entry
+      </Button>
     </form>
   );
 }

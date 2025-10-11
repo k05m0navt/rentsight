@@ -1,6 +1,11 @@
 import { useState } from 'react';
 import { Button } from './button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './dropdown-menu';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from './dropdown-menu';
 
 interface ExportButtonProps {
   selectedTagIds?: string[];
@@ -16,7 +21,7 @@ export function ExportButton({ selectedTagIds }: ExportButtonProps) {
     try {
       const queryParams = new URLSearchParams();
       queryParams.append('format', format);
-      selectedTagIds?.forEach(tagId => queryParams.append('tag_ids', tagId));
+      selectedTagIds?.forEach((tagId) => queryParams.append('tag_ids', tagId));
 
       const response = await fetch(`/api/analytics/export?${queryParams.toString()}`);
 
@@ -38,8 +43,9 @@ export function ExportButton({ selectedTagIds }: ExportButtonProps) {
       a.click();
       a.remove();
       window.URL.revokeObjectURL(url);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'An error occurred';
+      setError(message);
     } finally {
       setExporting(false);
     }
@@ -49,18 +55,19 @@ export function ExportButton({ selectedTagIds }: ExportButtonProps) {
     <div className="relative">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button disabled={exporting}>
-            {exporting ? 'Exporting...' : 'Export Data'}
-          </Button>
+          <Button disabled={exporting}>{exporting ? 'Exporting...' : 'Export Data'}</Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56">
           <DropdownMenuItem onClick={() => handleExport('csv')}>Export as CSV</DropdownMenuItem>
-          <DropdownMenuItem onClick={() => handleExport('pdf')}>Export as PDF (Coming Soon)</DropdownMenuItem>
-          <DropdownMenuItem onClick={() => handleExport('excel')}>Export as Excel (Coming Soon)</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => handleExport('pdf')}>
+            Export as PDF (Coming Soon)
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => handleExport('excel')}>
+            Export as Excel (Coming Soon)
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      {error && <p className="text-red-500 text-sm mt-2">Error: {error}</p>}
+      {error && <p className="text-destructive text-sm mt-2">Error: {error}</p>}
     </div>
   );
 }
-

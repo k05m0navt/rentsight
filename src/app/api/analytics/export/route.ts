@@ -9,7 +9,9 @@ const prisma = new PrismaClient();
 
 export async function GET(request: Request) {
   const supabase = createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   if (!user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -49,13 +51,14 @@ export async function GET(request: Request) {
     });
 
     if (format === 'csv') {
-      let csv = 'Type,Amount,Booked Days,Platform,Start Date,End Date,Category,Description,Date,Tags\n';
-      rentEntries.forEach(entry => {
-        const tags = entry.tags.map(t => t.tag.name).join('; ');
+      let csv =
+        'Type,Amount,Booked Days,Platform,Start Date,End Date,Category,Description,Date,Tags\n';
+      rentEntries.forEach((entry) => {
+        const tags = entry.tags.map((t) => t.tag.name).join('; ');
         csv += `Rent,${entry.amount},${entry.booked_days},${entry.platform},${entry.start_date},${entry.end_date},,,${tags}\n`;
       });
-      expenseEntries.forEach(entry => {
-        const tags = entry.tags.map(t => t.tag.name).join('; ');
+      expenseEntries.forEach((entry) => {
+        const tags = entry.tags.map((t) => t.tag.name).join('; ');
         csv += `Expense,${entry.amount},,,,,,${entry.description || ''},${entry.date},${tags}\n`;
       });
 
@@ -75,8 +78,8 @@ export async function GET(request: Request) {
     } else {
       return NextResponse.json({ error: 'Invalid export format' }, { status: 400 });
     }
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'An error occurred';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
-

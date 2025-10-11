@@ -1,0 +1,30 @@
+openapi: 3.0.3
+info:
+  title: Theme Preference API (optional - future)
+  version: 1.0.0
+  description: "Optional/future API for cross-device theme sync. NOT required for this iteration; listed for planning purposes only."
+paths:
+  /api/theme-preference:
+    get:
+      summary: Get user's theme preference (optional - future)
+      description: This endpoint is defined for potential future cross-device sync but is NOT required for the current implementation.
+      responses:
+        '200':
+          description: Current preference (if server-side implemented)
+    post:
+      summary: Set user's theme preference (optional - future)
+      description: Optional API for persisting preference server-side; not required for this iteration.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                preference:
+                  type: string
+                  enum: [light, dark, system]
+      responses:
+        '204':
+          description: Preference stored
+
+
