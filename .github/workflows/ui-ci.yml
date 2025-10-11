@@ -52,7 +52,8 @@ jobs:
       - name: Start development server
         run: |
           npm run dev &
-          sleep 10
+          echo "Waiting for dev server to be ready..."
+          npx wait-on http://localhost:3000 --timeout 60000
 
       - name: Run Playwright accessibility tests (Axe)
         run: npx playwright test --config=playwright.config.ts --project=accessibility
@@ -88,7 +89,8 @@ jobs:
       - name: Start production server
         run: |
           npm start &
-          sleep 15
+          echo "Waiting for server to be ready..."
+          npx wait-on http://localhost:3000 --timeout 60000
 
       - name: Run Lighthouse CI
         uses: treosh/lighthouse-ci-action@v10
