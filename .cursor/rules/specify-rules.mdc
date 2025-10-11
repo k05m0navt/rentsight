@@ -1,0 +1,27 @@
+# rentsight Development Guidelines
+
+Auto-generated from all feature plans. Last updated: 2025-10-09
+
+## Active Technologies
+- TypeScript (latest stable) + Next.js (latest stable), React (latest stable), Tailwind CSS, Prisma ORM, ShadCN/UI (001-build-a-web)
+- TypeScript, Node.js 20.x, React 18.x + Backend: Express.js, Prisma; Frontend: React, React Router, Recharts, Zustand (001-build-a-web)
+- PostgreSQL (001-build-a-web)
+
+## Project Structure
+```
+src/
+tests/
+```
+
+## Commands
+npm test [ONLY COMMANDS FOR ACTIVE TECHNOLOGIES][ONLY COMMANDS FOR ACTIVE TECHNOLOGIES] npm run lint
+
+## Code Style
+TypeScript (latest stable): Follow standard conventions
+
+## Recent Changes
+- 001-build-a-web: Added TypeScript, Node.js 20.x, React 18.x + Backend: Express.js, Prisma; Frontend: React, React Router, Recharts, Zustand
+- 001-build-a-web: Added TypeScript (latest stable) + Next.js (latest stable), React (latest stable), Tailwind CSS, Prisma ORM, ShadCN/UI
+
+<!-- MANUAL ADDITIONS START -->
+<!-- MANUAL ADDITIONS END -->
