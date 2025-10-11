@@ -6,7 +6,9 @@ import { DashboardContent } from '@/components/dashboard-content';
 export default async function DashboardPage() {
   const supabase = createClient();
 
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   if (!user) {
     return redirect('/login');
@@ -21,4 +23,3 @@ export default async function DashboardPage() {
     </div>
   );
 }
-

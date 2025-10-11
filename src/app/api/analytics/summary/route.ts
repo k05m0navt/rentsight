@@ -4,9 +4,11 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export async function GET(request: Request) {
+export async function GET() {
   const supabase = createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   if (!user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -25,10 +27,10 @@ export async function GET(request: Request) {
       },
       where: { user_id: user.id },
     });
-    // For total platform income, we need to sum amounts grouped by platform, then sum those up. 
-    // This will require a raw query or more complex Prisma aggregation later if needed, 
+    // For total platform income, we need to sum amounts grouped by platform, then sum those up.
+    // This will require a raw query or more complex Prisma aggregation later if needed,
     // but for now, we'll consider it as part of total rent income or a separate, more complex task.
-    const totalPlatformIncome = totalRentIncomeResult._sum?.amount || 0; 
+    const totalPlatformIncome = totalRentIncomeResult._sum?.amount || 0;
 
     const totalExpensesResult = await prisma.expenseEntry.aggregate({
       _sum: {
@@ -46,8 +48,8 @@ export async function GET(request: Request) {
     };
 
     return NextResponse.json(summary);
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'An error occurred';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
-

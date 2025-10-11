@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { createClient } from '@/lib/supabase/client';
 import { Input } from './input';
 import { Button } from './button';
 import { Badge } from './badge';
@@ -20,7 +19,6 @@ export function TagManager({ userId, selectedTagIds, onSelectedTagIdsChange }: T
   const [newTagName, setNewTagName] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const supabase = createClient();
 
   useEffect(() => {
     fetchTags();
@@ -36,8 +34,9 @@ export function TagManager({ userId, selectedTagIds, onSelectedTagIdsChange }: T
       }
       const data: Tag[] = await response.json();
       setTags(data);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'An error occurred';
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -60,8 +59,9 @@ export function TagManager({ userId, selectedTagIds, onSelectedTagIdsChange }: T
       setTags((prev) => [...prev, newTag]);
       // No onSelectedTagIdsChange here, as adding a tag doesn't automatically select it
       setNewTagName('');
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'An error occurred';
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -82,8 +82,9 @@ export function TagManager({ userId, selectedTagIds, onSelectedTagIdsChange }: T
       if (selectedTagIds.includes(tagId)) {
         onSelectedTagIdsChange(selectedTagIds.filter((id: string) => id !== tagId));
       }
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'An error occurred';
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -116,7 +117,7 @@ export function TagManager({ userId, selectedTagIds, onSelectedTagIdsChange }: T
           return (
             <Badge
               key={tag.id}
-              variant={isSelected ? "default" : "secondary"}
+              variant={isSelected ? 'default' : 'secondary'}
               className="flex items-center gap-1 cursor-pointer"
               onClick={() => {
                 const newSelectedTagIds = isSelected
@@ -145,4 +146,3 @@ export function TagManager({ userId, selectedTagIds, onSelectedTagIdsChange }: T
     </div>
   );
 }
-

@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React from 'react';
 import useTheme from '@/hooks/useTheme';
@@ -24,5 +24,3 @@ export const ThemeToggle: React.FC = () => {
 };
 
 export default ThemeToggle;
-
-

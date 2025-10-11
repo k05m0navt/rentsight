@@ -3,10 +3,7 @@
  */
 module.exports = {
   darkMode: 'class',
-  content: [
-    './src/**/*.{js,ts,jsx,tsx,mdx}',
-    './app/**/*.{js,ts,jsx,tsx,mdx}',
-  ],
+  content: ['./src/**/*.{js,ts,jsx,tsx,mdx}', './app/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     extend: {
       // semantic tokens are driven by CSS variables in tokens.css
@@ -57,5 +54,3 @@ module.exports = {
   },
   plugins: [],
 };
-
-

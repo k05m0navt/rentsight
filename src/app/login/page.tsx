@@ -1,57 +1,41 @@
-import Link from 'next/link'
-import { headers } from 'next/headers'
-import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
+import Link from 'next/link';
+import { createClient } from '@/lib/supabase/server';
+import { redirect } from 'next/navigation';
 
-export default async function Login({ searchParams: { message, error } }: { searchParams: { message: string, error: string } }) {
+export default async function Login({
+  searchParams,
+}: {
+  searchParams: Promise<{ message: string; error: string }>;
+}) {
   const supabase = createClient();
 
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   if (user) {
     return redirect('/dashboard');
   }
 
+  const { message, error } = await searchParams;
+
   const signIn = async (formData: FormData) => {
-    'use server'
-    const email = formData.get('email')
-    const password = formData.get('password')
-    const cookieStore = headers()
-    const supabase = createClient()
+    'use server';
+    const email = formData.get('email');
+    const password = formData.get('password');
+    const supabase = createClient();
 
     const { error } = await supabase.auth.signInWithPassword({
       email: email as string,
       password: password as string,
-    })
+    });
 
     if (error) {
-      return redirect(`/login?error=${error.message}`)
+      return redirect(`/login?error=${error.message}`);
     }
 
-    return redirect('/dashboard')
-  }
-
-  const signUp = async (formData: FormData) => {
-    'use server'
-    const email = formData.get('email')
-    const password = formData.get('password')
-    const cookieStore = headers()
-    const supabase = createClient()
-
-    const { error } = await supabase.auth.signUp({
-      email: email as string,
-      password: password as string,
-      options: {
-        emailRedirectTo: `${headers().get('origin')}/auth/callback`,
-      },
-    })
-
-    if (error) {
-      return redirect(`/login?error=${error.message}`)
-    }
-
-    return redirect('/login?message=Check email to verify your account')
-  }
+    return redirect('/dashboard');
+  };
 
   return (
     <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2">
@@ -96,23 +80,23 @@ export default async function Login({ searchParams: { message, error } }: { sear
           placeholder="••••••••"
           required
         />
-        <button formAction={signIn} className="bg-green-700 rounded-md px-4 py-2 text-foreground mb-2">
+        <button
+          formAction={signIn}
+          className="bg-green-700 rounded-md px-4 py-2 text-foreground mb-2"
+        >
           Sign In
         </button>
-        {error && (
-          <p className="mt-4 p-4 bg-foreground/10 text-destructive text-center">
-            {error}
-          </p>
-        )}
+        {error && <p className="mt-4 p-4 bg-foreground/10 text-destructive text-center">{error}</p>}
         {message && (
-          <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">
-            {message}
-          </p>
+          <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">{message}</p>
         )}
       </form>
-      <Link href="/signup" className="border border-foreground/20 rounded-md px-4 py-2 text-foreground mb-2 text-center">
+      <Link
+        href="/signup"
+        className="border border-foreground/20 rounded-md px-4 py-2 text-foreground mb-2 text-center"
+      >
         Sign Up
       </Link>
     </div>
-  )
+  );
 }

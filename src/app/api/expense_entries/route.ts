@@ -1,12 +1,14 @@
 import { createClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
 export async function GET(request: Request) {
   const supabase = createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   if (!user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -16,7 +18,7 @@ export async function GET(request: Request) {
   const tagIds = searchParams.getAll('tag_id');
 
   try {
-    const whereClause: any = { user_id: user.id };
+    const whereClause: Prisma.ExpenseEntryWhereInput = { user_id: user.id };
     if (tagIds.length > 0) {
       whereClause.tags = {
         some: { tag_id: { in: tagIds } },
@@ -36,14 +38,14 @@ export async function GET(request: Request) {
       },
     });
 
-    const formattedExpenseEntries = expenseEntries.map(entry => ({
+    const formattedExpenseEntries = expenseEntries.map((entry) => ({
       ...entry,
-      tags: entry.tags.map(tagEntry => tagEntry.tag),
+      tags: entry.tags.map((tagEntry) => tagEntry.tag),
     }));
 
     return NextResponse.json(formattedExpenseEntries);
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'An error occurred';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
-
