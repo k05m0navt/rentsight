@@ -3,6 +3,8 @@ import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
 import { DashboardContent } from '@/components/dashboard-content';
 
+export const dynamic = 'force-dynamic';
+
 export default async function DashboardPage() {
   const supabase = createClient();
 
