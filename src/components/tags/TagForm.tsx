@@ -21,14 +21,14 @@ interface TagFormProps {
 
 export function TagForm({ tag, onSubmit, onCancel, submitLabel = 'Create Tag' }: TagFormProps) {
   const [name, setName] = useState(tag?.name || '');
-  const [color, setColor] = useState(tag?.color || '#DD1202');
+  const [color, setColor] = useState(tag?.color || '#FF6B35');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (tag) {
       setName(tag.name);
-      setColor(tag.color || '#DD1202');
+      setColor(tag.color || '#FF6B35');
     }
   }, [tag]);
 
@@ -58,7 +58,7 @@ export function TagForm({ tag, onSubmit, onCancel, submitLabel = 'Create Tag' }:
       // Reset form if creating new tag (no tag.id)
       if (!tag?.id) {
         setName('');
-        setColor('#DD1202');
+        setColor('#FF6B35');
       }
     } catch (err) {
       const message = err instanceof Error ? err.message : 'An error occurred';

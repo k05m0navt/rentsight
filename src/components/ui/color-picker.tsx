@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Check } from 'lucide-react';
 
 const PRESET_COLORS = [
-  '#DD1202', // Primary red
+  '#FF6B35', // Primary orange - AI Hiring SaaS CRM design reference
   '#1DCC5C', // Success green
   '#F59E0B', // Warning amber
   '#3B82F6', // Info blue
@@ -19,7 +19,7 @@ const PRESET_COLORS = [
   '#84CC16', // Lime
   '#F43F5E', // Rose
   '#14B8A6', // Teal
-  '#8B5CF6', // Purple
+  '#DD1202', // Old primary red (kept as option)
 ];
 
 interface ColorPickerProps {
@@ -30,7 +30,7 @@ interface ColorPickerProps {
 }
 
 export function ColorPicker({
-  value = '#DD1202',
+  value = '#FF6B35',
   onChange,
   presetColors = PRESET_COLORS,
   allowCustom = true,
@@ -88,7 +88,7 @@ export function ColorPicker({
                 type="text"
                 value={customColor}
                 onChange={(e) => setCustomColor(e.target.value)}
-                placeholder="#DD1202"
+                placeholder="#FF6B35"
                 className="w-full px-3 py-3 pl-12 border border-border dark:border-border-dark rounded-md bg-background dark:bg-background-dark text-text dark:text-text-dark focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-[border-color] duration-200"
               />
               <div

@@ -8,19 +8,19 @@
  */
 
 :root {
-  /* Colors - Light Theme */
+  /* Colors - Light Theme - Updated to match AI Hiring SaaS CRM design reference */
   --color-background: #FFFFFF;
   --color-card: #F5F5F5;
-  --color-primary: #DD1202;
+  --color-primary: #FF6B35; /* Orange accent color from design reference */
   --color-primary-foreground: #FFFFFF;
-  --color-success: #1DCC5C;
+  --color-success: #1DCC5C; /* Green color from design reference */
   --color-success-foreground: #FFFFFF;
   --color-text: #1A1A1A;
   --color-text-dark: #EEEEEE;
   --color-muted: #666666;
   --color-border: #E5E5E5;
   --color-hover: #F8F8F8;
-  --color-focus: rgba(221, 18, 2, 0.2);
+  --color-focus: rgba(255, 107, 53, 0.2); /* Orange primary with 20% opacity */
   --color-error: #DC2626;
   --color-warning: #F59E0B;
   --color-info: #3B82F6;
@@ -77,15 +77,15 @@
   --transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Dark Theme */
+/* Dark Theme - Updated to match AI Hiring SaaS CRM design reference */
 .dark {
-  --color-background: #030303;
-  --color-card: #1A1A1A;
+  --color-background: #1A1A1A; /* Main background color from design reference */
+  --color-card: #2A2A2A; /* Card background color from design reference */
   --color-text: #EEEEEE;
   --color-muted: #AAAAAA;
   --color-border: #333333;
   --color-hover: #252525;
-  --color-focus: rgba(221, 18, 2, 0.4);
+  --color-focus: rgba(255, 107, 53, 0.4); /* Orange primary with 40% opacity for dark bg */
   --color-disabled: #4B5563;
   
   /* Shadows - Dark Theme (more prominent) */
@@ -101,17 +101,17 @@
 
 /* IE11 detection: Using @media for IE10+ */
 @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-  /* Light theme fallbacks */
+  /* Light theme fallbacks - Updated to match design reference */
   .bg-background { background-color: #FFFFFF; }
   .bg-card { background-color: #F5F5F5; }
-  .bg-primary { background-color: #DD1202; }
+  .bg-primary { background-color: #FF6B35; } /* Orange accent color */
   .text-text { color: #1A1A1A; }
   .text-muted { color: #666666; }
   .border-border { border-color: #E5E5E5; }
   
-  /* Dark theme fallbacks (requires .dark parent class) */
-  .dark .bg-background { background-color: #030303; }
-  .dark .bg-card { background-color: #1A1A1A; }
+  /* Dark theme fallbacks (requires .dark parent class) - Updated to match design reference */
+  .dark .bg-background { background-color: #1A1A1A; } /* Main background color */
+  .dark .bg-card { background-color: #2A2A2A; } /* Card background color */
   .dark .text-text { color: #EEEEEE; }
   .dark .text-muted { color: #AAAAAA; }
   .dark .border-border { border-color: #333333; }
@@ -143,6 +143,6 @@ body {
 .dark body {
   color: #EEEEEE;
   color: var(--color-text);
-  background-color: #030303;
+  background-color: #1A1A1A; /* Main background color from design reference */
   background-color: var(--color-background);
 }

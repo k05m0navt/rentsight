@@ -10,23 +10,23 @@
 
 export const designTokens = {
   colors: {
-    // Primary palette
-    primary: '#DD1202',
-    success: '#1DCC5C',
+    // Primary palette - Updated to match AI Hiring SaaS CRM design reference
+    primary: '#FF6B35', // Orange accent color from design reference
+    success: '#1DCC5C', // Green color for positive metrics
     error: '#DC2626',
     warning: '#F59E0B',
     info: '#3B82F6',
 
-    // Background colors
+    // Background colors - Updated to match design reference dark theme
     background: {
       light: '#FFFFFF',
-      dark: '#030303',
+      dark: '#1A1A1A', // Main background color from design reference
     },
 
-    // Card/surface colors
+    // Card/surface colors - Updated to match design reference
     card: {
       light: '#F5F5F5',
-      dark: '#1A1A1A',
+      dark: '#2A2A2A', // Card background color from design reference
     },
 
     // Text colors
@@ -53,10 +53,10 @@ export const designTokens = {
       dark: '#252525',
     },
 
-    // Chart/data visualization colors
+    // Chart/data visualization colors - Updated to match design reference
     chart: [
-      '#DD1202', // Primary
-      '#1DCC5C', // Success
+      '#FF6B35', // Primary - Orange accent from design reference
+      '#1DCC5C', // Success - Green from design reference
       '#F59E0B', // Warning
       '#3B82F6', // Info
       '#8B5CF6', // Purple

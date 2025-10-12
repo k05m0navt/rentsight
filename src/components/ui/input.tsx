@@ -29,6 +29,8 @@ function Input({ className, type, ...props }: React.ComponentProps<'input'>) {
         'focus-visible:outline-none focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20',
         'disabled:cursor-not-allowed disabled:opacity-60',
         'aria-invalid:border-error aria-invalid:focus-visible:ring-error/20',
+        // Success state styling with green accent from design reference
+        '[&:not([aria-invalid])]:valid:border-success [&:not([aria-invalid])]:valid:focus-visible:ring-success/20',
         className,
       )}
       {...props}
