@@ -12,41 +12,52 @@ datasource db {
 }
 
 model User {
-  id            String         @id @default(uuid())
-  email         String         @unique
-  password_hash String
-  created_at    DateTime       @default(now())
-  updated_at    DateTime       @updatedAt
-  rentEntries   RentEntry[]
-  expenseEntries ExpenseEntry[]
-  tags          Tag[]
+  id              String            @id @default(uuid())
+  email           String            @unique
+  name            String?
+  password_hash   String
+  created_at      DateTime          @default(now())
+  updated_at      DateTime          @updatedAt
+  rentEntries     RentEntry[]
+  expenseEntries  ExpenseEntry[]
+  tags            Tag[]
+  properties      Property[]
+  preferences     UserPreferences?
 }
 
 model RentEntry {
-  id          String   @id @default(uuid())
+  id          String    @id @default(uuid())
   user_id     String
   amount      Float
   booked_days Int
   platform    String
-  start_date  DateTime @db.Date
-  end_date    DateTime @db.Date
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
-  user        User     @relation(fields: [user_id], references: [id])
+  start_date  DateTime  @db.Date
+  end_date    DateTime  @db.Date
+  property_id String?
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+  user        User      @relation(fields: [user_id], references: [id])
+  property    Property? @relation(fields: [property_id], references: [id], onDelete: SetNull)
   tags        RentEntryTag[]
+  
+  @@index([property_id])
 }
 
 model ExpenseEntry {
-  id          String   @id @default(uuid())
+  id          String    @id @default(uuid())
   user_id     String
   amount      Float
   category    String
   description String?
-  date        DateTime @db.Date
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
-  user        User     @relation(fields: [user_id], references: [id])
+  date        DateTime  @db.Date
+  property_id String?
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+  user        User      @relation(fields: [user_id], references: [id])
+  property    Property? @relation(fields: [property_id], references: [id], onDelete: SetNull)
   tags        ExpenseEntryTag[]
+  
+  @@index([property_id])
 }
 
 model Tag {
@@ -78,4 +89,36 @@ model ExpenseEntryTag {
   tag              Tag          @relation(fields: [tag_id], references: [id])
 
   @@id([expense_entry_id, tag_id])
+}
+
+model Property {
+  id             String         @id @default(uuid())
+  user_id        String
+  name           String
+  address        String?
+  property_type  String?
+  start_date     DateTime?      @db.Date
+  notes          String?        @db.Text
+  created_at     DateTime       @default(now())
+  updated_at     DateTime       @updatedAt
+  user           User           @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  rentEntries    RentEntry[]
+  expenseEntries ExpenseEntry[]
+
+  @@unique([user_id, name])
+  @@index([user_id])
+}
+
+model UserPreferences {
+  id               String   @id @default(uuid())
+  user_id          String   @unique
+  currency_format  String   @default("USD")
+  date_format      String   @default("MM/DD/YYYY")
+  language         String   @default("en")
+  default_view     String   @default("dashboard")
+  theme_preference String?
+  preferences      Json?
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+  user             User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }

@@ -12,6 +12,7 @@ Auto-generated from all feature plans. Last updated: 2025-10-09
 - PostgreSQL via Prisma ORM, Supabase for auth/realtime (003-as-a-developer)
 - TypeScript 5.x, Next.js 14.x, React 18.x + Tailwind CSS 3.x, Lucide React, Supabase (004-as-a-developer)
 - Supabase PostgreSQL (existing) (004-as-a-developer)
+- PostgreSQL via Prisma ORM, Supabase for authentication (005-create-other-pages)
 
 ## Project Structure
 ```
@@ -26,9 +27,9 @@ npm test [ONLY COMMANDS FOR ACTIVE TECHNOLOGIES][ONLY COMMANDS FOR ACTIVE TECHNO
 TypeScript (latest stable): Follow standard conventions
 
 ## Recent Changes
+- 005-create-other-pages: Added TypeScript 5.x with Next.js 15.5.4 (React 19.1.0)
 - 004-as-a-developer: Added TypeScript 5.x, Next.js 14.x, React 18.x + Tailwind CSS 3.x, Lucide React, Supabase
 - 003-as-a-developer: Added TypeScript 5.x with Next.js 15.5.4 (React 19.1.0)
-- 002-i-need-that: Added TypeScript (Next.js project present) + Tailwind CSS, Aceternity UI (preferred), `shadcn/ui` (fallback)
 
 <!-- MANUAL ADDITIONS START -->
 <!-- MANUAL ADDITIONS END -->

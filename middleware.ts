@@ -5,8 +5,11 @@ import type { NextRequest } from 'next/server'
 export async function middleware(request: NextRequest) {
   const res = await updateSession(request)
 
-  // Protect dashboard route
-  if (request.nextUrl.pathname.startsWith('/dashboard')) {
+  // Protect authenticated routes
+  const protectedRoutes = ['/dashboard', '/settings', '/properties', '/reports', '/tags', '/rent-entries', '/expense-entries']
+  const isProtectedRoute = protectedRoutes.some(route => request.nextUrl.pathname.startsWith(route))
+  
+  if (isProtectedRoute) {
     const { data: { user } } = await res.supabase.auth.getUser()
     if (!user) {
       return NextResponse.redirect(new URL('/login', request.url))

@@ -50,9 +50,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <BottomNav />
 
           {/* Main content area with responsive padding */}
-          {/* pb-16 for bottom nav on mobile, md:pb-0 for desktop */}
-          {/* md:pl-64 for sidebar offset on desktop (256px) */}
-          <main className="min-h-screen pb-16 md:pb-0 md:pl-64 p-5 transition-[padding] duration-200">
+          {/* pb-20 for bottom nav on mobile, md:pb-12 for desktop */}
+          {/* md:pl-80 = 320px (256px sidebar + 64px space) */}
+          {/* md:pr-16 = 64px for equal spacing on both sides */}
+          {/* px-8 py-10 for spacing on mobile (32px horizontal, 40px vertical) */}
+          {/* md:pr-16 md:py-12 for spacing on desktop (64px right, 48px vertical) */}
+          <main className="min-h-screen pb-20 md:pb-12 pl-8 pr-8 py-10 md:pl-80 md:pr-16 md:py-12 transition-[padding] duration-200">
             {children}
           </main>
         </ThemeProvider>

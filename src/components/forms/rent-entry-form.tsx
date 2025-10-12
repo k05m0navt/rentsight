@@ -10,12 +10,14 @@
  *
  * Per FR-004: Redesigned form inputs following new design patterns
  */
+'use client';
 
 import { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { TagManager } from '@/components/ui/tag-manager';
+import { PropertySelector } from '@/components/properties/PropertySelector';
 import { FormField } from '@/components/forms/FormField';
 import { FormSelect } from '@/components/forms/FormSelect';
 import { ErrorMessage } from '@/components/ui/error-message';
@@ -37,6 +39,7 @@ export function RentEntryForm({ userId }: RentEntryFormProps) {
   const [platform, setPlatform] = useState<string>('');
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
+  const [propertyId, setPropertyId] = useState<string | undefined>(undefined);
   const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
   const [dateError, setDateError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -57,22 +60,42 @@ export function RentEntryForm({ userId }: RentEntryFormProps) {
 
     setSubmitting(true);
     try {
-      // Handle form submission, including selectedTagIds
-      console.log({
-        amount,
-        bookedDays,
-        platform,
-        startDate,
-        endDate,
-        selectedTagIds,
+      const response = await fetch('/api/rent_entries', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_id: userId,
+          amount: parseFloat(amount),
+          booked_days: parseInt(bookedDays),
+          platform,
+          start_date: startDate,
+          end_date: endDate,
+          property_id: propertyId || null,
+          tag_ids: selectedTagIds,
+        }),
       });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Failed to add rent entry');
+      }
+
       // Reset form on success
       setAmount('');
       setBookedDays('');
       setPlatform('');
       setStartDate('');
       setEndDate('');
+      setPropertyId(undefined);
       setSelectedTagIds([]);
+      
+      // Trigger a page reload to refresh the data
+      window.location.reload();
+    } catch (error) {
+      console.error('Error adding rent entry:', error);
+      alert(error instanceof Error ? error.message : 'Failed to add rent entry');
     } finally {
       setSubmitting(false);
     }
@@ -149,6 +172,16 @@ export function RentEntryForm({ userId }: RentEntryFormProps) {
           </div>
 
           {dateError && <ErrorMessage message={dateError} />}
+        </CardContent>
+      </Card>
+
+      {/* Property Card */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Property</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <PropertySelector value={propertyId} onChange={setPropertyId} />
         </CardContent>
       </Card>
 

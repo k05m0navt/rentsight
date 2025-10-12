@@ -16,7 +16,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Home, Receipt, Tag } from 'lucide-react';
+import { LayoutDashboard, Building2, Receipt, Tag, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
@@ -26,9 +26,9 @@ const navItems = [
     label: 'Dashboard',
   },
   {
-    href: '/rent-entries',
-    icon: Home,
-    label: 'Rent',
+    href: '/properties',
+    icon: Building2,
+    label: 'Properties',
   },
   {
     href: '/expense-entries',
@@ -39,6 +39,11 @@ const navItems = [
     href: '/tags',
     icon: Tag,
     label: 'Tags',
+  },
+  {
+    href: '/settings',
+    icon: Settings,
+    label: 'Settings',
   },
 ];
 
