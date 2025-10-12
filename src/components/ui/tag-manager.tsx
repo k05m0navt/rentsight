@@ -1,28 +1,28 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { Input } from './input'
-import { Button } from './button'
-import { Card } from './card'
-import { TagList } from '@/components/tags/TagList'
-import { TagItem } from '@/components/tags/TagItem'
-import { TagForm } from '@/components/tags/TagForm'
-import { TagEmptyState } from '@/components/tags/TagEmptyState'
-import { ErrorMessage } from '@/components/ui/error-message'
-import { Search, Plus, Grid, List, X } from 'lucide-react'
+import { useState, useEffect } from 'react';
+import { Input } from './input';
+import { Button } from './button';
+import { Card } from './card';
+import { TagList } from '@/components/tags/TagList';
+import { TagItem } from '@/components/tags/TagItem';
+import { TagForm } from '@/components/tags/TagForm';
+import { TagEmptyState } from '@/components/tags/TagEmptyState';
+import { ErrorMessage } from '@/components/ui/error-message';
+import { Search, Plus, Grid, List, X } from 'lucide-react';
 
 interface Tag {
-  id: string
-  name: string
-  color?: string
+  id: string;
+  name: string;
+  color?: string;
 }
 
 interface TagManagerProps {
-  userId: string
-  selectedTagIds: string[]
-  onSelectedTagIdsChange: (tagIds: string[]) => void
-  mode?: 'select' | 'manage'
-  layout?: 'grid' | 'list' | 'compact'
+  userId: string;
+  selectedTagIds: string[];
+  onSelectedTagIdsChange: (tagIds: string[]) => void;
+  mode?: 'select' | 'manage';
+  layout?: 'grid' | 'list' | 'compact';
 }
 
 export function TagManager({
@@ -30,125 +30,127 @@ export function TagManager({
   selectedTagIds,
   onSelectedTagIdsChange,
   mode = 'select',
-  layout = 'compact'
+  layout = 'compact',
 }: TagManagerProps) {
-  const [tags, setTags] = useState<Tag[]>([])
-  const [filteredTags, setFilteredTags] = useState<Tag[]>([])
-  const [searchQuery, setSearchQuery] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [viewLayout, setViewLayout] = useState<'grid' | 'list'>(layout === 'compact' ? 'grid' : layout)
-  const [showCreateForm, setShowCreateForm] = useState(false)
-  const [editingTag, setEditingTag] = useState<Tag | null>(null)
+  const [tags, setTags] = useState<Tag[]>([]);
+  const [filteredTags, setFilteredTags] = useState<Tag[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [viewLayout, setViewLayout] = useState<'grid' | 'list'>(
+    layout === 'compact' ? 'grid' : layout,
+  );
+  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [editingTag, setEditingTag] = useState<Tag | null>(null);
 
   useEffect(() => {
-    fetchTags()
-  }, [userId])
+    fetchTags();
+  }, [userId]);
 
   useEffect(() => {
     // Filter tags based on search query
     if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase()
-      setFilteredTags(
-        tags.filter((tag) => tag.name.toLowerCase().includes(query))
-      )
+      const query = searchQuery.toLowerCase();
+      setFilteredTags(tags.filter((tag) => tag.name.toLowerCase().includes(query)));
     } else {
-      setFilteredTags(tags)
+      setFilteredTags(tags);
     }
-  }, [searchQuery, tags])
+  }, [searchQuery, tags]);
 
   const fetchTags = async () => {
-    setLoading(true)
-    setError(null)
+    setLoading(true);
+    setError(null);
     try {
-      const response = await fetch('/api/tags')
+      const response = await fetch('/api/tags');
       if (!response.ok) {
-        throw new Error(`Error: ${response.status}`)
+        throw new Error(`Error: ${response.status}`);
       }
-      const data: Tag[] = await response.json()
-      setTags(data)
-      setFilteredTags(data)
+      const data: Tag[] = await response.json();
+      setTags(data);
+      setFilteredTags(data);
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'An error occurred'
-      setError(message)
+      const message = err instanceof Error ? err.message : 'An error occurred';
+      setError(message);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
-  const handleCreateTag = async (tag: Omit<Tag, 'id'>) => {
+  const handleCreateTag = async (tag: { id?: string; name: string; color?: string }) => {
+    const { name, color } = tag;
     const response = await fetch('/api/tags', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(tag),
-    })
+      body: JSON.stringify({ name, color }),
+    });
     if (!response.ok) {
-      throw new Error(`Error: ${response.status}`)
+      throw new Error(`Error: ${response.status}`);
     }
-    const newTag: Tag = await response.json()
-    setTags((prev) => [...prev, newTag])
-    setShowCreateForm(false)
-  }
+    const newTag: Tag = await response.json();
+    setTags((prev) => [...prev, newTag]);
+    setShowCreateForm(false);
+  };
 
-  const handleUpdateTag = async (tag: Tag) => {
+  const handleUpdateTag = async (tag: { id?: string; name: string; color?: string }) => {
+    if (!tag.id) return;
     const response = await fetch(`/api/tags/${tag.id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name: tag.name, color: tag.color }),
-    })
+    });
     if (!response.ok) {
-      throw new Error(`Error: ${response.status}`)
+      throw new Error(`Error: ${response.status}`);
     }
-    const updatedTag: Tag = await response.json()
-    setTags((prev) => prev.map((t) => (t.id === updatedTag.id ? updatedTag : t)))
-    setEditingTag(null)
-  }
+    const updatedTag: Tag = await response.json();
+    setTags((prev) => prev.map((t) => (t.id === updatedTag.id ? updatedTag : t)));
+    setEditingTag(null);
+  };
 
   const handleDeleteTag = async (tagId: string) => {
     if (!confirm('Are you sure you want to delete this tag?')) {
-      return
+      return;
     }
-    
-    setLoading(true)
-    setError(null)
+
+    setLoading(true);
+    setError(null);
     try {
       const response = await fetch(`/api/tags/${tagId}`, {
         method: 'DELETE',
-      })
+      });
       if (!response.ok) {
-        throw new Error(`Error: ${response.status}`)
+        throw new Error(`Error: ${response.status}`);
       }
-      setTags((prev) => prev.filter((tag) => tag.id !== tagId))
+      setTags((prev) => prev.filter((tag) => tag.id !== tagId));
       // If the deleted tag was selected, update the selectedTagIds as well
       if (selectedTagIds.includes(tagId)) {
-        onSelectedTagIdsChange(selectedTagIds.filter((id: string) => id !== tagId))
+        onSelectedTagIdsChange(selectedTagIds.filter((id: string) => id !== tagId));
       }
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'An error occurred'
-      setError(message)
+      const message = err instanceof Error ? err.message : 'An error occurred';
+      setError(message);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleTagClick = (tag: Tag) => {
-    const isSelected = selectedTagIds.includes(tag.id)
+    const isSelected = selectedTagIds.includes(tag.id);
     const newSelectedTagIds = isSelected
       ? selectedTagIds.filter((id) => id !== tag.id)
-      : [...selectedTagIds, tag.id]
-    onSelectedTagIdsChange(newSelectedTagIds)
-  }
+      : [...selectedTagIds, tag.id];
+    onSelectedTagIdsChange(newSelectedTagIds);
+  };
 
   if (loading && tags.length === 0) {
     return (
       <div className="flex items-center justify-center py-8">
         <div className="text-muted dark:text-muted-dark">Loading tags...</div>
       </div>
-    )
+    );
   }
 
   if (error) {
-    return <ErrorMessage message={error} />
+    return <ErrorMessage message={error} />;
   }
 
   // Compact mode - inline badges for forms
@@ -178,7 +180,7 @@ export function TagManager({
           ))}
         </div>
       </div>
-    )
+    );
   }
 
   // Full management mode with search, filtering, and layout options
@@ -250,7 +252,8 @@ export function TagManager({
       {searchQuery && (
         <div className="flex items-center justify-between text-sm">
           <span className="text-muted dark:text-muted-dark">
-            Found {filteredTags.length} tag{filteredTags.length !== 1 ? 's' : ''} matching &quot;{searchQuery}&quot;
+            Found {filteredTags.length} tag{filteredTags.length !== 1 ? 's' : ''} matching &quot;
+            {searchQuery}&quot;
           </span>
         </div>
       )}
@@ -265,8 +268,8 @@ export function TagManager({
             tag={editingTag || undefined}
             onSubmit={editingTag ? handleUpdateTag : handleCreateTag}
             onCancel={() => {
-              setShowCreateForm(false)
-              setEditingTag(null)
+              setShowCreateForm(false);
+              setEditingTag(null);
             }}
             submitLabel={editingTag ? 'Update Tag' : 'Create Tag'}
           />
@@ -275,12 +278,12 @@ export function TagManager({
 
       {/* Tags Display */}
       {filteredTags.length === 0 && !searchQuery ? (
-        <TagEmptyState onCreateTag={mode === 'manage' ? () => setShowCreateForm(true) : undefined} />
+        <TagEmptyState
+          onCreateTag={mode === 'manage' ? () => setShowCreateForm(true) : undefined}
+        />
       ) : filteredTags.length === 0 && searchQuery ? (
         <Card className="p-8 text-center">
-          <p className="text-muted dark:text-muted-dark">
-            No tags found matching your search.
-          </p>
+          <p className="text-muted dark:text-muted-dark">No tags found matching your search.</p>
         </Card>
       ) : mode === 'manage' ? (
         <TagList
@@ -305,5 +308,5 @@ export function TagManager({
         </div>
       )}
     </div>
-  )
+  );
 }

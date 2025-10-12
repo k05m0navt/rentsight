@@ -1,77 +1,72 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { ColorPicker } from '@/components/ui/color-picker'
-import { ErrorMessage } from '@/components/ui/error-message'
+import { useState, useEffect } from 'react';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { ColorPicker } from '@/components/ui/color-picker';
+import { ErrorMessage } from '@/components/ui/error-message';
 
 interface Tag {
-  id?: string
-  name: string
-  color?: string
+  id?: string;
+  name: string;
+  color?: string;
 }
 
 interface TagFormProps {
-  tag?: Tag
-  onSubmit: (tag: Tag) => Promise<void>
-  onCancel?: () => void
-  submitLabel?: string
+  tag?: Tag;
+  onSubmit: (tag: { id?: string; name: string; color?: string }) => Promise<void>;
+  onCancel?: () => void;
+  submitLabel?: string;
 }
 
-export function TagForm({
-  tag,
-  onSubmit,
-  onCancel,
-  submitLabel = 'Create Tag'
-}: TagFormProps) {
-  const [name, setName] = useState(tag?.name || '')
-  const [color, setColor] = useState(tag?.color || '#DD1202')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+export function TagForm({ tag, onSubmit, onCancel, submitLabel = 'Create Tag' }: TagFormProps) {
+  const [name, setName] = useState(tag?.name || '');
+  const [color, setColor] = useState(tag?.color || '#DD1202');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (tag) {
-      setName(tag.name)
-      setColor(tag.color || '#DD1202')
+      setName(tag.name);
+      setColor(tag.color || '#DD1202');
     }
-  }, [tag])
+  }, [tag]);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    
+    e.preventDefault();
+
     if (!name.trim()) {
-      setError('Tag name is required')
-      return
+      setError('Tag name is required');
+      return;
     }
 
     if (name.length > 50) {
-      setError('Tag name must be 50 characters or less')
-      return
+      setError('Tag name must be 50 characters or less');
+      return;
     }
 
-    setLoading(true)
-    setError(null)
+    setLoading(true);
+    setError(null);
 
     try {
       await onSubmit({
         ...(tag?.id ? { id: tag.id } : {}),
         name: name.trim(),
-        color
-      })
-      
+        color,
+      });
+
       // Reset form if creating new tag (no tag.id)
       if (!tag?.id) {
-        setName('')
-        setColor('#DD1202')
+        setName('');
+        setColor('#DD1202');
       }
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'An error occurred'
-      setError(message)
+      const message = err instanceof Error ? err.message : 'An error occurred';
+      setError(message);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
@@ -87,8 +82,8 @@ export function TagForm({
           type="text"
           value={name}
           onChange={(e) => {
-            setName(e.target.value)
-            setError(null)
+            setName(e.target.value);
+            setError(null);
           }}
           placeholder="Enter tag name"
           maxLength={50}
@@ -103,10 +98,7 @@ export function TagForm({
       </div>
 
       <div>
-        <ColorPicker
-          value={color}
-          onChange={setColor}
-        />
+        <ColorPicker value={color} onChange={setColor} />
       </div>
 
       {error && <ErrorMessage message={error} />}
@@ -121,17 +113,11 @@ export function TagForm({
           {loading ? 'Saving...' : submitLabel}
         </Button>
         {onCancel && (
-          <Button
-            type="button"
-            variant="secondary"
-            onClick={onCancel}
-            disabled={loading}
-          >
+          <Button type="button" variant="secondary" onClick={onCancel} disabled={loading}>
             Cancel
           </Button>
         )}
       </div>
     </form>
-  )
+  );
 }
-

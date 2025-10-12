@@ -44,10 +44,10 @@ function CardHeader({ className, ...props }: React.ComponentProps<'div'>) {
   );
 }
 
-function CardTitle({ 
-  className, 
+function CardTitle({
+  className,
   as: Component = 'h2',
-  ...props 
+  ...props
 }: React.ComponentProps<'h2'> & { as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'div' }) {
   return (
     <Component

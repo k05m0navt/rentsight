@@ -1,20 +1,20 @@
-'use client'
+'use client';
 
-import { Card } from '@/components/ui/card'
+import { Card } from '@/components/ui/card';
 
 interface Tag {
-  id: string
-  name: string
-  color?: string
+  id: string;
+  name: string;
+  color?: string;
 }
 
 interface TagListProps {
-  tags: Tag[]
-  onTagClick?: (tag: Tag) => void
-  onTagEdit?: (tag: Tag) => void
-  onTagDelete?: (tagId: string) => void
-  selectedTagIds?: string[]
-  layout?: 'grid' | 'list'
+  tags: Tag[];
+  onTagClick?: (tag: Tag) => void;
+  onTagEdit?: (tag: Tag) => void;
+  onTagDelete?: (tagId: string) => void;
+  selectedTagIds?: string[];
+  layout?: 'grid' | 'list';
 }
 
 export function TagList({
@@ -23,7 +23,7 @@ export function TagList({
   onTagEdit,
   onTagDelete,
   selectedTagIds = [],
-  layout = 'grid'
+  layout = 'grid',
 }: TagListProps) {
   if (layout === 'list') {
     return (
@@ -42,9 +42,7 @@ export function TagList({
                     style={{ backgroundColor: tag.color }}
                   />
                 )}
-                <span className="font-medium text-text dark:text-text-dark">
-                  {tag.name}
-                </span>
+                <span className="font-medium text-text dark:text-text-dark">{tag.name}</span>
                 {selectedTagIds.includes(tag.id) && (
                   <span className="text-xs text-primary bg-primary/10 px-2 py-1 rounded-full">
                     Selected
@@ -55,8 +53,8 @@ export function TagList({
                 {onTagEdit && (
                   <button
                     onClick={(e) => {
-                      e.stopPropagation()
-                      onTagEdit(tag)
+                      e.stopPropagation();
+                      onTagEdit(tag);
                     }}
                     className="text-muted dark:text-muted-dark hover:text-primary transition-colors duration-200"
                     aria-label={`Edit ${tag.name}`}
@@ -67,8 +65,8 @@ export function TagList({
                 {onTagDelete && (
                   <button
                     onClick={(e) => {
-                      e.stopPropagation()
-                      onTagDelete(tag.id)
+                      e.stopPropagation();
+                      onTagDelete(tag.id);
                     }}
                     className="text-muted dark:text-muted-dark hover:text-error transition-colors duration-200"
                     aria-label={`Delete ${tag.name}`}
@@ -81,7 +79,7 @@ export function TagList({
           </Card>
         ))}
       </div>
-    )
+    );
   }
 
   // Grid layout (default)
@@ -101,9 +99,7 @@ export function TagList({
                   style={{ backgroundColor: tag.color }}
                 />
               )}
-              <span className="font-medium text-text dark:text-text-dark truncate">
-                {tag.name}
-              </span>
+              <span className="font-medium text-text dark:text-text-dark truncate">{tag.name}</span>
             </div>
             {selectedTagIds.includes(tag.id) && (
               <span className="text-xs text-primary bg-primary/10 px-2 py-1 rounded-full text-center">
@@ -114,8 +110,8 @@ export function TagList({
               {onTagEdit && (
                 <button
                   onClick={(e) => {
-                    e.stopPropagation()
-                    onTagEdit(tag)
+                    e.stopPropagation();
+                    onTagEdit(tag);
                   }}
                   className="text-sm text-muted dark:text-muted-dark hover:text-primary transition-colors duration-200"
                   aria-label={`Edit ${tag.name}`}
@@ -126,8 +122,8 @@ export function TagList({
               {onTagDelete && (
                 <button
                   onClick={(e) => {
-                    e.stopPropagation()
-                    onTagDelete(tag.id)
+                    e.stopPropagation();
+                    onTagDelete(tag.id);
                   }}
                   className="text-sm text-muted dark:text-muted-dark hover:text-error transition-colors duration-200"
                   aria-label={`Delete ${tag.name}`}
@@ -140,6 +136,5 @@ export function TagList({
         </Card>
       ))}
     </div>
-  )
+  );
 }
-

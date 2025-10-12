@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { Check } from 'lucide-react'
+import { useState } from 'react';
+import { Check } from 'lucide-react';
 
 const PRESET_COLORS = [
   '#DD1202', // Primary red
@@ -20,22 +20,22 @@ const PRESET_COLORS = [
   '#F43F5E', // Rose
   '#14B8A6', // Teal
   '#8B5CF6', // Purple
-]
+];
 
 interface ColorPickerProps {
-  value?: string
-  onChange: (color: string) => void
-  presetColors?: string[]
-  allowCustom?: boolean
+  value?: string;
+  onChange: (color: string) => void;
+  presetColors?: string[];
+  allowCustom?: boolean;
 }
 
 export function ColorPicker({
   value = '#DD1202',
   onChange,
   presetColors = PRESET_COLORS,
-  allowCustom = true
+  allowCustom = true,
 }: ColorPickerProps) {
-  const [customColor, setCustomColor] = useState(value)
+  const [customColor, setCustomColor] = useState(value);
 
   return (
     <div className="space-y-4">
@@ -50,15 +50,16 @@ export function ColorPicker({
               type="button"
               className={`
                 w-10 h-10 rounded-md border-2 transition-[opacity,transform] duration-200 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-primary/50
-                ${value === color 
-                  ? 'border-primary dark:border-primary' 
-                  : 'border-border dark:border-border-dark'
+                ${
+                  value === color
+                    ? 'border-primary dark:border-primary'
+                    : 'border-border dark:border-border-dark'
                 }
               `}
               style={{ backgroundColor: color }}
               onClick={() => {
-                onChange(color)
-                setCustomColor(color)
+                onChange(color);
+                setCustomColor(color);
               }}
               aria-label={`Select color ${color}`}
             >
@@ -99,8 +100,8 @@ export function ColorPicker({
               type="color"
               value={customColor}
               onChange={(e) => {
-                setCustomColor(e.target.value)
-                onChange(e.target.value)
+                setCustomColor(e.target.value);
+                onChange(e.target.value);
               }}
               className="w-12 h-12 rounded-md border border-border dark:border-border-dark cursor-pointer"
               aria-label="Pick custom color"
@@ -109,9 +110,9 @@ export function ColorPicker({
           <button
             type="button"
             onClick={() => {
-              const isValidHex = /^#[0-9A-F]{6}$/i.test(customColor)
+              const isValidHex = /^#[0-9A-F]{6}$/i.test(customColor);
               if (isValidHex) {
-                onChange(customColor)
+                onChange(customColor);
               }
             }}
             className="mt-2 px-4 py-2 text-sm bg-primary text-white rounded-md hover:brightness-110 transition-[opacity,transform] duration-200 active:brightness-90 focus:outline-none focus:ring-2 focus:ring-primary/50"
@@ -121,6 +122,5 @@ export function ColorPicker({
         </div>
       )}
     </div>
-  )
+  );
 }
-

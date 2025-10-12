@@ -47,6 +47,9 @@ if (typeof window !== 'undefined' && typeof ResizeObserver === 'undefined') {
 if (typeof window !== 'undefined' && typeof IntersectionObserver === 'undefined') {
   (window as any).IntersectionObserver = class IntersectionObserver {
     private callback: IntersectionObserverCallback;
+    root: Element | Document | null = null;
+    rootMargin: string = '0px';
+    thresholds: ReadonlyArray<number> = [0];
 
     constructor(callback: IntersectionObserverCallback) {
       this.callback = callback;
@@ -63,7 +66,6 @@ if (typeof window !== 'undefined' && typeof IntersectionObserver === 'undefined'
               intersectionRatio: 1,
             } as IntersectionObserverEntry,
           ],
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           this as any,
         );
       }, 0);
@@ -75,6 +77,10 @@ if (typeof window !== 'undefined' && typeof IntersectionObserver === 'undefined'
 
     disconnect() {
       // No-op in polyfill
+    }
+
+    takeRecords(): IntersectionObserverEntry[] {
+      return [];
     }
   };
 }

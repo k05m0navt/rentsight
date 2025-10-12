@@ -1,10 +1,10 @@
-'use client'
+'use client';
 
-import { Tag, Plus } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { Tag, Plus } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface TagEmptyStateProps {
-  onCreateTag?: () => void
+  onCreateTag?: () => void;
 }
 
 export function TagEmptyState({ onCreateTag }: TagEmptyStateProps) {
@@ -13,22 +13,16 @@ export function TagEmptyState({ onCreateTag }: TagEmptyStateProps) {
       <div className="rounded-full bg-card dark:bg-card-dark p-6 mb-4">
         <Tag className="w-12 h-12 text-muted dark:text-muted-dark" />
       </div>
-      
-      <h3 className="text-xl font-bold text-text dark:text-text-dark mb-2">
-        No tags yet
-      </h3>
-      
+
+      <h3 className="text-xl font-bold text-text dark:text-text-dark mb-2">No tags yet</h3>
+
       <p className="text-base text-muted dark:text-muted-dark mb-6 max-w-md">
-        Create your first tag to organize and categorize your rent and expense entries.
-        Tags help you filter and analyze your data more effectively.
+        Create your first tag to organize and categorize your rent and expense entries. Tags help
+        you filter and analyze your data more effectively.
       </p>
 
       {onCreateTag && (
-        <Button
-          variant="primary"
-          onClick={onCreateTag}
-          className="inline-flex items-center gap-2"
-        >
+        <Button variant="primary" onClick={onCreateTag} className="inline-flex items-center gap-2">
           <Plus className="w-4 h-4" />
           Create Your First Tag
         </Button>
@@ -44,6 +38,5 @@ export function TagEmptyState({ onCreateTag }: TagEmptyStateProps) {
         </ul>
       </div>
     </div>
-  )
+  );
 }
-

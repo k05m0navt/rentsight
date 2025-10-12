@@ -1,21 +1,21 @@
-'use client'
+'use client';
 
-import { Badge } from '@/components/ui/badge'
-import { X, Edit2 } from 'lucide-react'
+import { Badge } from '@/components/ui/badge';
+import { X, Edit2 } from 'lucide-react';
 
 interface Tag {
-  id: string
-  name: string
-  color?: string
+  id: string;
+  name: string;
+  color?: string;
 }
 
 interface TagItemProps {
-  tag: Tag
-  selected?: boolean
-  onClick?: () => void
-  onEdit?: () => void
-  onDelete?: () => void
-  variant?: 'default' | 'selectable' | 'compact'
+  tag: Tag;
+  selected?: boolean;
+  onClick?: () => void;
+  onEdit?: () => void;
+  onDelete?: () => void;
+  variant?: 'default' | 'selectable' | 'compact';
 }
 
 export function TagItem({
@@ -24,7 +24,7 @@ export function TagItem({
   onClick,
   onEdit,
   onDelete,
-  variant = 'default'
+  variant = 'default',
 }: TagItemProps) {
   if (variant === 'compact') {
     return (
@@ -34,17 +34,14 @@ export function TagItem({
         onClick={onClick}
       >
         {tag.color && (
-          <div
-            className="w-2 h-2 rounded-full"
-            style={{ backgroundColor: tag.color }}
-          />
+          <div className="w-2 h-2 rounded-full" style={{ backgroundColor: tag.color }} />
         )}
         <span>{tag.name}</span>
         {onDelete && (
           <button
             onClick={(e) => {
-              e.stopPropagation()
-              onDelete()
+              e.stopPropagation();
+              onDelete();
             }}
             className="ml-1 hover:opacity-70 transition-opacity duration-150"
             aria-label={`Remove ${tag.name}`}
@@ -53,7 +50,7 @@ export function TagItem({
           </button>
         )}
       </Badge>
-    )
+    );
   }
 
   if (variant === 'selectable') {
@@ -61,9 +58,10 @@ export function TagItem({
       <div
         className={`
           flex items-center gap-3 p-3 rounded-md border transition-[opacity,transform] duration-200 cursor-pointer
-          ${selected 
-            ? 'border-primary bg-primary/10 text-primary' 
-            : 'border-border dark:border-border-dark bg-card dark:bg-card-dark text-text dark:text-text-dark hover:bg-hover dark:hover:bg-hover-dark'
+          ${
+            selected
+              ? 'border-primary bg-primary/10 text-primary'
+              : 'border-border dark:border-border-dark bg-card dark:bg-card-dark text-text dark:text-text-dark hover:bg-hover dark:hover:bg-hover-dark'
           }
         `}
         onClick={onClick}
@@ -81,8 +79,8 @@ export function TagItem({
           {onEdit && (
             <button
               onClick={(e) => {
-                e.stopPropagation()
-                onEdit()
+                e.stopPropagation();
+                onEdit();
               }}
               className="p-1 hover:opacity-70 transition-opacity duration-150"
               aria-label={`Edit ${tag.name}`}
@@ -93,8 +91,8 @@ export function TagItem({
           {onDelete && (
             <button
               onClick={(e) => {
-                e.stopPropagation()
-                onDelete()
+                e.stopPropagation();
+                onDelete();
               }}
               className="p-1 hover:text-error transition-colors duration-150"
               aria-label={`Delete ${tag.name}`}
@@ -104,7 +102,7 @@ export function TagItem({
           )}
         </div>
       </div>
-    )
+    );
   }
 
   // Default variant
@@ -121,22 +119,16 @@ export function TagItem({
           />
         )}
         <div className="flex flex-col">
-          <span className="font-medium text-text dark:text-text-dark">
-            {tag.name}
-          </span>
-          {selected && (
-            <span className="text-xs text-primary mt-1">
-              Currently selected
-            </span>
-          )}
+          <span className="font-medium text-text dark:text-text-dark">{tag.name}</span>
+          {selected && <span className="text-xs text-primary mt-1">Currently selected</span>}
         </div>
       </div>
       <div className="flex items-center gap-2">
         {onEdit && (
           <button
             onClick={(e) => {
-              e.stopPropagation()
-              onEdit()
+              e.stopPropagation();
+              onEdit();
             }}
             className="p-2 text-muted dark:text-muted-dark hover:text-primary transition-colors duration-200 rounded-md hover:bg-hover dark:hover:bg-hover-dark"
             aria-label={`Edit ${tag.name}`}
@@ -147,8 +139,8 @@ export function TagItem({
         {onDelete && (
           <button
             onClick={(e) => {
-              e.stopPropagation()
-              onDelete()
+              e.stopPropagation();
+              onDelete();
             }}
             className="p-2 text-muted dark:text-muted-dark hover:text-error transition-colors duration-200 rounded-md hover:bg-hover dark:hover:bg-hover-dark"
             aria-label={`Delete ${tag.name}`}
@@ -158,6 +150,5 @@ export function TagItem({
         )}
       </div>
     </div>
-  )
+  );
 }
-

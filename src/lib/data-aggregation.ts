@@ -159,10 +159,12 @@ export function calculateStats(data: number[]): {
 /**
  * Export all utilities as default
  */
-export default {
+const dataAggregationUtils = {
   aggregateIntoBuckets,
   aggregateByTimePeriod,
   aggregateByCategory,
   sampleData,
   calculateStats,
 };
+
+export default dataAggregationUtils;

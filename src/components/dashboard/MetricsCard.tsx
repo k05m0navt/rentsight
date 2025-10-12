@@ -13,7 +13,7 @@
 
 import React from 'react';
 import { LucideIcon } from 'lucide-react';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Card, CardHeader, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 
 export interface MetricsCardProps {
@@ -53,9 +53,7 @@ export function MetricsCard({
     <Card className={cn('relative overflow-hidden', className)}>
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
-          <div className="text-sm font-medium text-muted dark:text-muted-dark">
-            {title}
-          </div>
+          <div className="text-sm font-medium text-muted dark:text-muted-dark">{title}</div>
           {Icon && <Icon className={cn('h-5 w-5', variantColors[variant])} aria-hidden="true" />}
         </div>
       </CardHeader>
