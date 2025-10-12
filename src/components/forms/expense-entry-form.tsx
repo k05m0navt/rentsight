@@ -10,12 +10,14 @@
  *
  * Per FR-004: Redesigned form inputs with consistent patterns
  */
+'use client';
 
 import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { TagManager } from '@/components/ui/tag-manager';
+import { PropertySelector } from '@/components/properties/PropertySelector';
 import { FormField } from '@/components/forms/FormField';
 import { FormSelect } from '@/components/forms/FormSelect';
 
@@ -39,6 +41,7 @@ export function ExpenseEntryForm({ userId }: ExpenseEntryFormProps) {
   const [category, setCategory] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [date, setDate] = useState<string>('');
+  const [propertyId, setPropertyId] = useState<string | undefined>(undefined);
   const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
 
@@ -47,20 +50,40 @@ export function ExpenseEntryForm({ userId }: ExpenseEntryFormProps) {
 
     setSubmitting(true);
     try {
-      // Handle form submission, including selectedTagIds
-      console.log({
-        amount,
-        category,
-        description,
-        date,
-        selectedTagIds,
+      const response = await fetch('/api/expense_entries', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_id: userId,
+          amount: parseFloat(amount),
+          category,
+          description,
+          date,
+          property_id: propertyId || null,
+          tag_ids: selectedTagIds,
+        }),
       });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Failed to add expense entry');
+      }
+
       // Reset form on success
       setAmount('');
       setCategory('');
       setDescription('');
       setDate('');
+      setPropertyId(undefined);
       setSelectedTagIds([]);
+
+      // Trigger a page reload to refresh the data
+      window.location.reload();
+    } catch (error) {
+      console.error('Error adding expense entry:', error);
+      alert(error instanceof Error ? error.message : 'Failed to add expense entry');
     } finally {
       setSubmitting(false);
     }
@@ -119,6 +142,16 @@ export function ExpenseEntryForm({ userId }: ExpenseEntryFormProps) {
               placeholder="e.g., Plumbing repair in unit 2B"
             />
           </FormField>
+        </CardContent>
+      </Card>
+
+      {/* Property Card */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Property</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <PropertySelector value={propertyId} onChange={setPropertyId} />
         </CardContent>
       </Card>
 

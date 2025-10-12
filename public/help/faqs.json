@@ -1,0 +1,87 @@
+[
+  {
+    "id": "getting-started-1",
+    "category": "Getting Started",
+    "question": "How do I add my first property?",
+    "answer": "Navigate to the Properties page from the sidebar (or bottom navigation on mobile). Click 'Add First Property' or 'Add Property', fill in the property details (name is required, other fields optional), and click 'Create Property'. Your property will appear in the list immediately."
+  },
+  {
+    "id": "getting-started-2",
+    "category": "Getting Started",
+    "question": "How do I create a rent entry?",
+    "answer": "Go to the Dashboard and look for the rent entry form. Fill in the amount, booked days, platform, and date range. You can optionally select a property and add tags for better organization. Click 'Add Rent Entry' to save."
+  },
+  {
+    "id": "getting-started-3",
+    "category": "Getting Started",
+    "question": "What's the difference between properties and tags?",
+    "answer": "Properties represent physical rental locations with structured data (address, type, dates). Tags are flexible labels for categorizing entries across multiple dimensions (like 'maintenance' or 'summer season'). You can use both together - a property for structure and tags for additional categorization."
+  },
+  {
+    "id": "account-1",
+    "category": "Account",
+    "question": "How do I reset my password?",
+    "answer": "Go to Settings from the navigation menu. In the 'Change Password' section, enter your current password, then your new password twice. Click 'Change Password'. Your password will be updated immediately and you can use it on your next login."
+  },
+  {
+    "id": "account-2",
+    "category": "Account",
+    "question": "How do I change my email?",
+    "answer": "Navigate to Settings and find the 'Profile Information' section. Update your email address in the Email field and click 'Save Changes'. You may need to verify the new email address through a confirmation email."
+  },
+  {
+    "id": "account-3",
+    "category": "Account",
+    "question": "How do I customize my preferences?",
+    "answer": "In Settings, scroll to 'Application Preferences'. You can set your preferred currency format, date format, language, default page on login, and theme preference. Click 'Save Preferences' to apply your changes."
+  },
+  {
+    "id": "properties-1",
+    "category": "Properties",
+    "question": "Can I edit a property after creating it?",
+    "answer": "Yes! Click the Edit button (pencil icon) on any property card. Update the details in the form and click 'Update Property'. All associated rent and expense entries will automatically reflect the updated property information."
+  },
+  {
+    "id": "properties-2",
+    "category": "Properties",
+    "question": "What happens to my entries if I delete a property?",
+    "answer": "Your rent and expense entries are safe! When you delete a property, the entries remain in your database but are no longer associated with that property. You'll see a warning before deletion showing how many entries are affected."
+  },
+  {
+    "id": "properties-3",
+    "category": "Properties",
+    "question": "How do I associate entries with a property?",
+    "answer": "When creating or editing a rent or expense entry, you'll see a 'Property' section in the form. Use the dropdown to select a property. This is optional - you can still use tags for categorization without selecting a property."
+  },
+  {
+    "id": "reports-1",
+    "category": "Reports",
+    "question": "What types of reports can I generate?",
+    "answer": "RentSight offers three report types: Income Summary (rent income by period, platform, and property), Expense Breakdown (expenses by category and property with trends), and Tax Report (annual income and expenses formatted for tax preparation)."
+  },
+  {
+    "id": "reports-2",
+    "category": "Reports",
+    "question": "How do I export my data?",
+    "answer": "On the Reports page, select your report type and apply filters (date range, property, tags). Click 'Generate Report', then choose your export format (PDF, CSV, or Excel). The file will download automatically."
+  },
+  {
+    "id": "troubleshooting-1",
+    "category": "Troubleshooting",
+    "question": "Why can't I see my data?",
+    "answer": "First, check your tag filters - you might have filters applied that exclude your data. Try clicking 'Clear Filters' or 'Show All'. If you still don't see data, try refreshing the page. If the issue persists, check that you're logged into the correct account."
+  },
+  {
+    "id": "troubleshooting-2",
+    "category": "Troubleshooting",
+    "question": "The page is loading slowly, what can I do?",
+    "answer": "RentSight is optimized for large datasets, but if you're experiencing slow loading: 1) Check your internet connection, 2) Clear your browser cache, 3) Try using tag or property filters to reduce the amount of data displayed at once. If issues persist, contact support."
+  },
+  {
+    "id": "troubleshooting-3",
+    "category": "Troubleshooting",
+    "question": "I'm having trouble logging in, what should I do?",
+    "answer": "Verify you're using the correct email and password. Password is case-sensitive. If you forgot your password, use the 'Forgot Password' link on the login page. Make sure your browser allows cookies, as they're required for authentication."
+  }
+]
+
