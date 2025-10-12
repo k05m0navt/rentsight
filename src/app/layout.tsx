@@ -1,27 +1,60 @@
+/**
+ * Root Layout - Complete Application Redesign
+ *
+ * Integrates redesigned navigation system:
+ * - Sidebar navigation for desktop/tablet (>= 768px)
+ * - Bottom navigation bar for mobile (< 768px)
+ * - Dark theme as default with Inter font family
+ *
+ * Per FR-014: Sidebar navigation on desktop/tablet, bottom nav on mobile
+ * Per FR-016: Dark theme as primary theme
+ */
+
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { cn } from '@/lib/utils';
 import ThemeProvider from '@/components/ThemeProvider';
-import Navbar from '@/components/navbar';
+import { Sidebar } from '@/components/Layout/Sidebar';
+import { BottomNav } from '@/components/Layout/BottomNav';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap', // Optimize font loading
+});
 
 export const metadata = {
-  title: 'Rentsight',
-  description: 'Web application for renter to help to see analytics about his rents.',
+  title: 'RentSight - Rental Analytics Dashboard',
+  description:
+    'Modern analytics platform for rental property management. Track income, expenses, and performance across all your properties.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
       </head>
-      <body className={cn('min-h-screen bg-background font-sans antialiased', inter.variable)}>
+      <body
+        className={cn(
+          'min-h-screen bg-background dark:bg-background-dark text-text dark:text-text-dark font-sans antialiased',
+          inter.variable,
+        )}
+      >
         <ThemeProvider>
-          <Navbar />
-          {children}
+          {/* Desktop/Tablet: Sidebar Navigation */}
+          <Sidebar />
+
+          {/* Mobile: Bottom Navigation Bar */}
+          <BottomNav />
+
+          {/* Main content area with responsive padding */}
+          {/* pb-16 for bottom nav on mobile, md:pb-0 for desktop */}
+          {/* md:pl-64 for sidebar offset on desktop (256px) */}
+          <main className="min-h-screen pb-16 md:pb-0 md:pl-64 p-5 transition-[padding] duration-200">
+            {children}
+          </main>
         </ThemeProvider>
       </body>
     </html>

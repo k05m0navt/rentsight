@@ -1,7 +1,21 @@
 'use client';
 
+/**
+ * Dashboard Content - Redesigned
+ *
+ * Main dashboard container with enhanced layout and visualizations.
+ * Features:
+ * - MetricsCard components for summary statistics
+ * - New color palette (#DD1202, #1DCC5C)
+ * - Card-based layout with consistent spacing
+ * - Improved loading and error states
+ *
+ * Per FR-015: Improved information hierarchy with prominent key data
+ */
+
 import { useEffect, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { DollarSign, Calendar, CreditCard, TrendingDown } from 'lucide-react';
+import { MetricsCard } from '@/components/dashboard/MetricsCard';
 import { RentAnalytics } from '@/app/dashboard/rent-analytics';
 import { ExpenseAnalytics } from '@/app/dashboard/expense-analytics';
 import { ExportButton } from '@/components/ui/export-button';
@@ -39,106 +53,73 @@ export function DashboardContent({ userId }: { userId: string }) {
     fetchSummary();
   }, [userId]);
 
+  // Calculate net income
+  const netIncome = summary ? summary.total_rent_income - summary.total_expenses : 0;
+
   if (loading) {
-    return <div>Loading analytics...</div>;
+    return (
+      <div className="flex items-center justify-center py-20">
+        <p className="text-lg text-muted dark:text-muted-dark">Loading analytics...</p>
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="text-red-500">Error loading analytics: {error}</div>;
+    return (
+      <div className="p-6 rounded-lg bg-error/10 border border-error/20 text-error">
+        <p className="font-medium">Error loading analytics</p>
+        <p className="text-sm mt-1">{error}</p>
+      </div>
+    );
   }
 
   if (!summary) {
-    return <div>No analytics data available.</div>; // T014
+    return (
+      <div className="p-12 text-center">
+        <p className="text-muted dark:text-muted-dark">No analytics data available.</p>
+      </div>
+    );
   }
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Rent Income</CardTitle>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              className="h-4 w-4 text-muted-foreground"
-            >
-              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-            </svg>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">${summary.total_rent_income.toFixed(2)}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Booked Days</CardTitle>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              className="h-4 w-4 text-muted-foreground"
-            >
-              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-              <circle cx="9" cy="7" r="4" />
-              <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
-            </svg>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{summary.total_booked_days}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Platform Income</CardTitle>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              className="h-4 w-4 text-muted-foreground"
-            >
-              <rect width="20" height="14" x="2" y="5" rx="2" />
-              <path d="M2 10h20" />
-            </svg>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">${summary.total_platform_income.toFixed(2)}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Expenses</CardTitle>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              className="h-4 w-4 text-muted-foreground"
-            >
-              <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-            </svg>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">${summary.total_expenses.toFixed(2)}</div>
-          </CardContent>
-        </Card>
+      {/* Summary Metrics */}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <MetricsCard
+          title="Total Rent Income"
+          value={`$${summary.total_rent_income.toFixed(2)}`}
+          icon={DollarSign}
+          variant="primary"
+        />
+        <MetricsCard
+          title="Total Booked Days"
+          value={summary.total_booked_days}
+          subtitle={`${summary.average_days_per_rent.toFixed(1)} avg per rental`}
+          icon={Calendar}
+          variant="success"
+        />
+        <MetricsCard
+          title="Platform Income"
+          value={`$${summary.total_platform_income.toFixed(2)}`}
+          subtitle="Across all platforms"
+          icon={CreditCard}
+        />
+        <MetricsCard
+          title="Net Income"
+          value={`$${netIncome.toFixed(2)}`}
+          subtitle={`After $${summary.total_expenses.toFixed(2)} expenses`}
+          icon={TrendingDown}
+          trend={netIncome > 0 ? 'up' : netIncome < 0 ? 'down' : 'neutral'}
+          variant={netIncome > 0 ? 'success' : 'default'}
+        />
       </div>
-      <ExportButton />
+
+      {/* Export Button */}
+      <div className="flex justify-end">
+        <ExportButton />
+      </div>
+
+      {/* Detailed Analytics */}
       <RentAnalytics userId={userId} />
       <ExpenseAnalytics userId={userId} />
     </div>

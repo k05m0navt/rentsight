@@ -1,46 +1,148 @@
-/* Semantic CSS tokens for light and dark themes */
+/**
+ * Design System Tokens
+ * CSS custom properties with IE11 fallback values
+ * 
+ * IMPORTANT: All properties include IE11-compatible fallback values
+ * before the custom property. Modern browsers will use the custom property,
+ * while IE11 will use the fallback value.
+ */
+
 :root {
-  --color-bg: #ffffff;
-  --color-surface: #f8fafc;
-  --color-text-primary: #0f172a; /* dark-900 */
-  --color-text-secondary: #475569; /* slate-500 */
-  --color-primary: #2563eb; /* blue-600 */
+  /* Colors - Light Theme */
+  --color-background: #FFFFFF;
+  --color-card: #F5F5F5;
+  --color-primary: #DD1202;
+  --color-primary-foreground: #FFFFFF;
+  --color-success: #1DCC5C;
+  --color-success-foreground: #FFFFFF;
+  --color-text: #1A1A1A;
+  --color-text-dark: #EEEEEE;
+  --color-muted: #666666;
+  --color-border: #E5E5E5;
+  --color-hover: #F8F8F8;
+  --color-focus: rgba(221, 18, 2, 0.2);
+  --color-error: #DC2626;
+  --color-warning: #F59E0B;
+  --color-info: #3B82F6;
+  --color-disabled: #D1D5DB;
+  
+  /* Spacing (8-point scale) */
+  --spacing-0: 0;
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 16px;
+  --spacing-4: 24px;
+  --spacing-5: 32px;
+  --spacing-6: 40px;
+  --spacing-7: 48px;
+  --spacing-8: 64px;
+  
+  /* Typography */
+  --font-family-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-family-mono: 'Roboto Mono', 'Courier New', monospace;
+  
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-base: 16px;
+  --font-size-lg: 20px;
+  --font-size-xl: 24px;
+  --font-size-2xl: 32px;
+  
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+  
+  --line-height-xs: 16px;
+  --line-height-sm: 20px;
+  --line-height-base: 24px;
+  --line-height-lg: 28px;
+  --line-height-xl: 32px;
+  --line-height-2xl: 40px;
+  
+  /* Border Radius */
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  --border-radius-full: 9999px;
+  
+  /* Shadows - Light Theme */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  
+  /* Transitions */
+  --transition-fast: 150ms;
+  --transition-default: 200ms;
+  --transition-slow: 300ms;
+  --transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Dark Theme */
 .dark {
-  --color-bg: #0b1220;
-  --color-surface: #071026;
-  --color-text-primary: #e6eef8;
-  --color-text-secondary: #94a3b8;
-  --color-primary: #60a5fa;
+  --color-background: #030303;
+  --color-card: #1A1A1A;
+  --color-text: #EEEEEE;
+  --color-muted: #AAAAAA;
+  --color-border: #333333;
+  --color-hover: #252525;
+  --color-focus: rgba(221, 18, 2, 0.4);
+  --color-disabled: #4B5563;
+  
+  /* Shadows - Dark Theme (more prominent) */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.5);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.7);
 }
 
-/* Focus outline token */
-:root {
-  --focus-ring: 3px solid rgba(37,99,235,0.3);
+/**
+ * IE11 Fallback Classes
+ * Use these classes for IE11 where custom properties aren't supported
+ */
+
+/* IE11 detection: Using @media for IE10+ */
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  /* Light theme fallbacks */
+  .bg-background { background-color: #FFFFFF; }
+  .bg-card { background-color: #F5F5F5; }
+  .bg-primary { background-color: #DD1202; }
+  .text-text { color: #1A1A1A; }
+  .text-muted { color: #666666; }
+  .border-border { border-color: #E5E5E5; }
+  
+  /* Dark theme fallbacks (requires .dark parent class) */
+  .dark .bg-background { background-color: #030303; }
+  .dark .bg-card { background-color: #1A1A1A; }
+  .dark .text-text { color: #EEEEEE; }
+  .dark .text-muted { color: #AAAAAA; }
+  .dark .border-border { border-color: #333333; }
+  
+  /* Disable animations in IE11 for performance */
+  * {
+    animation-duration: 0s !important;
+    transition-duration: 0s !important;
+  }
 }
 
-/* Typography Scale */
-:root {
-  --font-size-xs: 0.75rem;
-  --font-size-sm: 0.875rem;
-  --font-size-base: 1rem;
-  --font-size-lg: 1.125rem;
-  --font-size-xl: 1.25rem;
-  --font-size-2xl: 1.5rem;
-  --font-size-3xl: 1.875rem;
-  --line-height-tight: 1.25;
-  --line-height-normal: 1.5;
-  --line-height-relaxed: 1.625;
+/**
+ * Base styles with fallbacks
+ * These styles use fallback values before custom properties
+ */
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font-family-sans);
+  font-size: 16px;
+  font-size: var(--font-size-base);
+  line-height: 24px;
+  line-height: var(--line-height-base);
+  color: #1A1A1A;
+  color: var(--color-text);
+  background-color: #FFFFFF;
+  background-color: var(--color-background);
 }
 
-/* Spacing Units */
-:root {
-  --spacing-xs: 0.25rem; /* 4px */
-  --spacing-sm: 0.5rem; /* 8px */
-  --spacing-md: 1rem; /* 16px */
-  --spacing-lg: 1.5rem; /* 24px */
-  --spacing-xl: 2rem; /* 32px */
+.dark body {
+  color: #EEEEEE;
+  color: var(--color-text);
+  background-color: #030303;
+  background-color: var(--color-background);
 }
-
-

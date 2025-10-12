@@ -1,0 +1,22 @@
+# Browsers that we support for the redesigned application
+# This configuration ensures proper transpilation and prefixing for
+# enterprise browser compatibility including IE11
+
+# Modern browsers (last 2 versions)
+last 2 Chrome versions
+last 2 Firefox versions
+last 2 Safari versions
+last 2 Edge versions
+
+# Enterprise browsers (IE11 and older Edge)
+IE 11
+Edge >= 15
+
+# Mobile browsers
+last 2 iOS versions
+last 2 Android versions
+
+# Market share threshold
+> 0.5%
+not dead
+

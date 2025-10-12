@@ -8,6 +8,8 @@ Auto-generated from all feature plans. Last updated: 2025-10-09
 - PostgreSQL (001-build-a-web)
 - TypeScript (Next.js project present) + Tailwind CSS, Aceternity UI (preferred), `shadcn/ui` (fallback) (002-i-need-that)
 - N/A (theme stored in browser `localStorage`) (002-i-need-that)
+- TypeScript 5.x with Next.js 15.5.4 (React 19.1.0) (003-as-a-developer)
+- PostgreSQL via Prisma ORM, Supabase for auth/realtime (003-as-a-developer)
 
 ## Project Structure
 ```
@@ -22,9 +24,9 @@ npm test [ONLY COMMANDS FOR ACTIVE TECHNOLOGIES][ONLY COMMANDS FOR ACTIVE TECHNO
 TypeScript (latest stable): Follow standard conventions
 
 ## Recent Changes
+- 003-as-a-developer: Added TypeScript 5.x with Next.js 15.5.4 (React 19.1.0)
 - 002-i-need-that: Added TypeScript (Next.js project present) + Tailwind CSS, Aceternity UI (preferred), `shadcn/ui` (fallback)
 - 001-build-a-web: Added TypeScript, Node.js 20.x, React 18.x + Backend: Express.js, Prisma; Frontend: React, React Router, Recharts, Zustand
-- 001-build-a-web: Added TypeScript (latest stable) + Next.js (latest stable), React (latest stable), Tailwind CSS, Prisma ORM, ShadCN/UI
 
 <!-- MANUAL ADDITIONS START -->
 <!-- MANUAL ADDITIONS END -->

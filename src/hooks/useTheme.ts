@@ -1,7 +1,8 @@
-'use client';
+/**
+ * Theme Hook
+ *
+ * Re-exports the useTheme hook from ThemeProvider for convenience.
+ * This maintains backward compatibility with existing code.
+ */
 
-import { useTheme as _useTheme } from '../components/ThemeProvider';
-
-export default function useTheme() {
-  return _useTheme();
-}
+export { useTheme, useTheme as default } from '../components/ThemeProvider';

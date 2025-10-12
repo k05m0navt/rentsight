@@ -1,49 +1,42 @@
 'use client';
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
+/**
+ * Theme Provider using next-themes
+ *
+ * Provides dark/light theme management with localStorage persistence.
+ * Dark theme is the default per the redesign specification.
+ *
+ * Based on the redesign spec:
+ * - FR-016: Dark theme as primary theme
+ * - Dark mode is default, light mode is optional
+ * - Client-side storage only (localStorage)
+ * - No system preference detection (enableSystem: false)
+ */
 
-type Theme = 'light' | 'dark' | 'system';
+import {
+  ThemeProvider as NextThemesProvider,
+  useTheme as useNextTheme,
+  type ThemeProviderProps,
+} from 'next-themes';
 
-const ThemeContext = createContext({
-  theme: 'system' as Theme,
-  setTheme: (_t: Theme) => {},
-});
+export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
+  return (
+    <NextThemesProvider
+      attribute="class"
+      defaultTheme="dark"
+      enableSystem={false}
+      storageKey="rentsight-theme"
+      {...props}
+    >
+      {children}
+    </NextThemesProvider>
+  );
+}
 
-export const useTheme = () => useContext(ThemeContext);
-
-export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [theme, setThemeState] = useState<Theme>('system');
-
-  useEffect(() => {
-    const stored = typeof window !== 'undefined' ? localStorage.getItem('theme') : null;
-    if (stored === 'light' || stored === 'dark' || stored === 'system') {
-      setThemeState(stored as Theme);
-    } else {
-      setThemeState('system');
-    }
-  }, []);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const root = document.documentElement;
-    const applied =
-      theme === 'system'
-        ? window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-          ? 'dark'
-          : 'light'
-        : theme;
-    if (applied === 'dark') root.classList.add('dark');
-    else root.classList.remove('dark');
-    try {
-      localStorage.setItem('theme', theme);
-    } catch (_e) {
-      /* ignore */
-    }
-  }, [theme]);
-
-  const setTheme = (t: Theme) => setThemeState(t);
-
-  return <ThemeContext.Provider value={{ theme, setTheme }}>{children}</ThemeContext.Provider>;
-};
+/**
+ * Re-export useTheme hook from next-themes for convenience
+ * Usage: const { theme, setTheme } = useTheme()
+ */
+export const useTheme = useNextTheme;
 
 export default ThemeProvider;
