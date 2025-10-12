@@ -1,3 +1,12 @@
+/**
+ * Grid Component - Redesigned
+ *
+ * Updated with new responsive breakpoints from design system.
+ * Default gap: gap-4 (24px) from 8-point spacing scale.
+ *
+ * Key breakpoint: md (768px) for sidebar → bottom nav transition
+ */
+
 import React from 'react';
 import { cn } from '@/lib/utils';
 

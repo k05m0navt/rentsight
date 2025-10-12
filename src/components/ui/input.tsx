@@ -1,3 +1,15 @@
+/**
+ * Input Component - Redesigned
+ *
+ * Updated with new design system from "AI Hiring - SaaS CRM Web App" reference.
+ * Features:
+ * - Border radius: md (8px)
+ * - Padding: 12px 16px (vertical: 3, horizontal: 3)
+ * - Focus ring: primary color with offset
+ * - Dark theme support
+ * - WCAG AA compliant contrast
+ */
+
 import * as React from 'react';
 
 import { cn } from '@/lib/utils';
@@ -8,9 +20,15 @@ function Input({ className, type, ...props }: React.ComponentProps<'input'>) {
       type={type}
       data-slot="input"
       className={cn(
-        'file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-10 w-full min-w-0 rounded-md border bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm',
-        'focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]',
-        'aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive',
+        'h-10 w-full rounded-md border border-border dark:border-border-dark',
+        'bg-background dark:bg-background-dark',
+        'px-3 py-3 text-base',
+        'text-text dark:text-text-dark',
+        'placeholder:text-muted dark:placeholder:text-muted-dark',
+        'transition-[border-color,box-shadow] duration-200',
+        'focus-visible:outline-none focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20',
+        'disabled:cursor-not-allowed disabled:opacity-60',
+        'aria-invalid:border-error aria-invalid:focus-visible:ring-error/20',
         className,
       )}
       {...props}

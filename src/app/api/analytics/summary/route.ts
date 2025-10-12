@@ -39,12 +39,19 @@ export async function GET() {
       where: { user_id: user.id },
     });
 
+    // Calculate average days per rent
+    const rentCount = await prisma.rentEntry.count({
+      where: { user_id: user.id },
+    });
+    const averageDaysPerRent =
+      rentCount > 0 ? (totalBookedDaysResult._sum?.booked_days || 0) / rentCount : 0;
+
     const summary = {
       total_rent_income: totalRentIncomeResult._sum?.amount || 0,
       total_booked_days: totalBookedDaysResult._sum?.booked_days || 0,
       total_platform_income: totalPlatformIncome,
       total_expenses: totalExpensesResult._sum?.amount || 0,
-      average_days_per_rent: 0, // This will be calculated in a later task if required.
+      average_days_per_rent: averageDaysPerRent,
     };
 
     return NextResponse.json(summary);
