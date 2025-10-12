@@ -1,0 +1,104 @@
+openapi: 3.0.0
+info:
+  title: Visual Design System Adoption API
+  description: API contracts for visual design system adoption from AI Hiring SaaS CRM
+  version: 1.0.0
+
+paths:
+  /api/design-tokens:
+    get:
+      summary: Get current design tokens
+      description: Retrieve the current design token configuration
+      responses:
+        '200':
+          description: Design tokens retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  primaryColor:
+                    type: string
+                    example: "#FF6B35"
+                  successColor:
+                    type: string
+                    example: "#1DCC5C"
+                  backgroundColor:
+                    type: string
+                    example: "#1A1A1A"
+                  cardBackground:
+                    type: string
+                    example: "#2A2A2A"
+                  textPrimary:
+                    type: string
+                  textSecondary:
+                    type: string
+                  borderRadius:
+                    type: object
+                  spacing:
+                    type: object
+                  typography:
+                    type: object
+
+  /api/visual-tests:
+    get:
+      summary: Get visual regression test results
+      description: Retrieve results of visual regression tests
+      responses:
+        '200':
+          description: Visual test results retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tests:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        testName:
+                          type: string
+                        component:
+                          type: string
+                        status:
+                          type: string
+                          enum: ["pass", "fail", "pending"]
+                        lastUpdated:
+                          type: string
+                          format: date-time
+
+  /api/design-validation:
+    post:
+      summary: Validate component against design reference
+      description: Compare component visual appearance against design reference
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                componentName:
+                  type: string
+                screenshot:
+                  type: string
+                  format: base64
+      responses:
+        '200':
+          description: Design validation completed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isValid:
+                    type: boolean
+                  confidence:
+                    type: number
+                    minimum: 0
+                    maximum: 1
+                  differences:
+                    type: array
+                    items:
+                      type: string

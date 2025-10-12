@@ -6,3 +6,46 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "../styles/tokens.css";
+
+@theme {
+  /* Color palette from AI Hiring SaaS CRM design reference */
+  --color-primary: #FF6B35;
+  --color-primary-foreground: #FFFFFF;
+  --color-success: #1DCC5C;
+  --color-success-foreground: #FFFFFF;
+  --color-error: #DC2626;
+  --color-warning: #F59E0B;
+  --color-info: #3B82F6;
+  
+  /* Background colors */
+  --color-background: #FFFFFF;
+  --color-background-dark: #1A1A1A;
+  
+  /* Card colors */
+  --color-card: #F5F5F5;
+  --color-card-dark: #2A2A2A;
+  
+  /* Text colors */
+  --color-text: #1A1A1A;
+  --color-text-dark: #EEEEEE;
+  
+  /* Muted colors */
+  --color-muted: #666666;
+  --color-muted-dark: #AAAAAA;
+  
+  /* Border colors */
+  --color-border: #E5E5E5;
+  --color-border-dark: #333333;
+  
+  /* Hover colors */
+  --color-hover: #F8F8F8;
+  --color-hover-dark: #252525;
+  
+  /* Focus colors */
+  --color-focus: rgba(255, 107, 53, 0.2);
+  --color-focus-dark: rgba(255, 107, 53, 0.4);
+  
+  /* Disabled colors */
+  --color-disabled: #D1D5DB;
+  --color-disabled-dark: #4B5563;
+}

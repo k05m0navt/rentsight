@@ -5,7 +5,7 @@
  * Uses design tokens for consistent styling across light and dark themes.
  *
  * Variants:
- * - primary: Primary accent (#DD1202), white text
+ * - primary: Primary accent (#FF6B35 - Orange from AI Hiring SaaS CRM design), white text
  * - secondary: Card background, border, hover state
  * - ghost: Transparent background, subtle hover
  * - link: Text link with underline

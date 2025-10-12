@@ -9,17 +9,17 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Semantic color tokens
+        // Semantic color tokens - Updated to match AI Hiring SaaS CRM design reference
         background: {
           DEFAULT: '#FFFFFF', // Light mode
-          dark: '#030303',    // Dark mode #030303
+          dark: '#1A1A1A',    // Dark mode - Main background color from design reference
         },
         card: {
           DEFAULT: '#F5F5F5',
-          dark: '#1A1A1A',
+          dark: '#2A2A2A',    // Card background color from design reference
         },
         primary: {
-          DEFAULT: '#DD1202',        // Primary accent
+          DEFAULT: '#FF6B35',        // Orange accent color from design reference
           foreground: '#FFFFFF',
         },
         success: {
@@ -43,8 +43,8 @@ module.exports = {
           dark: '#252525',
         },
         focus: {
-          DEFAULT: 'rgba(221, 18, 2, 0.2)',   // Primary with 20% opacity
-          dark: 'rgba(221, 18, 2, 0.4)',      // Primary with 40% opacity for dark bg
+          DEFAULT: 'rgba(255, 107, 53, 0.2)',   // Orange primary with 20% opacity
+          dark: 'rgba(255, 107, 53, 0.4)',      // Orange primary with 40% opacity for dark bg
         },
         // Semantic states
         error: '#DC2626',
