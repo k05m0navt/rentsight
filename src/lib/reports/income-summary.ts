@@ -5,6 +5,7 @@ export async function generateIncomeSummary(
   userId: string,
   filters: ReportFilters = {},
 ): Promise<IncomeSummaryData> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const where: any = { user_id: userId };
 
   // Apply filters
@@ -78,4 +79,3 @@ export async function generateIncomeSummary(
     })),
   };
 }
-

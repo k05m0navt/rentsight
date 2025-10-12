@@ -79,10 +79,10 @@ export default function PropertiesPage() {
         router.refresh();
         window.location.reload();
       } else {
-        const error = await response.json();
-        alert(error.error || 'Failed to delete property');
+        const errorData = await response.json();
+        alert(errorData.error || 'Failed to delete property');
       }
-    } catch (error) {
+    } catch {
       alert('Network error. Please try again.');
     }
   };
@@ -160,18 +160,15 @@ export default function PropertiesPage() {
                 (deletingProperty._count?.expenseEntries || 0) > 0) && (
                 <p className="text-sm text-muted dark:text-muted-dark bg-card dark:bg-card-dark p-3 rounded">
                   This property has {deletingProperty._count?.rentEntries || 0} rent entries and{' '}
-                  {deletingProperty._count?.expenseEntries || 0} expense entries. These entries will not
-                  be deleted, but will no longer be associated with a property.
+                  {deletingProperty._count?.expenseEntries || 0} expense entries. These entries will
+                  not be deleted, but will no longer be associated with a property.
                 </p>
               )}
               <div className="flex gap-2 justify-end">
                 <Button variant="secondary" onClick={() => setDeletingProperty(null)}>
                   Cancel
                 </Button>
-                <Button
-                  onClick={confirmDelete}
-                  className="bg-red-600 hover:bg-red-700 text-white"
-                >
+                <Button onClick={confirmDelete} className="bg-red-600 hover:bg-red-700 text-white">
                   Delete Property
                 </Button>
               </div>
@@ -182,4 +179,3 @@ export default function PropertiesPage() {
     </div>
   );
 }
-

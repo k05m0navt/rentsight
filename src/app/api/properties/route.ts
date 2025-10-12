@@ -102,10 +102,10 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json(property, { status: 201 });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error creating property:', error);
 
-    if (error.code === 'P2002') {
+    if (error && typeof error === 'object' && 'code' in error && error.code === 'P2002') {
       // Unique constraint violation
       return NextResponse.json(
         { error: 'Property with this name already exists', code: 'DUPLICATE_NAME' },
@@ -119,4 +119,3 @@ export async function POST(request: Request) {
     );
   }
 }
-

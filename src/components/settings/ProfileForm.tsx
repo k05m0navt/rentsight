@@ -51,10 +51,10 @@ export function ProfileForm({ initialData }: ProfileFormProps) {
         // Refresh the page to reflect changes
         setTimeout(() => window.location.reload(), 1500);
       } else {
-        const error = await response.json();
-        setMessage({ type: 'error', text: error.error || 'Failed to update profile' });
+        const errorData = await response.json();
+        setMessage({ type: 'error', text: errorData.error || 'Failed to update profile' });
       }
-    } catch (error) {
+    } catch {
       setMessage({ type: 'error', text: 'Network error. Please try again.' });
     }
   };
@@ -116,4 +116,3 @@ export function ProfileForm({ initialData }: ProfileFormProps) {
     </form>
   );
 }
-

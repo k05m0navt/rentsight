@@ -6,7 +6,9 @@ export async function generateTaxReport(
   filters: ReportFilters = {},
 ): Promise<TaxReportData> {
   // For tax reports, typically we want a full calendar year
-  const year = filters.startDate ? new Date(filters.startDate).getFullYear() : new Date().getFullYear();
+  const year = filters.startDate
+    ? new Date(filters.startDate).getFullYear()
+    : new Date().getFullYear();
   const yearStart = new Date(`${year}-01-01`);
   const yearEnd = new Date(`${year}-12-31`);
 
@@ -95,4 +97,3 @@ export async function generateTaxReport(
     })),
   };
 }
-

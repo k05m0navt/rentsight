@@ -24,10 +24,10 @@ export type PasswordChangeForm = z.infer<typeof passwordChangeSchema>;
 
 // User Preferences Validation
 export const userPreferencesSchema = z.object({
-  currency_format: z.string().default('USD'),
-  date_format: z.enum(['MM/DD/YYYY', 'DD/MM/YYYY', 'YYYY-MM-DD']).default('MM/DD/YYYY'),
-  language: z.string().default('en'),
-  default_view: z.enum(['dashboard', 'properties', 'reports', 'settings']).default('dashboard'),
+  currency_format: z.string(),
+  date_format: z.enum(['MM/DD/YYYY', 'DD/MM/YYYY', 'YYYY-MM-DD']),
+  language: z.string(),
+  default_view: z.enum(['dashboard', 'properties', 'reports', 'settings']),
   theme_preference: z.enum(['light', 'dark', 'system']).optional(),
 });
 
@@ -37,9 +37,7 @@ export type UserPreferencesForm = z.infer<typeof userPreferencesSchema>;
 export const propertySchema = z.object({
   name: z.string().min(1, 'Name is required').max(255, 'Name is too long'),
   address: z.string().max(500, 'Address is too long').optional(),
-  property_type: z
-    .enum(['apartment', 'house', 'condo', 'townhouse', 'duplex', 'other'])
-    .optional(),
+  property_type: z.enum(['apartment', 'house', 'condo', 'townhouse', 'duplex', 'other']).optional(),
   start_date: z.string().optional(), // ISO date string
   notes: z.string().max(2000, 'Notes are too long').optional(),
 });
@@ -65,4 +63,3 @@ export const reportRequestSchema = z.object({
 });
 
 export type ReportRequest = z.infer<typeof reportRequestSchema>;
-

@@ -32,10 +32,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
     });
 
     if (!property) {
-      return NextResponse.json(
-        { error: 'Property not found', code: 'NOT_FOUND' },
-        { status: 404 },
-      );
+      return NextResponse.json({ error: 'Property not found', code: 'NOT_FOUND' }, { status: 404 });
     }
 
     // Calculate stats
@@ -99,10 +96,7 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
     });
 
     if (!existing) {
-      return NextResponse.json(
-        { error: 'Property not found', code: 'NOT_FOUND' },
-        { status: 404 },
-      );
+      return NextResponse.json({ error: 'Property not found', code: 'NOT_FOUND' }, { status: 404 });
     }
 
     const updated = await prisma.property.update({
@@ -122,10 +116,10 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
     });
 
     return NextResponse.json(updated);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error updating property:', error);
 
-    if (error.code === 'P2002') {
+    if (error && typeof error === 'object' && 'code' in error && error.code === 'P2002') {
       return NextResponse.json(
         { error: 'Property name already exists', code: 'DUPLICATE_NAME' },
         { status: 409 },
@@ -159,10 +153,7 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
     });
 
     if (!existing) {
-      return NextResponse.json(
-        { error: 'Property not found', code: 'NOT_FOUND' },
-        { status: 404 },
-      );
+      return NextResponse.json({ error: 'Property not found', code: 'NOT_FOUND' }, { status: 404 });
     }
 
     // Delete property (property_id in entries will be set to null due to onDelete: SetNull)
@@ -179,4 +170,3 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
     );
   }
 }
-

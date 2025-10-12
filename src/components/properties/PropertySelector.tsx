@@ -18,7 +18,12 @@ interface PropertySelectorProps {
   required?: boolean;
 }
 
-export function PropertySelector({ value, onChange, error, required = false }: PropertySelectorProps) {
+export function PropertySelector({
+  value,
+  onChange,
+  error,
+  required = false,
+}: PropertySelectorProps) {
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -81,4 +86,3 @@ export function PropertySelector({ value, onChange, error, required = false }: P
     </div>
   );
 }
-

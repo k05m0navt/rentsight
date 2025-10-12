@@ -80,7 +80,12 @@ interface AccordionProps {
   className?: string;
 }
 
-function Accordion({ items, allowMultiple = false, defaultOpenIds = [], className }: AccordionProps) {
+function Accordion({
+  items,
+  allowMultiple = false,
+  defaultOpenIds = [],
+  className,
+}: AccordionProps) {
   const [openIds, setOpenIds] = React.useState<Set<string>>(new Set(defaultOpenIds));
 
   const toggleItem = (id: string) => {
@@ -116,4 +121,3 @@ function Accordion({ items, allowMultiple = false, defaultOpenIds = [], classNam
 
 export { Accordion, AccordionItem };
 export type { AccordionProps };
-

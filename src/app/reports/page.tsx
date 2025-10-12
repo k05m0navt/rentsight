@@ -20,7 +20,11 @@ import { BarChart3, FileText, Calculator, Download } from 'lucide-react';
 export default function ReportsPage() {
   const [reportType, setReportType] = useState('income_summary');
   const [generating, setGenerating] = useState(false);
-  const [reportData, setReportData] = useState<any>(null);
+  const [reportData, setReportData] = useState<{
+    generated_at: string;
+    summary: { totalIncome: number; totalExpenses: number; netIncome: number; entryCount: number };
+    data: unknown;
+  } | null>(null);
 
   const handleGenerate = async () => {
     setGenerating(true);
@@ -40,7 +44,7 @@ export default function ReportsPage() {
       } else {
         alert('Failed to generate report');
       }
-    } catch (error) {
+    } catch {
       alert('Network error');
     } finally {
       setGenerating(false);
@@ -63,7 +67,7 @@ export default function ReportsPage() {
         const data = await response.json();
         alert(data.message || 'Export successful');
       }
-    } catch (error) {
+    } catch {
       alert('Export failed');
     }
   };
@@ -242,4 +246,3 @@ export default function ReportsPage() {
     </div>
   );
 }
-

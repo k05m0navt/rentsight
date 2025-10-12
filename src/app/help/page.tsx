@@ -120,9 +120,7 @@ export default async function HelpPage() {
               </div>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted dark:text-muted-dark mb-2">
-                Get help via email
-              </p>
+              <p className="text-sm text-muted dark:text-muted-dark mb-2">Get help via email</p>
               <a
                 href="mailto:support@rentsight.app"
                 className="text-sm text-primary hover:underline"
@@ -160,4 +158,3 @@ export default async function HelpPage() {
     </div>
   );
 }
-

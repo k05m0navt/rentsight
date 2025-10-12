@@ -38,4 +38,3 @@ export interface PropertyListResponse {
   nextCursor: string | null;
   total: number;
 }
-

@@ -14,7 +14,7 @@ export interface UserPreferences {
   language: string;
   default_view: string;
   theme_preference?: string | null;
-  preferences?: Record<string, any> | null;
+  preferences?: Record<string, unknown> | null;
   created_at: Date;
   updated_at: Date;
 }
@@ -25,7 +25,7 @@ export interface UserPreferencesUpdate {
   language?: string;
   default_view?: 'dashboard' | 'properties' | 'reports' | 'settings';
   theme_preference?: 'light' | 'dark' | 'system';
-  preferences?: Record<string, any>;
+  preferences?: Record<string, unknown>;
 }
 
 export interface ProfileUpdateInput {
@@ -38,4 +38,3 @@ export interface PasswordChangeInput {
   newPassword: string;
   confirmPassword: string;
 }
-

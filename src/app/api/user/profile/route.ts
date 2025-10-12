@@ -97,10 +97,10 @@ export async function PUT(request: Request) {
     });
 
     return NextResponse.json(updated);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error updating profile:', error);
 
-    if (error.code === 'P2002') {
+    if (error && typeof error === 'object' && 'code' in error && error.code === 'P2002') {
       // Unique constraint violation
       return NextResponse.json(
         { error: 'Email already in use', code: 'EMAIL_EXISTS' },
@@ -114,4 +114,3 @@ export async function PUT(request: Request) {
     );
   }
 }
-

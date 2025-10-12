@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { TagList } from './TagList';
 import { TagItem } from './TagItem';
 
 interface Tag {
@@ -72,9 +71,7 @@ export function TagListContainer({ userId }: TagListContainerProps) {
     return (
       <div className="text-center py-8">
         <p className="text-muted-foreground mb-2">No tags yet</p>
-        <p className="text-sm text-muted-foreground">
-          Create your first tag using the form above
-        </p>
+        <p className="text-sm text-muted-foreground">Create your first tag using the form above</p>
       </div>
     );
   }
@@ -82,13 +79,8 @@ export function TagListContainer({ userId }: TagListContainerProps) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {tags.map((tag) => (
-        <TagItem
-          key={tag.id}
-          tag={tag}
-          onDelete={handleDelete}
-        />
+        <TagItem key={tag.id} tag={tag} onDelete={() => handleDelete(tag.id)} />
       ))}
     </div>
   );
 }
-

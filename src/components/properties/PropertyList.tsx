@@ -11,7 +11,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { PropertyWithStats } from '@/types/property';
 import { PropertyItem } from './PropertyItem';
 import { Button } from '@/components/ui/button';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Card, CardHeader, CardContent } from '@/components/ui/card';
 import { Plus, Search, Building2 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 
@@ -141,7 +141,9 @@ export function PropertyList({ onAdd, onEdit, onDelete }: PropertyListProps) {
         </div>
       ) : (
         <div className="text-center py-12">
-          <p className="text-muted dark:text-muted-dark">No properties found matching "{searchTerm}"</p>
+          <p className="text-muted dark:text-muted-dark">
+            No properties found matching &quot;{searchTerm}&quot;
+          </p>
           <Button variant="secondary" onClick={() => setSearchTerm('')} className="mt-4">
             Clear Search
           </Button>
@@ -165,4 +167,3 @@ export function PropertyList({ onAdd, onEdit, onDelete }: PropertyListProps) {
     </div>
   );
 }
-

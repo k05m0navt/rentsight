@@ -118,9 +118,8 @@ export default function AboutPage() {
         </CardHeader>
         <CardContent>
           <p className="text-sm">
-            Design inspired by{' '}
-            <strong>&quot;AI Hiring - SaaS CRM Web App&quot;</strong> by Tamim Al Arafat on
-            Dribbble
+            Design inspired by <strong>&quot;AI Hiring - SaaS CRM Web App&quot;</strong> by Tamim Al
+            Arafat on Dribbble
           </p>
           <p className="text-sm text-muted dark:text-muted-dark mt-2">
             Component library: shadcn/ui with Radix UI primitives
@@ -150,7 +149,8 @@ export default function AboutPage() {
             </Link>
           </div>
           <p className="text-xs text-muted dark:text-muted-dark mt-4">
-            ⚠️ Legal documents require review by qualified legal counsel before production deployment
+            ⚠️ Legal documents require review by qualified legal counsel before production
+            deployment
           </p>
         </CardContent>
       </Card>
@@ -218,4 +218,3 @@ export default function AboutPage() {
     </div>
   );
 }
-

@@ -17,17 +17,13 @@ export default async function RentEntriesPage() {
     <div className="container mx-auto max-w-4xl">
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">Rent Entries</h1>
-        <p className="text-muted-foreground">
-          Add and manage your rental income entries
-        </p>
+        <p className="text-muted-foreground">Add and manage your rental income entries</p>
       </div>
 
       <Card>
         <CardHeader>
           <CardTitle>Add New Rent Entry</CardTitle>
-          <CardDescription>
-            Record rental income from your properties
-          </CardDescription>
+          <CardDescription>Record rental income from your properties</CardDescription>
         </CardHeader>
         <CardContent>
           <RentEntryForm userId={user.id} />
@@ -36,4 +32,3 @@ export default async function RentEntriesPage() {
     </div>
   );
 }
-

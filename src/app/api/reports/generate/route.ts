@@ -34,7 +34,7 @@ export async function POST(request: Request) {
 
     const { reportType, filters } = validation.data;
 
-    let reportData: any;
+    let reportData: unknown;
 
     switch (reportType) {
       case 'income_summary':
@@ -94,4 +94,3 @@ export async function POST(request: Request) {
     );
   }
 }
-

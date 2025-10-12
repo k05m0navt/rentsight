@@ -17,17 +17,13 @@ export default async function ExpenseEntriesPage() {
     <div className="container mx-auto max-w-4xl">
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">Expense Entries</h1>
-        <p className="text-muted-foreground">
-          Add and manage your rental property expenses
-        </p>
+        <p className="text-muted-foreground">Add and manage your rental property expenses</p>
       </div>
 
       <Card>
         <CardHeader>
           <CardTitle>Add New Expense Entry</CardTitle>
-          <CardDescription>
-            Record expenses related to your rental properties
-          </CardDescription>
+          <CardDescription>Record expenses related to your rental properties</CardDescription>
         </CardHeader>
         <CardContent>
           <ExpenseEntryForm userId={user.id} />
@@ -36,4 +32,3 @@ export default async function ExpenseEntriesPage() {
     </div>
   );
 }
-

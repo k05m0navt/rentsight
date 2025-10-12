@@ -41,10 +41,10 @@ export function PasswordForm() {
         setMessage({ type: 'success', text: 'Password changed successfully' });
         reset(); // Clear form fields
       } else {
-        const error = await response.json();
-        setMessage({ type: 'error', text: error.error || 'Failed to change password' });
+        const errorData = await response.json();
+        setMessage({ type: 'error', text: errorData.error || 'Failed to change password' });
       }
-    } catch (error) {
+    } catch {
       setMessage({ type: 'error', text: 'Network error. Please try again.' });
     }
   };
@@ -124,4 +124,3 @@ export function PasswordForm() {
     </form>
   );
 }
-

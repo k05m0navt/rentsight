@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma';
-import { PropertyCreateInput, PropertyUpdateInput, PropertyWithStats } from '@/types/property';
+import { PropertyCreateInput, PropertyUpdateInput } from '@/types/property';
 
 export class PropertyService {
   /**
@@ -166,4 +166,3 @@ export class PropertyService {
     };
   }
 }
-

@@ -23,7 +23,7 @@ export interface ReportData {
   reportType: string;
   generated_at: string;
   filters: ReportFilters;
-  data: Record<string, any>;
+  data: Record<string, unknown>;
   summary: ReportSummary;
 }
 
@@ -80,4 +80,3 @@ export interface TaxReportData {
 }
 
 export type ReportExportFormat = 'pdf' | 'csv' | 'excel';
-

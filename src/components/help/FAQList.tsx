@@ -61,4 +61,3 @@ export function FAQList({ faqs }: FAQListProps) {
     </div>
   );
 }
-

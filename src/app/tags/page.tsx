@@ -1,26 +1,62 @@
+'use client';
+
 import { redirect } from 'next/navigation';
-import { createClient } from '@/lib/supabase/server';
+import { createClient } from '@/lib/supabase/client';
 import { TagListContainer } from '@/components/tags/TagListContainer';
 import { TagForm } from '@/components/tags/TagForm';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useEffect, useState } from 'react';
 
-export default async function TagsPage() {
-  const supabase = createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+export default function TagsPage() {
+  const [userId, setUserId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  if (!user) {
-    redirect('/login');
+  useEffect(() => {
+    const checkAuth = async () => {
+      const supabase = createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        redirect('/login');
+      } else {
+        setUserId(user.id);
+      }
+      setLoading(false);
+    };
+    checkAuth();
+  }, []);
+
+  const handleTagSubmit = async (tag: { name: string; color?: string }) => {
+    const response = await fetch('/api/tags', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(tag),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Failed to create tag');
+    }
+
+    // Reload to refresh the tag list
+    window.location.reload();
+  };
+
+  if (loading || !userId) {
+    return (
+      <div className="container mx-auto max-w-4xl">
+        <p className="text-muted-foreground">Loading...</p>
+      </div>
+    );
   }
 
   return (
     <div className="container mx-auto max-w-4xl">
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">Tags</h1>
-        <p className="text-muted-foreground">
-          Create and manage tags for organizing your entries
-        </p>
+        <p className="text-muted-foreground">Create and manage tags for organizing your entries</p>
       </div>
 
       <div className="grid gap-6">
@@ -32,23 +68,20 @@ export default async function TagsPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <TagForm userId={user.id} />
+            <TagForm onSubmit={handleTagSubmit} />
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
             <CardTitle>Your Tags</CardTitle>
-            <CardDescription>
-              Manage and organize your existing tags
-            </CardDescription>
+            <CardDescription>Manage and organize your existing tags</CardDescription>
           </CardHeader>
           <CardContent>
-            <TagListContainer userId={user.id} />
+            <TagListContainer userId={userId} />
           </CardContent>
         </Card>
       </div>
     </div>
   );
 }
-

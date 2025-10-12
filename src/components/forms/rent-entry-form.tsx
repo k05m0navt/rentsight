@@ -90,7 +90,7 @@ export function RentEntryForm({ userId }: RentEntryFormProps) {
       setEndDate('');
       setPropertyId(undefined);
       setSelectedTagIds([]);
-      
+
       // Trigger a page reload to refresh the data
       window.location.reload();
     } catch (error) {

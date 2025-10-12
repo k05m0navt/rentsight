@@ -43,7 +43,15 @@ export function PropertyForm({ initialData, onSuccess, onCancel }: PropertyFormP
       ? {
           name: initialData.name,
           address: initialData.address || '',
-          property_type: initialData.property_type || undefined,
+          property_type:
+            (initialData.property_type as
+              | 'apartment'
+              | 'house'
+              | 'condo'
+              | 'townhouse'
+              | 'duplex'
+              | 'other'
+              | undefined) || undefined,
           start_date: initialData.start_date
             ? new Date(initialData.start_date).toISOString().split('T')[0]
             : '',
@@ -74,10 +82,10 @@ export function PropertyForm({ initialData, onSuccess, onCancel }: PropertyFormP
           if (onSuccess) onSuccess();
         }, 1000);
       } else {
-        const error = await response.json();
-        setMessage({ type: 'error', text: error.error || 'Failed to save property' });
+        const errorData = await response.json();
+        setMessage({ type: 'error', text: errorData.error || 'Failed to save property' });
       }
-    } catch (error) {
+    } catch {
       setMessage({ type: 'error', text: 'Network error. Please try again.' });
     }
   };
@@ -137,7 +145,11 @@ export function PropertyForm({ initialData, onSuccess, onCancel }: PropertyFormP
         <label htmlFor="property_type" className="block text-sm font-medium mb-2">
           Property Type
         </label>
-        <Select id="property_type" {...register('property_type')} aria-invalid={!!errors.property_type}>
+        <Select
+          id="property_type"
+          {...register('property_type')}
+          aria-invalid={!!errors.property_type}
+        >
           <option value="">Select type...</option>
           <option value="apartment">Apartment</option>
           <option value="house">House</option>
@@ -201,4 +213,3 @@ export function PropertyForm({ initialData, onSuccess, onCancel }: PropertyFormP
     </form>
   );
 }
-

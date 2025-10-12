@@ -30,4 +30,3 @@ export function HelpArticle({ title, content }: HelpArticleProps) {
     </Card>
   );
 }
-

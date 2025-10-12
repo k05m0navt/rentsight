@@ -100,9 +100,7 @@ export async function GET(request: Request) {
       }
     }
 
-    const matchedArticles = articles
-      .sort((a, b) => b.relevance! - a.relevance!)
-      .slice(0, limit);
+    const matchedArticles = articles.sort((a, b) => b.relevance! - a.relevance!).slice(0, limit);
 
     return NextResponse.json({
       articles: matchedArticles,
@@ -116,4 +114,3 @@ export async function GET(request: Request) {
     );
   }
 }
-

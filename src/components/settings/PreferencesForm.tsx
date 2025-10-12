@@ -34,7 +34,14 @@ export function PreferencesForm({ initialData }: PreferencesFormProps) {
     formState: { errors, isSubmitting },
   } = useForm<UserPreferencesForm>({
     resolver: zodResolver(userPreferencesSchema),
-    defaultValues: initialData,
+    defaultValues: {
+      currency_format: initialData.currency_format,
+      date_format: initialData.date_format as 'MM/DD/YYYY' | 'DD/MM/YYYY' | 'YYYY-MM-DD',
+      language: initialData.language,
+      default_view: initialData.default_view as 'dashboard' | 'properties' | 'reports' | 'settings',
+      theme_preference:
+        (initialData.theme_preference as 'light' | 'dark' | 'system' | undefined) || undefined,
+    },
   });
 
   const onSubmit = async (data: UserPreferencesForm) => {
@@ -52,10 +59,10 @@ export function PreferencesForm({ initialData }: PreferencesFormProps) {
         // Refresh to apply new preferences
         setTimeout(() => window.location.reload(), 1500);
       } else {
-        const error = await response.json();
-        setMessage({ type: 'error', text: error.error || 'Failed to update preferences' });
+        const errorData = await response.json();
+        setMessage({ type: 'error', text: errorData.error || 'Failed to update preferences' });
       }
-    } catch (error) {
+    } catch {
       setMessage({ type: 'error', text: 'Network error. Please try again.' });
     }
   };
@@ -79,7 +86,11 @@ export function PreferencesForm({ initialData }: PreferencesFormProps) {
         <label htmlFor="currency_format" className="block text-sm font-medium mb-2">
           Currency Format
         </label>
-        <Select id="currency_format" {...register('currency_format')} aria-invalid={!!errors.currency_format}>
+        <Select
+          id="currency_format"
+          {...register('currency_format')}
+          aria-invalid={!!errors.currency_format}
+        >
           <option value="USD">USD ($)</option>
           <option value="EUR">EUR (€)</option>
           <option value="GBP">GBP (£)</option>
@@ -132,7 +143,11 @@ export function PreferencesForm({ initialData }: PreferencesFormProps) {
         <label htmlFor="default_view" className="block text-sm font-medium mb-2">
           Default View
         </label>
-        <Select id="default_view" {...register('default_view')} aria-invalid={!!errors.default_view}>
+        <Select
+          id="default_view"
+          {...register('default_view')}
+          aria-invalid={!!errors.default_view}
+        >
           <option value="dashboard">Dashboard</option>
           <option value="properties">Properties</option>
           <option value="reports">Reports</option>
@@ -143,16 +158,18 @@ export function PreferencesForm({ initialData }: PreferencesFormProps) {
             {errors.default_view.message}
           </p>
         )}
-        <p className="text-sm text-muted dark:text-muted-dark mt-1">
-          Page to show when you log in
-        </p>
+        <p className="text-sm text-muted dark:text-muted-dark mt-1">Page to show when you log in</p>
       </div>
 
       <div>
         <label htmlFor="theme_preference" className="block text-sm font-medium mb-2">
           Theme Preference
         </label>
-        <Select id="theme_preference" {...register('theme_preference')} aria-invalid={!!errors.theme_preference}>
+        <Select
+          id="theme_preference"
+          {...register('theme_preference')}
+          aria-invalid={!!errors.theme_preference}
+        >
           <option value="">System Default</option>
           <option value="light">Light</option>
           <option value="dark">Dark</option>
@@ -171,4 +188,3 @@ export function PreferencesForm({ initialData }: PreferencesFormProps) {
     </form>
   );
 }
-

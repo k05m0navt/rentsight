@@ -110,4 +110,3 @@ export function PropertyItem({ property, onEdit, onDelete }: PropertyItemProps) 
     </Card>
   );
 }
-

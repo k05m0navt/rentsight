@@ -5,6 +5,7 @@ export async function generateExpenseBreakdown(
   userId: string,
   filters: ReportFilters = {},
 ): Promise<ExpenseBreakdownData> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const where: any = { user_id: userId };
 
   // Apply filters
@@ -82,4 +83,3 @@ export async function generateExpenseBreakdown(
       .sort((a, b) => a.period.localeCompare(b.period)),
   };
 }
-
