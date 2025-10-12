@@ -1,5 +1,7 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { TagListContainer } from '@/components/tags/TagListContainer';

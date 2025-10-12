@@ -3,6 +3,8 @@ import { createClient } from '@/lib/supabase/server';
 import { RentEntryForm } from '@/components/forms/rent-entry-form';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
+export const dynamic = 'force-dynamic';
+
 export default async function RentEntriesPage() {
   const supabase = createClient();
   const {
