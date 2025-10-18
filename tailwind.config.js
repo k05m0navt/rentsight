@@ -9,63 +9,53 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Semantic color tokens - Updated to match AI Hiring SaaS CRM design reference
-        background: {
-          DEFAULT: '#FFFFFF', // Light mode
-          dark: '#1A1A1A',    // Dark mode - Main background color from design reference
-        },
-        card: {
-          DEFAULT: '#F5F5F5',
-          dark: '#2A2A2A',    // Card background color from design reference
-        },
+        // Dark theme only - Semantic color tokens
+        background: '#0A0A0A',
+        surface: '#1A1A1A',
+        card: '#1F1F1F',
         primary: {
-          DEFAULT: '#FF6B35',        // Orange accent color from design reference
+          DEFAULT: '#EA580C', // Orange
+          hover: '#C2410C',
           foreground: '#FFFFFF',
         },
         success: {
-          DEFAULT: '#1DCC5C',        // Success/positive accent
+          DEFAULT: '#16A34A', // Green
+          hover: '#15803D',
           foreground: '#FFFFFF',
         },
         text: {
-          DEFAULT: '#1A1A1A',        // Light mode
-          dark: '#EEEEEE',           // Dark mode #EEEEEE
+          DEFAULT: '#F5F5F5', // Dark mode text
+          secondary: '#D4D4D4',
         },
         muted: {
-          DEFAULT: '#666666',
-          dark: '#AAAAAA',
+          DEFAULT: '#A3A3A3',
+          foreground: '#737373',
         },
         border: {
-          DEFAULT: '#E5E5E5',
-          dark: '#333333',
+          DEFAULT: '#262626',
+          strong: '#404040',
         },
-        hover: {
-          DEFAULT: '#F8F8F8',
-          dark: '#252525',
-        },
-        focus: {
-          DEFAULT: 'rgba(255, 107, 53, 0.2)',   // Orange primary with 20% opacity
-          dark: 'rgba(255, 107, 53, 0.4)',      // Orange primary with 40% opacity for dark bg
-        },
+        hover: '#171717',
+        focus: 'rgba(234, 88, 12, 0.3)', // Orange primary with 30% opacity for dark bg
         // Semantic states
         error: '#DC2626',
-        warning: '#F59E0B',
-        info: '#3B82F6',
-        disabled: {
-          DEFAULT: '#D1D5DB',
-          dark: '#4B5563',
-        },
+        'error-hover': '#B91C1C',
+        warning: '#D97706',
+        'warning-hover': '#B45309',
+        info: '#2563EB',
+        disabled: '#525252',
       },
       spacing: {
         // 8-point spacing scale
         0: '0',
-        1: '4px',   // 0.5 * 8
-        2: '8px',   // 1 * 8
-        3: '16px',  // 2 * 8
-        4: '24px',  // 3 * 8
-        5: '32px',  // 4 * 8
-        6: '40px',  // 5 * 8
-        7: '48px',  // 6 * 8
-        8: '64px',  // 8 * 8
+        1: '4px', // 0.5 * 8
+        2: '8px', // 1 * 8
+        3: '16px', // 2 * 8
+        4: '24px', // 3 * 8
+        5: '32px', // 4 * 8
+        6: '40px', // 5 * 8
+        7: '48px', // 6 * 8
+        8: '64px', // 8 * 8
       },
       fontSize: {
         xs: ['12px', { lineHeight: '16px' }],
@@ -113,7 +103,7 @@ module.exports = {
       // Responsive breakpoints
       screens: {
         sm: '640px',
-        md: '768px',   // Key breakpoint: sidebar → bottom nav
+        md: '768px', // Key breakpoint: sidebar → bottom nav
         lg: '1024px',
         xl: '1280px',
         '2xl': '1536px',
@@ -121,5 +111,4 @@ module.exports = {
     },
   },
   plugins: [],
-}
-
+};

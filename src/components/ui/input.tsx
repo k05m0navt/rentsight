@@ -20,11 +20,11 @@ function Input({ className, type, ...props }: React.ComponentProps<'input'>) {
       type={type}
       data-slot="input"
       className={cn(
-        'h-10 w-full rounded-md border border-border dark:border-border-dark',
-        'bg-background dark:bg-background-dark',
+        'h-10 w-full rounded-md border border-border',
+        'bg-background',
         'px-3 py-3 text-base',
-        'text-text dark:text-text-dark',
-        'placeholder:text-muted dark:placeholder:text-muted-dark',
+        'text-text',
+        'placeholder:text-muted',
         'transition-[border-color,box-shadow] duration-200',
         'focus-visible:outline-none focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20',
         'disabled:cursor-not-allowed disabled:opacity-60',

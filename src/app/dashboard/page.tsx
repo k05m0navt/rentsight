@@ -15,9 +15,14 @@ import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
 import { DashboardContent } from '@/components/dashboard-content';
-import { ThemeToggle } from '@/components/ui/ThemeToggle';
+import { DashboardSkeleton } from '@/components/dashboard/DashboardSkeleton';
 
 export const dynamic = 'force-dynamic';
+
+export const metadata = {
+  title: 'Dashboard - RentSight',
+  description: 'Analytics dashboard for rental property management',
+};
 
 export default async function DashboardPage() {
   const supabase = createClient();
@@ -33,26 +38,20 @@ export default async function DashboardPage() {
   return (
     <div className="flex flex-col gap-6">
       {/* Page Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold">Analytics Dashboard</h1>
-          <p className="text-sm text-muted dark:text-muted-dark mt-1">
-            Track your rental performance and expenses
-          </p>
-        </div>
-        <ThemeToggle />
+      <div>
+        <h1 className="text-2xl font-bold">Analytics Dashboard</h1>
+        <p className="text-sm text-muted dark:text-muted-dark mt-1">
+          Track your rental performance and expenses
+        </p>
       </div>
 
       {/* Dashboard Content with Loading State */}
-      <Suspense
-        fallback={
-          <div className="flex items-center justify-center py-20">
-            <p className="text-muted dark:text-muted-dark">Loading analytics...</p>
-          </div>
-        }
-      >
+      <Suspense fallback={<DashboardSkeleton />}>
         <DashboardContent userId={user.id} />
       </Suspense>
     </div>
   );
 }
+
+// Note: PageTransition not added to server component dashboard page to avoid hydration issues
+// Animation is handled by client components within DashboardContent

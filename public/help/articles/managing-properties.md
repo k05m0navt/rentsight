@@ -4,7 +4,7 @@ Properties are the foundation of organizing your rental business in RentSight. L
 
 ## Creating a Property
 
-1. Navigate to **Properties** from the sidebar
+1. Navigate to **Properties** from the sidebar or click [here](/properties){:target="_blank" rel="noopener noreferrer"}
 2. Click **"Add Property"**
 3. Fill in the property details:
    - **Name** (required): A unique identifier for the property

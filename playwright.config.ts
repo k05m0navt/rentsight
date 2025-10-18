@@ -50,7 +50,7 @@ export default defineConfig({
 
     {
       name: 'accessibility',
-      use: { 
+      use: {
         ...devices['Desktop Chrome'],
         storageState: 'playwright/.auth/user.json',
       },
@@ -59,7 +59,7 @@ export default defineConfig({
 
     {
       name: 'chromium',
-      use: { 
+      use: {
         ...devices['Desktop Chrome'],
         storageState: 'playwright/.auth/user.json',
       },
@@ -68,7 +68,7 @@ export default defineConfig({
 
     {
       name: 'firefox',
-      use: { 
+      use: {
         ...devices['Desktop Firefox'],
         storageState: 'playwright/.auth/user.json',
       },
@@ -77,7 +77,7 @@ export default defineConfig({
 
     {
       name: 'webkit',
-      use: { 
+      use: {
         ...devices['Desktop Safari'],
         storageState: 'playwright/.auth/user.json',
       },
@@ -95,4 +95,3 @@ export default defineConfig({
         timeout: 120 * 1000,
       },
 });
-

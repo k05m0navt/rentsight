@@ -38,7 +38,7 @@ export function MetricsCard({
   className,
 }: MetricsCardProps) {
   const variantColors = {
-    default: 'text-text dark:text-text-dark',
+    default: 'text-text',
     primary: 'text-primary',
     success: 'text-success',
   };
@@ -46,14 +46,14 @@ export function MetricsCard({
   const trendColors = {
     up: 'text-success',
     down: 'text-error',
-    neutral: 'text-muted dark:text-muted-dark',
+    neutral: 'text-muted',
   };
 
   return (
     <Card className={cn('relative overflow-hidden', className)}>
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
-          <div className="text-sm font-medium text-muted dark:text-muted-dark">{title}</div>
+          <div className="text-sm font-medium text-muted">{title}</div>
           {Icon && <Icon className={cn('h-5 w-5', variantColors[variant])} aria-hidden="true" />}
         </div>
       </CardHeader>
@@ -62,7 +62,7 @@ export function MetricsCard({
           <p className={cn('text-2xl font-bold', variantColors[variant])}>
             {typeof value === 'number' ? value.toLocaleString() : value}
           </p>
-          {subtitle && <p className="text-xs text-muted dark:text-muted-dark">{subtitle}</p>}
+          {subtitle && <p className="text-xs text-muted">{subtitle}</p>}
           {trend && trendValue && (
             <p className={cn('text-xs font-medium', trendColors[trend])}>
               {trend === 'up' && '↑ '}

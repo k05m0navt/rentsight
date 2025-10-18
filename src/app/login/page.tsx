@@ -16,6 +16,11 @@ import { Button } from '@/components/ui/button';
 
 export const dynamic = 'force-dynamic';
 
+export const metadata = {
+  title: 'Login - RentSight',
+  description: 'Sign in to your RentSight account',
+};
+
 export default async function Login({
   searchParams,
 }: {
@@ -47,6 +52,10 @@ export default async function Login({
     if (error) {
       return redirect(`/login?error=${error.message}`);
     }
+
+    // Revalidate the layout to ensure sidebar updates
+    const { revalidatePath } = await import('next/cache');
+    revalidatePath('/', 'layout');
 
     return redirect('/dashboard');
   };

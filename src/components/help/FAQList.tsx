@@ -38,7 +38,7 @@ export function FAQList({ faqs }: FAQListProps) {
   if (categories.length === 0) {
     return (
       <div className="text-center py-8">
-        <p className="text-muted dark:text-muted-dark">No FAQs available</p>
+        <p className="text-muted">No FAQs available</p>
       </div>
     );
   }
@@ -47,15 +47,21 @@ export function FAQList({ faqs }: FAQListProps) {
     <div className="space-y-6">
       {categories.map((category) => (
         <div key={category}>
-          <h3 className="text-lg font-semibold mb-3">{category}</h3>
-          <Accordion
-            items={categorizedFaqs[category].map((faq) => ({
-              id: faq.id,
-              title: faq.question,
-              content: <p className="text-sm">{faq.answer}</p>,
-            }))}
-            allowMultiple={true}
-          />
+          <h3 className="text-lg font-semibold mb-3 text-text">{category}</h3>
+          <div data-testid="faq-item">
+            <Accordion
+              items={categorizedFaqs[category].map((faq) => ({
+                id: faq.id,
+                title: faq.question,
+                content: (
+                  <div data-testid="faq-answer" className="text-sm text-muted">
+                    {faq.answer}
+                  </div>
+                ),
+              }))}
+              allowMultiple={true}
+            />
+          </div>
         </div>
       ))}
     </div>

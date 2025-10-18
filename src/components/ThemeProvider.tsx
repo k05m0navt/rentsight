@@ -1,42 +1,39 @@
 'use client';
 
 /**
- * Theme Provider using next-themes
+ * Theme Provider - Dark Theme Only
  *
- * Provides dark/light theme management with localStorage persistence.
- * Dark theme is the default per the redesign specification.
+ * Provides dark theme only with no theme switching capability.
+ * Dark theme is the only theme per the redesign specification.
  *
  * Based on the redesign spec:
- * - FR-016: Dark theme as primary theme
- * - Dark mode is default, light mode is optional
- * - Client-side storage only (localStorage)
- * - No system preference detection (enableSystem: false)
+ * - FR-016: Dark theme as primary and only theme
+ * - No theme switching functionality
+ * - Simplified theme management
  */
 
-import {
-  ThemeProvider as NextThemesProvider,
-  useTheme as useNextTheme,
-  type ThemeProviderProps,
-} from 'next-themes';
+import React from 'react';
 
-export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
-  return (
-    <NextThemesProvider
-      attribute="class"
-      defaultTheme="dark"
-      enableSystem={false}
-      storageKey="rentsight-theme"
-      {...props}
-    >
-      {children}
-    </NextThemesProvider>
-  );
+interface ThemeProviderProps {
+  children: React.ReactNode;
 }
 
-/**
- * Re-export useTheme hook from next-themes for convenience
- * Usage: const { theme, setTheme } = useTheme()
- */
-export const useTheme = useNextTheme;
+export function ThemeProvider({ children }: ThemeProviderProps) {
+  // Simply apply dark class to body and return children
+  React.useEffect(() => {
+    document.documentElement.classList.add('dark');
+    document.documentElement.classList.remove('light');
+  }, []);
+
+  return <>{children}</>;
+}
+
+// Mock useTheme hook for compatibility (always returns dark theme)
+export const useTheme = () => ({
+  theme: 'dark',
+  setTheme: () => {}, // No-op since we don't support theme switching
+  systemTheme: 'dark',
+  resolvedTheme: 'dark',
+});
 
 export default ThemeProvider;

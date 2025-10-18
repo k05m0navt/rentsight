@@ -19,6 +19,7 @@ import { MetricsCard } from '@/components/dashboard/MetricsCard';
 import { RentAnalytics } from '@/app/dashboard/rent-analytics';
 import { ExpenseAnalytics } from '@/app/dashboard/expense-analytics';
 import { ExportButton } from '@/components/ui/export-button';
+import { CurrencyDisplay } from '@/components/ui/currency-display';
 
 interface AnalyticsSummary {
   total_rent_income: number;
@@ -28,20 +29,37 @@ interface AnalyticsSummary {
   average_days_per_rent: number;
 }
 
+interface UserPreferences {
+  currency_format: string;
+  date_format: string;
+  language: string;
+  default_view: string;
+  theme_preference?: string | null;
+}
+
 export function DashboardContent({ userId }: { userId: string }) {
   const [summary, setSummary] = useState<AnalyticsSummary | null>(null);
+  const [preferences, setPreferences] = useState<UserPreferences | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function fetchSummary() {
+    async function fetchData() {
       try {
-        const response = await fetch('/api/analytics/summary');
-        if (!response.ok) {
-          throw new Error(`Error: ${response.status}`);
+        // Fetch analytics summary
+        const summaryResponse = await fetch('/api/analytics/summary');
+        if (!summaryResponse.ok) {
+          throw new Error(`Error: ${summaryResponse.status}`);
         }
-        const data: AnalyticsSummary = await response.json();
-        setSummary(data);
+        const summaryData: AnalyticsSummary = await summaryResponse.json();
+        setSummary(summaryData);
+
+        // Fetch user preferences
+        const preferencesResponse = await fetch('/api/user/preferences');
+        if (preferencesResponse.ok) {
+          const preferencesData: UserPreferences = await preferencesResponse.json();
+          setPreferences(preferencesData);
+        }
       } catch (err: unknown) {
         const message = err instanceof Error ? err.message : 'An error occurred';
         setError(message);
@@ -50,7 +68,7 @@ export function DashboardContent({ userId }: { userId: string }) {
       }
     }
 
-    fetchSummary();
+    fetchData();
   }, [userId]);
 
   // Calculate net income
@@ -81,13 +99,22 @@ export function DashboardContent({ userId }: { userId: string }) {
     );
   }
 
+  const currency = preferences?.currency_format || 'USD';
+
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-8" data-testid="dashboard-content">
+      {/* Currency Display */}
+      <div className="flex items-center justify-between">
+        <div className="text-sm text-muted dark:text-muted-dark">
+          Displaying amounts in: <span className="font-medium">{currency}</span>
+        </div>
+      </div>
+
       {/* Summary Metrics */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <MetricsCard
           title="Total Rent Income"
-          value={`$${summary.total_rent_income.toFixed(2)}`}
+          value={<CurrencyDisplay value={summary.total_rent_income} currency={currency} />}
           icon={DollarSign}
           variant="primary"
         />
@@ -100,14 +127,20 @@ export function DashboardContent({ userId }: { userId: string }) {
         />
         <MetricsCard
           title="Platform Income"
-          value={`$${summary.total_platform_income.toFixed(2)}`}
+          value={<CurrencyDisplay value={summary.total_platform_income} currency={currency} />}
           subtitle="Across all platforms"
           icon={CreditCard}
         />
         <MetricsCard
           title="Net Income"
-          value={`$${netIncome.toFixed(2)}`}
-          subtitle={`After $${summary.total_expenses.toFixed(2)} expenses`}
+          value={<CurrencyDisplay value={netIncome} currency={currency} />}
+          subtitle={
+            <CurrencyDisplay
+              value={summary.total_expenses}
+              currency={currency}
+              showSymbol={false}
+            />
+          }
           icon={TrendingDown}
           trend={netIncome > 0 ? 'up' : netIncome < 0 ? 'down' : 'neutral'}
           variant={netIncome > 0 ? 'success' : 'default'}

@@ -15,7 +15,7 @@ async function createTestUser() {
   // For testing, we'll create a user with a known ID
   // In production, this should be done via auth callback or trigger
   const testEmail = 'ertalun@gmail.com';
-  
+
   try {
     // Check if user already exists in Prisma
     const existing = await prisma.user.findUnique({
@@ -25,12 +25,12 @@ async function createTestUser() {
     if (existing) {
       console.log(`✅ User already exists: ${existing.email}`);
       console.log(`   User ID: ${existing.id}`);
-      
+
       // Check preferences
       const prefs = await prisma.userPreferences.findUnique({
         where: { user_id: existing.id },
       });
-      
+
       if (prefs) {
         console.log('✅ Preferences exist');
       } else {
@@ -46,7 +46,7 @@ async function createTestUser() {
         });
         console.log('✅ Default preferences created');
       }
-      
+
       return;
     }
 
@@ -78,7 +78,6 @@ async function createTestUser() {
     console.log('✅ Default preferences created');
     console.log('\n⚠️ NOTE: User ID may not match Supabase Auth ID.');
     console.log('   For production, implement auth callback to sync IDs properly.');
-
   } catch (error: any) {
     console.error('❌ Failed to create test user:');
     console.error(error.message);
@@ -90,4 +89,3 @@ async function createTestUser() {
 }
 
 createTestUser();
-

@@ -8,7 +8,7 @@ async function syncUser() {
   // The authenticated user from Supabase
   // We need to get this from the auth system
   // For now, let's query the auth.users table directly
-  
+
   try {
     // Query Supabase auth.users table
     const authUsers: any = await prisma.$queryRaw`
@@ -65,7 +65,6 @@ async function syncUser() {
     }
 
     console.log('\n🎉 Sync complete!');
-
   } catch (error: any) {
     console.error('\n❌ Sync failed:');
     console.error('Error:', error.message);
@@ -76,4 +75,3 @@ async function syncUser() {
 }
 
 syncUser();
-

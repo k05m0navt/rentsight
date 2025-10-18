@@ -1,7 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
 import { Button } from './ui/button';
-import ThemeToggle from './ui/ThemeToggle';
 
 const Navbar: React.FC = () => {
   return (
@@ -32,7 +31,6 @@ const Navbar: React.FC = () => {
           <Button variant="ghost">Menu</Button>
         </div>
 
-        <ThemeToggle />
       </div>
     </nav>
   );
