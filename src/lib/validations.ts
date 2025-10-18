@@ -25,9 +25,7 @@ export type PasswordChangeForm = z.infer<typeof passwordChangeSchema>;
 // User Preferences Validation
 export const userPreferencesSchema = z.object({
   currency_format: z.string(),
-  language: z.string(),
   default_view: z.enum(['dashboard', 'properties', 'reports', 'settings']),
-  theme_preference: z.enum(['light', 'dark', 'system']).optional(),
 });
 
 export type UserPreferencesForm = z.infer<typeof userPreferencesSchema>;

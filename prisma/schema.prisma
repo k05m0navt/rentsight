@@ -117,10 +117,6 @@ model UserPreferences {
   id                  String   @id @default(uuid())
   user_id             String   @unique
   
-  // Theme preferences
-  theme               String   @default("system") // "light" | "dark" | "system"
-  reducedMotion       Boolean  @default(false)
-  
   // Regional preferences  
   currency            String   @default("USD") // ISO currency code (USD, EUR, RUB, etc.)
   numberFormat        String   @default("en-US") // Locale for number formatting
@@ -128,11 +124,11 @@ model UserPreferences {
   // Platform preferences
   preferredPlatforms  String[] @default([])
   
+  // Default view preference
+  default_view        String   @default("dashboard")
+  
   // Legacy fields (keep for backward compatibility)
   currency_format     String   @default("USD")
-  language            String   @default("en")
-  default_view        String   @default("dashboard")
-  theme_preference    String?
   preferences         Json?
   
   created_at          DateTime @default(now())

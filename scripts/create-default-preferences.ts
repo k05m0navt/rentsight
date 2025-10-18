@@ -41,15 +41,12 @@ async function createDefaultPreferences() {
         await prisma.userPreferences.create({
           data: {
             user_id: user.id,
-            theme: 'system',
-            reducedMotion: false,
             currency: 'USD',
             numberFormat: 'en-US',
             preferredPlatforms: [],
+            default_view: 'dashboard',
             // Legacy fields for backward compatibility
             currency_format: 'USD',
-            language: 'en',
-            default_view: 'dashboard',
           },
         });
 

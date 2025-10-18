@@ -13,6 +13,7 @@ import { ArrowLeft } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { getCurrentUserDefaultView } from '@/lib/user-preferences';
 
 export const dynamic = 'force-dynamic';
 
@@ -33,7 +34,8 @@ export default async function Login({
   } = await supabase.auth.getUser();
 
   if (user) {
-    return redirect('/dashboard');
+    const defaultView = await getCurrentUserDefaultView();
+    return redirect(defaultView);
   }
 
   const { message, error } = await searchParams;
@@ -44,7 +46,7 @@ export default async function Login({
     const password = formData.get('password');
     const supabase = createClient();
 
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email: email as string,
       password: password as string,
     });
@@ -53,11 +55,18 @@ export default async function Login({
       return redirect(`/login?error=${error.message}`);
     }
 
+    if (!data.user) {
+      return redirect('/login?error=Authentication failed');
+    }
+
     // Revalidate the layout to ensure sidebar updates
     const { revalidatePath } = await import('next/cache');
     revalidatePath('/', 'layout');
 
-    return redirect('/dashboard');
+    // Get user's default view preference
+    const { getUserDefaultView } = await import('@/lib/user-preferences');
+    const defaultView = await getUserDefaultView(data.user.id);
+    return redirect(defaultView);
   };
 
   return (

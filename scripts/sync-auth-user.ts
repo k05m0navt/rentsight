@@ -56,7 +56,6 @@ async function syncUser() {
           data: {
             user_id: newUser.id,
             currency_format: 'USD',
-            language: 'en',
             default_view: 'dashboard',
           },
         });

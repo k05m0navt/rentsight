@@ -25,7 +25,6 @@ export async function GET() {
         data: {
           user_id: user.id,
           currency_format: 'USD',
-          language: 'en',
           default_view: 'dashboard',
         },
       });
