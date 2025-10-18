@@ -7,6 +7,16 @@
 @import "tw-animate-css";
 @import "../styles/tokens.css";
 
+/* Shimmer animation for skeleton components */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
 @theme {
   /* Dark Theme Only - WCAG AA Compliant Color Palette */
   --color-primary: #EA580C; /* Orange */

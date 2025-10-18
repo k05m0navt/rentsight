@@ -13,7 +13,12 @@ import { cn } from '@/lib/utils';
 export function Skeleton({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn('animate-pulse rounded-md bg-gray-200 dark:bg-gray-800', className)}
+      className={cn(
+        'animate-pulse rounded-md bg-muted/60',
+        'relative overflow-hidden',
+        'before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent',
+        className,
+      )}
       {...props}
     />
   );
@@ -26,16 +31,47 @@ export function SkeletonCard({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        'rounded-lg border border-border dark:border-border-dark bg-card dark:bg-card-dark p-6',
+        'rounded-xl bg-card text-text flex flex-col gap-4 p-6 transition-all duration-300 ease-out border border-border shadow-lg relative overflow-hidden',
         className,
       )}
     >
-      <div className="space-y-3">
-        <Skeleton className="h-5 w-3/4" />
-        <Skeleton className="h-4 w-1/2" />
-        <div className="flex gap-2 mt-4">
+      <div className="space-y-3 min-w-0">
+        <Skeleton className="h-5 w-3/4 max-w-48" />
+        <Skeleton className="h-4 w-1/2 max-w-32" />
+        <div className="flex gap-2 mt-4 flex-wrap">
+          <Skeleton className="h-8 w-20 flex-shrink-0" />
+          <Skeleton className="h-8 w-20 flex-shrink-0" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Skeleton MetricsCard - Matches MetricsCard component layout
+ */
+export function SkeletonMetricsCard({ className }: { className?: string }) {
+  return (
+    <div
+      className={cn(
+        'rounded-xl bg-card text-text flex flex-col transition-all duration-300 ease-out border border-border shadow-lg relative overflow-hidden',
+        className,
+      )}
+    >
+      {/* CardHeader */}
+      <div className="flex flex-col gap-2 pb-2 px-6 pt-6">
+        <div className="flex items-center justify-between">
+          <Skeleton className="h-4 w-24" />
+          <Skeleton className="h-5 w-5 rounded" />
+        </div>
+      </div>
+      
+      {/* CardContent */}
+      <div className="px-6 pb-6">
+        <div className="flex flex-col gap-1">
           <Skeleton className="h-8 w-20" />
-          <Skeleton className="h-8 w-20" />
+          <Skeleton className="h-3 w-16" />
+          <Skeleton className="h-3 w-12" />
         </div>
       </div>
     </div>

@@ -20,6 +20,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { MetricsCard } from '@/components/dashboard/MetricsCard';
 import { useDateFormat } from '@/hooks/useDateFormat';
+import { RentAnalyticsSkeleton } from '@/components/dashboard/RentAnalyticsSkeleton';
 
 interface Tag {
   id: string;
@@ -73,11 +74,7 @@ export function RentAnalytics({ userId }: { userId: string }) {
   const averageIncome = rentEntries.length > 0 ? totalIncome / rentEntries.length : 0;
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center py-12">
-        <p className="text-muted dark:text-muted-dark">Loading rent analytics...</p>
-      </div>
-    );
+    return <RentAnalyticsSkeleton />;
   }
 
   if (error) {

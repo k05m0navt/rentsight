@@ -20,6 +20,9 @@ import { RentAnalytics } from '@/app/dashboard/rent-analytics';
 import { ExpenseAnalytics } from '@/app/dashboard/expense-analytics';
 import { ExportButton } from '@/components/ui/export-button';
 import { CurrencyDisplay } from '@/components/ui/currency-display';
+import { Skeleton, SkeletonMetricsCard } from '@/components/ui/skeleton';
+import { RentAnalyticsSkeleton } from '@/components/dashboard/RentAnalyticsSkeleton';
+import { ExpenseAnalyticsSkeleton } from '@/components/dashboard/ExpenseAnalyticsSkeleton';
 
 interface AnalyticsSummary {
   total_rent_income: number;
@@ -75,8 +78,28 @@ export function DashboardContent({ userId }: { userId: string }) {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-20">
-        <p className="text-lg text-muted dark:text-muted-dark">Loading analytics...</p>
+      <div className="flex flex-col gap-8 min-w-0" data-testid="dashboard-content">
+        {/* Currency Display Skeleton */}
+        <div className="flex items-center justify-between min-w-0">
+          <Skeleton className="h-4 w-48 max-w-full" />
+        </div>
+
+        {/* Summary Metrics Skeleton */}
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 min-w-0">
+          <SkeletonMetricsCard className="min-w-0" />
+          <SkeletonMetricsCard className="min-w-0" />
+          <SkeletonMetricsCard className="min-w-0" />
+          <SkeletonMetricsCard className="min-w-0" />
+        </div>
+
+        {/* Export Button Skeleton */}
+        <div className="flex justify-end min-w-0">
+          <Skeleton className="h-10 w-32 rounded-lg flex-shrink-0" />
+        </div>
+
+        {/* Analytics Skeletons */}
+        <RentAnalyticsSkeleton />
+        <ExpenseAnalyticsSkeleton />
       </div>
     );
   }

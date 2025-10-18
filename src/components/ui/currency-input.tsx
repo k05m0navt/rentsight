@@ -1,6 +1,6 @@
 /**
  * Currency Input Component
- * 
+ *
  * Input field with currency symbol display
  * Shows the user's selected currency symbol next to the input
  */
@@ -156,9 +156,7 @@ export function CurrencyInput({ currency, loading, className, ...props }: Curren
         disabled={loading}
       />
       <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-        <span className="text-sm font-medium text-muted">
-          {loading ? '...' : symbol}
-        </span>
+        <span className="text-sm font-medium text-muted">{loading ? '...' : symbol}</span>
       </div>
     </div>
   );

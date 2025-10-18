@@ -19,6 +19,7 @@ import { TagManager } from '@/components/ui/tag-manager';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { MetricsCard } from '@/components/dashboard/MetricsCard';
+import { ExpenseAnalyticsSkeleton } from '@/components/dashboard/ExpenseAnalyticsSkeleton';
 
 interface Tag {
   id: string;
@@ -70,11 +71,7 @@ export function ExpenseAnalytics({ userId }: { userId: string }) {
   const averageExpense = expenseEntries.length > 0 ? totalExpenses / expenseEntries.length : 0;
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center py-12">
-        <p className="text-muted dark:text-muted-dark">Loading expense analytics...</p>
-      </div>
-    );
+    return <ExpenseAnalyticsSkeleton />;
   }
 
   if (error) {
