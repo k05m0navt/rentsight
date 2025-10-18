@@ -44,7 +44,6 @@ async function createDefaultPreferences() {
             theme: 'system',
             reducedMotion: false,
             currency: 'USD',
-            dateFormat: 'MM/DD/YYYY',
             numberFormat: 'en-US',
             preferredPlatforms: [],
             // Legacy fields for backward compatibility
