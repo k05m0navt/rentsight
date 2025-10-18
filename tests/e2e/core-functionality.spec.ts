@@ -219,6 +219,36 @@ test.describe('Russian Market Features', () => {
     }
   });
 
+  test('should display currency symbols in amount input fields', async ({ page }) => {
+    // Test rent entry form
+    await page.goto('/rent-entries');
+    
+    // Wait for the form to load
+    await page.waitForSelector('input[id="amount"]', { timeout: 10000 });
+    
+    // Check that the amount input has a currency symbol
+    const amountInput = page.locator('input[id="amount"]');
+    await expect(amountInput).toBeVisible();
+    
+    // Check that there's a currency symbol next to the input
+    const currencySymbol = page.locator('input[id="amount"]').locator('..').locator('span').last();
+    await expect(currencySymbol).toBeVisible();
+    
+    // Test expense entry form
+    await page.goto('/expense-entries');
+    
+    // Wait for the form to load
+    await page.waitForSelector('input[id="amount"]', { timeout: 10000 });
+    
+    // Check that the amount input has a currency symbol
+    const expenseAmountInput = page.locator('input[id="amount"]');
+    await expect(expenseAmountInput).toBeVisible();
+    
+    // Check that there's a currency symbol next to the input
+    const expenseCurrencySymbol = page.locator('input[id="amount"]').locator('..').locator('span').last();
+    await expect(expenseCurrencySymbol).toBeVisible();
+  });
+
   test('should support Russian language', async ({ page }) => {
     await page.goto('/settings');
     
