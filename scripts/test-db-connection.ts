@@ -24,10 +24,13 @@ async function testConnection() {
     // Check for existing users
     const userCount = await prisma.user.count();
     console.log(`\n✅ Found ${userCount} users in database`);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('❌ Database connection failed:');
-    console.error('Error:', error.message);
-    console.error('Code:', error.code);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    console.error('Error:', errorMessage);
+    if (error && typeof error === 'object' && 'code' in error) {
+      console.error('Code:', (error as { code: string }).code);
+    }
     process.exit(1);
   } finally {
     await prisma.$disconnect();

@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { createClient } from '@supabase/supabase-js';
+// import { createClient } from '@supabase/supabase-js';
 
 const prisma = new PrismaClient();
 
@@ -7,10 +7,10 @@ async function createTestUser() {
   console.log('Creating test user in database...');
 
   // Get Supabase user ID from auth
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-  );
+  // const supabase = createClient(
+  //   process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  //   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+  // );
 
   // For testing, we'll create a user with a known ID
   // In production, this should be done via auth callback or trigger
@@ -78,10 +78,13 @@ async function createTestUser() {
     console.log('✅ Default preferences created');
     console.log('\n⚠️ NOTE: User ID may not match Supabase Auth ID.');
     console.log('   For production, implement auth callback to sync IDs properly.');
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('❌ Failed to create test user:');
-    console.error(error.message);
-    if (error.code) console.error('Code:', error.code);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    console.error(errorMessage);
+    if (error && typeof error === 'object' && 'code' in error) {
+      console.error('Code:', (error as { code: string }).code);
+    }
     process.exit(1);
   } finally {
     await prisma.$disconnect();
