@@ -34,23 +34,29 @@ export default function ReportsPage() {
     data: unknown;
   } | null>(null);
   const router = useRouter();
-  const supabase = createClient();
   const { formatDateTime } = useDateFormat();
 
   useEffect(() => {
     const getUser = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) {
+      try {
+        const supabase = createClient();
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+        if (!user) {
+          router.push('/login');
+          return;
+        }
+        setUser(user);
+      } catch (error) {
+        console.error('Error getting user:', error);
         router.push('/login');
-        return;
+      } finally {
+        setLoading(false);
       }
-      setUser(user);
-      setLoading(false);
     };
     getUser();
-  }, [router, supabase.auth]);
+  }, [router]);
 
   if (loading) {
     return <ReportsSkeleton />;
