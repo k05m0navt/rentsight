@@ -35,6 +35,31 @@ export interface Platform {
   icon?: string;
 }
 
+export interface CustomPlatform {
+  /** Unique platform identifier (UUID) */
+  id: string;
+
+  /** User ID who created this platform */
+  user_id: string;
+
+  /** Platform name (2-100 characters) */
+  name: string;
+
+  /** Creation timestamp */
+  created_at: Date;
+
+  /** Last update timestamp */
+  updated_at: Date;
+
+  /** Number of rent entries using this platform */
+  usage_count: number;
+}
+
+export interface PlatformWithCustom extends Platform {
+  /** Indicates if this is a custom platform */
+  isCustom?: boolean;
+}
+
 export interface DateFormatConfig {
   /** Locale code (en-US, ru-RU, etc.) */
   locale: string;

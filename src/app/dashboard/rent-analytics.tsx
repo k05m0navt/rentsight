@@ -21,6 +21,7 @@ import { Badge } from '@/components/ui/badge';
 import { MetricsCard } from '@/components/dashboard/MetricsCard';
 import { useDateFormat } from '@/hooks/useDateFormat';
 import { RentAnalyticsSkeleton } from '@/components/dashboard/RentAnalyticsSkeleton';
+import { getPlatformDisplayName } from '@/lib/services/platformService';
 
 interface Tag {
   id: string;
@@ -32,6 +33,7 @@ interface RentEntry {
   amount: number;
   booked_days: number;
   platform: string;
+  custom_platform_name?: string;
   start_date: string;
   end_date: string;
   tags: Tag[];
@@ -138,7 +140,9 @@ export function RentAnalytics({ userId }: { userId: string }) {
             <Card key={entry.id}>
               <CardHeader>
                 <CardTitle className="text-lg">${entry.amount.toFixed(2)}</CardTitle>
-                <p className="text-sm text-muted dark:text-muted-dark">{entry.platform}</p>
+                <p className="text-sm text-muted dark:text-muted-dark">
+                  {getPlatformDisplayName(entry.platform, entry.custom_platform_name)}
+                </p>
               </CardHeader>
               <CardContent>
                 <div className="space-y-2 text-sm">

@@ -18,9 +18,7 @@ import { useState } from 'react';
 interface PreferencesFormProps {
   initialData: {
     currency_format: string;
-    language: string;
     default_view: string;
-    theme_preference?: string | null;
   };
 }
 
@@ -35,10 +33,7 @@ export function PreferencesForm({ initialData }: PreferencesFormProps) {
     resolver: zodResolver(userPreferencesSchema),
     defaultValues: {
       currency_format: initialData.currency_format,
-      language: initialData.language,
       default_view: initialData.default_view as 'dashboard' | 'properties' | 'reports' | 'settings',
-      theme_preference:
-        (initialData.theme_preference as 'light' | 'dark' | 'system' | undefined) || undefined,
     },
   });
 
@@ -103,25 +98,6 @@ export function PreferencesForm({ initialData }: PreferencesFormProps) {
       </div>
 
       <div>
-        <label htmlFor="language" className="block text-sm font-medium mb-2">
-          Language
-        </label>
-        <Select id="language" {...register('language')} aria-invalid={!!errors.language}>
-          <option value="en">English</option>
-          <option value="es">Español</option>
-          <option value="fr">Français</option>
-          <option value="de">Deutsch</option>
-          <option value="ja">日本語</option>
-          <option value="ru">Русский</option>
-        </Select>
-        {errors.language && (
-          <p className="text-sm text-red-600 mt-1" role="alert">
-            {errors.language.message}
-          </p>
-        )}
-      </div>
-
-      <div>
         <label htmlFor="default_view" className="block text-sm font-medium mb-2">
           Default View
         </label>
@@ -141,27 +117,6 @@ export function PreferencesForm({ initialData }: PreferencesFormProps) {
           </p>
         )}
         <p className="text-sm text-muted mt-1">Page to show when you log in</p>
-      </div>
-
-      <div>
-        <label htmlFor="theme_preference" className="block text-sm font-medium mb-2">
-          Theme Preference
-        </label>
-        <Select
-          id="theme_preference"
-          {...register('theme_preference')}
-          aria-invalid={!!errors.theme_preference}
-        >
-          <option value="">System Default</option>
-          <option value="light">Light</option>
-          <option value="dark">Dark</option>
-          <option value="system">Follow System</option>
-        </Select>
-        {errors.theme_preference && (
-          <p className="text-sm text-red-600 mt-1" role="alert">
-            {errors.theme_preference.message}
-          </p>
-        )}
       </div>
 
       <Button type="submit" disabled={isSubmitting}>

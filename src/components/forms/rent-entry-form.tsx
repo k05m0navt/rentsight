@@ -23,28 +23,31 @@ import { FormSelect } from '@/components/forms/FormSelect';
 import { ErrorMessage } from '@/components/ui/error-message';
 import { CurrencyInput } from '@/components/ui/currency-input';
 import { useUserCurrency } from '@/hooks/useUserCurrency';
+import { getPlatformsByRegion } from '@/lib/regional-config';
+import type { Platform, CustomPlatform } from '@/types/regional';
+import { PlatformManagementModal } from '@/components/platform/PlatformManagementModal';
 
 interface RentEntryFormProps {
   userId: string;
 }
 
-const platformOptions = [
-  { value: 'airbnb', label: 'Airbnb' },
-  { value: 'booking', label: 'Booking.com' },
-  { value: 'vrbo', label: 'VRBO' },
-  { value: 'other', label: 'Other' },
-];
+// Get Russian platforms as primary options
+const russianPlatforms = getPlatformsByRegion('russian');
 
 export function RentEntryForm({ userId }: RentEntryFormProps) {
   const [amount, setAmount] = useState<string>('');
   const [bookedDays, setBookedDays] = useState<string>('');
   const [platform, setPlatform] = useState<string>('');
+  const [customPlatformName, setCustomPlatformName] = useState<string>('');
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
   const [propertyId, setPropertyId] = useState<string | undefined>(undefined);
   const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
   const [dateError, setDateError] = useState<string | null>(null);
+  const [customPlatformError, setCustomPlatformError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [customPlatforms, setCustomPlatforms] = useState<CustomPlatform[]>([]);
+  const [, setLoadingCustomPlatforms] = useState(false);
   // Get user's currency preference
   const { currency, loading: currencyLoading } = useUserCurrency(userId);
 
@@ -56,9 +59,61 @@ export function RentEntryForm({ userId }: RentEntryFormProps) {
     }
   }, [startDate, endDate]);
 
+  useEffect(() => {
+    if (platform === 'other' && customPlatformName) {
+      if (customPlatformName.length < 2) {
+        setCustomPlatformError('Platform name must be at least 2 characters');
+      } else if (customPlatformName.length > 100) {
+        setCustomPlatformError('Platform name must be less than 100 characters');
+      } else if (!/^[a-zA-Zа-яА-Я0-9\s\-_.,()]+$/.test(customPlatformName)) {
+        setCustomPlatformError('Platform name contains invalid characters');
+      } else {
+        setCustomPlatformError(null);
+      }
+    } else if (platform === 'other' && !customPlatformName) {
+      setCustomPlatformError('Custom platform name is required when selecting "Other"');
+    } else {
+      setCustomPlatformError(null);
+    }
+  }, [platform, customPlatformName]);
+
+  // Fetch custom platforms function
+  const fetchCustomPlatforms = async () => {
+    setLoadingCustomPlatforms(true);
+    try {
+      const response = await fetch('/api/platforms/custom');
+      if (response.ok) {
+        const data = await response.json();
+        setCustomPlatforms(data.customPlatforms || []);
+      }
+    } catch (error) {
+      console.error('Error fetching custom platforms:', error);
+    } finally {
+      setLoadingCustomPlatforms(false);
+    }
+  };
+
+  // Fetch custom platforms on component mount
+  useEffect(() => {
+    fetchCustomPlatforms();
+  }, []);
+
+  // Create platform options dynamically
+  const platformOptions = [
+    ...russianPlatforms.map((platform: Platform) => ({
+      value: platform.id,
+      label: platform.name,
+    })),
+    ...customPlatforms.map((platform: CustomPlatform) => ({
+      value: platform.id,
+      label: platform.name,
+    })),
+    { value: 'other', label: 'Other' },
+  ];
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (dateError) {
+    if (dateError || customPlatformError) {
       return;
     }
 
@@ -74,6 +129,7 @@ export function RentEntryForm({ userId }: RentEntryFormProps) {
           amount: parseFloat(amount),
           booked_days: parseInt(bookedDays),
           platform,
+          custom_platform_name: platform === 'other' ? customPlatformName : null,
           start_date: startDate,
           end_date: endDate,
           property_id: propertyId || null,
@@ -90,6 +146,7 @@ export function RentEntryForm({ userId }: RentEntryFormProps) {
       setAmount('');
       setBookedDays('');
       setPlatform('');
+      setCustomPlatformName('');
       setStartDate('');
       setEndDate('');
       setPropertyId(undefined);
@@ -143,15 +200,47 @@ export function RentEntryForm({ userId }: RentEntryFormProps) {
           </div>
 
           <FormField label="Platform" required>
-            <FormSelect
-              id="platform"
-              value={platform}
-              onChange={(e) => setPlatform(e.target.value)}
-              options={platformOptions}
-              placeholder="Select platform"
-              required
-            />
+            <div className="space-y-3">
+              <FormSelect
+                id="platform"
+                value={platform}
+                onChange={(e) => setPlatform(e.target.value)}
+                options={platformOptions}
+                placeholder="Select platform"
+                required
+                className="w-full"
+              />
+              <div className="flex justify-end">
+                <PlatformManagementModal
+                  userId={userId}
+                  onPlatformChange={() => {
+                    // Refresh custom platforms when they change
+                    fetchCustomPlatforms();
+                  }}
+                />
+              </div>
+            </div>
           </FormField>
+
+          {platform === 'other' && (
+            <FormField
+              label="Custom Platform Name"
+              required
+              error={customPlatformError || undefined}
+            >
+              <Input
+                type="text"
+                id="customPlatformName"
+                value={customPlatformName}
+                onChange={(e) => setCustomPlatformName(e.target.value)}
+                placeholder="Enter platform name"
+                minLength={2}
+                maxLength={100}
+                required
+                aria-invalid={!!customPlatformError}
+              />
+            </FormField>
+          )}
 
           <div className="grid gap-4 md:grid-cols-2">
             <FormField label="Start Date" required error={dateError || undefined}>

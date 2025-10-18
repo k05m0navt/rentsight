@@ -29,20 +29,18 @@ export async function GET() {
     // If no preferences exist, return defaults
     if (!preferences) {
       return NextResponse.json({
-        theme: 'system',
-        reducedMotion: false,
         currency: 'USD',
         numberFormat: 'en-US',
         preferredPlatforms: [],
+        default_view: 'dashboard',
       });
     }
 
     return NextResponse.json({
-      theme: preferences.theme,
-      reducedMotion: preferences.reducedMotion,
       currency: preferences.currency,
       numberFormat: preferences.numberFormat,
       preferredPlatforms: preferences.preferredPlatforms,
+      default_view: preferences.default_view,
     });
   } catch (error) {
     console.error('Error fetching preferences:', error);
@@ -65,13 +63,7 @@ export async function PUT(request: Request) {
     const body = await request.json();
 
     // Validate request body
-    const allowedFields = [
-      'theme',
-      'reducedMotion',
-      'currency',
-      'numberFormat',
-      'preferredPlatforms',
-    ];
+    const allowedFields = ['currency', 'numberFormat', 'preferredPlatforms', 'default_view'];
 
     const updates: Record<string, unknown> = {};
     for (const field of allowedFields) {
@@ -80,10 +72,16 @@ export async function PUT(request: Request) {
       }
     }
 
-    // Validate theme value if provided
-    if (updates.theme && !['light', 'dark', 'system'].includes(updates.theme as string)) {
+    // Validate default_view value if provided
+    if (
+      updates.default_view &&
+      !['dashboard', 'properties', 'reports', 'settings'].includes(updates.default_view as string)
+    ) {
       return NextResponse.json(
-        { error: 'Invalid theme value. Must be "light", "dark", or "system"' },
+        {
+          error:
+            'Invalid default_view value. Must be "dashboard", "properties", "reports", or "settings"',
+        },
         { status: 400 },
       );
     }
@@ -93,25 +91,21 @@ export async function PUT(request: Request) {
       where: { user_id: user.id },
       create: {
         user_id: user.id,
-        theme: (updates.theme as string) ?? 'system',
-        reducedMotion: (updates.reducedMotion as boolean) ?? false,
         currency: (updates.currency as string) ?? 'USD',
         numberFormat: (updates.numberFormat as string) ?? 'en-US',
         preferredPlatforms: (updates.preferredPlatforms as string[]) ?? [],
+        default_view: (updates.default_view as string) ?? 'dashboard',
         // Legacy fields for backward compatibility
         currency_format: (updates.currency as string) ?? 'USD',
-        language: 'en',
-        default_view: 'dashboard',
       },
       update: updates,
     });
 
     return NextResponse.json({
-      theme: preferences.theme,
-      reducedMotion: preferences.reducedMotion,
       currency: preferences.currency,
       numberFormat: preferences.numberFormat,
       preferredPlatforms: preferences.preferredPlatforms,
+      default_view: preferences.default_view,
     });
   } catch (error) {
     console.error('Error updating preferences:', error);

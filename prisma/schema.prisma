@@ -23,39 +23,43 @@ model User {
   tags            Tag[]
   properties      Property[]
   preferences     UserPreferences?
+  customPlatforms CustomPlatform[]
+  customCategories CustomCategory[]
 }
 
 model RentEntry {
-  id          String    @id @default(uuid())
-  user_id     String
-  amount      Float
-  booked_days Int
-  platform    String
-  start_date  DateTime  @db.Date
-  end_date    DateTime  @db.Date
-  property_id String?
-  created_at  DateTime  @default(now())
-  updated_at  DateTime  @updatedAt
-  user        User      @relation(fields: [user_id], references: [id])
-  property    Property? @relation(fields: [property_id], references: [id], onDelete: SetNull)
-  tags        RentEntryTag[]
+  id                   String    @id @default(uuid())
+  user_id              String
+  amount               Float
+  booked_days          Int
+  platform             String
+  custom_platform_name String?
+  start_date           DateTime  @db.Date
+  end_date             DateTime  @db.Date
+  property_id          String?
+  created_at           DateTime  @default(now())
+  updated_at           DateTime  @updatedAt
+  user                 User      @relation(fields: [user_id], references: [id])
+  property             Property? @relation(fields: [property_id], references: [id], onDelete: SetNull)
+  tags                 RentEntryTag[]
   
   @@index([property_id])
 }
 
 model ExpenseEntry {
-  id          String    @id @default(uuid())
-  user_id     String
-  amount      Float
-  category    String
-  description String?
-  date        DateTime  @db.Date
-  property_id String?
-  created_at  DateTime  @default(now())
-  updated_at  DateTime  @updatedAt
-  user        User      @relation(fields: [user_id], references: [id])
-  property    Property? @relation(fields: [property_id], references: [id], onDelete: SetNull)
-  tags        ExpenseEntryTag[]
+  id                   String    @id @default(uuid())
+  user_id              String
+  amount               Float
+  category             String
+  custom_category_name String?   // New field for custom category names
+  description          String?
+  date                 DateTime  @db.Date
+  property_id          String?
+  created_at           DateTime  @default(now())
+  updated_at           DateTime  @updatedAt
+  user                 User      @relation(fields: [user_id], references: [id])
+  property             Property? @relation(fields: [property_id], references: [id], onDelete: SetNull)
+  tags                 ExpenseEntryTag[]
   
   @@index([property_id])
 }
@@ -113,10 +117,6 @@ model UserPreferences {
   id                  String   @id @default(uuid())
   user_id             String   @unique
   
-  // Theme preferences
-  theme               String   @default("system") // "light" | "dark" | "system"
-  reducedMotion       Boolean  @default(false)
-  
   // Regional preferences  
   currency            String   @default("USD") // ISO currency code (USD, EUR, RUB, etc.)
   numberFormat        String   @default("en-US") // Locale for number formatting
@@ -124,14 +124,42 @@ model UserPreferences {
   // Platform preferences
   preferredPlatforms  String[] @default([])
   
+  // Default view preference
+  default_view        String   @default("dashboard")
+  
   // Legacy fields (keep for backward compatibility)
   currency_format     String   @default("USD")
-  language            String   @default("en")
-  default_view        String   @default("dashboard")
-  theme_preference    String?
   preferences         Json?
   
   created_at          DateTime @default(now())
   updated_at          DateTime @updatedAt
   user                User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model CustomPlatform {
+  id          String   @id @default(uuid())
+  user_id     String
+  name        String
+  usage_count Int      @default(0)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  
+  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  
+  @@unique([user_id, name])
+  @@index([user_id])
+}
+
+model CustomCategory {
+  id          String   @id @default(uuid())
+  user_id     String
+  name        String
+  usage_count Int      @default(0)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  
+  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  
+  @@unique([user_id, name])
+  @@index([user_id])
 }

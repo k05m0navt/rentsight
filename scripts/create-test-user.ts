@@ -39,7 +39,6 @@ async function createTestUser() {
           data: {
             user_id: existing.id,
             currency_format: 'USD',
-            language: 'en',
             default_view: 'dashboard',
           },
         });
@@ -68,7 +67,6 @@ async function createTestUser() {
       data: {
         user_id: user.id,
         currency_format: 'USD',
-        language: 'en',
         default_view: 'dashboard',
       },
     });

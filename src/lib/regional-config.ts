@@ -48,6 +48,7 @@ export const currencies: Record<string, Currency> = {
 
 /**
  * Booking Platforms by Region
+ * Russian platforms are now the primary options
  */
 export const platforms: Record<string, Platform[]> = {
   russian: [
@@ -64,6 +65,12 @@ export const platforms: Record<string, Platform[]> = {
       region: 'ru',
     },
     {
+      id: 'sutochno',
+      name: 'Sutochno.ru',
+      url: 'https://sutochno.ru',
+      region: 'ru',
+    },
+    {
       id: 'domclick',
       name: 'Domclick',
       url: 'https://domclick.ru',
@@ -73,6 +80,24 @@ export const platforms: Record<string, Platform[]> = {
       id: 'yandex-realty',
       name: 'Yandex.Realty',
       url: 'https://realty.yandex.ru',
+      region: 'ru',
+    },
+    {
+      id: 'irr',
+      name: 'IRR.ru',
+      url: 'https://www.irr.ru',
+      region: 'ru',
+    },
+    {
+      id: 'cian-rent',
+      name: 'CIAN Rent',
+      url: 'https://rent.cian.ru',
+      region: 'ru',
+    },
+    {
+      id: 'avito-rent',
+      name: 'Avito Rent',
+      url: 'https://www.avito.ru/rossiya/nedvizhimost/arenda',
       region: 'ru',
     },
   ],
