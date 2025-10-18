@@ -48,7 +48,6 @@ async function createDefaultPreferences() {
             preferredPlatforms: [],
             // Legacy fields for backward compatibility
             currency_format: 'USD',
-            date_format: 'MM/DD/YYYY',
             language: 'en',
             default_view: 'dashboard',
           },
