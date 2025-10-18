@@ -39,7 +39,6 @@ async function createTestUser() {
           data: {
             user_id: existing.id,
             currency_format: 'USD',
-            date_format: 'MM/DD/YYYY',
             language: 'en',
             default_view: 'dashboard',
           },
