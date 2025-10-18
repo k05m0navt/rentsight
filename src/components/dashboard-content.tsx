@@ -31,7 +31,6 @@ interface AnalyticsSummary {
 
 interface UserPreferences {
   currency_format: string;
-  date_format: string;
   language: string;
   default_view: string;
   theme_preference?: string | null;

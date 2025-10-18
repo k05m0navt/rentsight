@@ -119,7 +119,6 @@ model UserPreferences {
   
   // Regional preferences  
   currency            String   @default("USD") // ISO currency code (USD, EUR, RUB, etc.)
-  dateFormat          String   @default("MM/DD/YYYY") // "MM/DD/YYYY" | "DD.MM.YYYY"
   numberFormat        String   @default("en-US") // Locale for number formatting
   
   // Platform preferences
@@ -127,7 +126,6 @@ model UserPreferences {
   
   // Legacy fields (keep for backward compatibility)
   currency_format     String   @default("USD")
-  date_format         String   @default("MM/DD/YYYY")
   language            String   @default("en")
   default_view        String   @default("dashboard")
   theme_preference    String?

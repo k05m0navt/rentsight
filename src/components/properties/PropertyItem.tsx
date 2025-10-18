@@ -10,6 +10,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/com
 import { Button } from '@/components/ui/button';
 import { Building2, Calendar, MapPin, Trash2, Edit, TrendingUp, TrendingDown } from 'lucide-react';
 import { PropertyWithStats } from '@/types/property';
+import { useDateFormat } from '@/hooks/useDateFormat';
 
 interface PropertyItemProps {
   property: PropertyWithStats;
@@ -18,10 +19,7 @@ interface PropertyItemProps {
 }
 
 export function PropertyItem({ property, onEdit, onDelete }: PropertyItemProps) {
-  const formatDate = (date: Date | null | undefined) => {
-    if (!date) return 'Not set';
-    return new Date(date).toLocaleDateString();
-  };
+  const { formatDate } = useDateFormat();
 
   const hasEntries =
     (property._count?.rentEntries || 0) > 0 || (property._count?.expenseEntries || 0) > 0;

@@ -14,18 +14,15 @@ export function formatAmount(amount: number, currencyCode: string = 'USD'): stri
 }
 
 /**
- * Format date based on user preference
+ * Format date in DD.MM.YYYY format
  */
-export function formatUserDate(date: Date, dateFormat: string = 'MM/DD/YYYY'): string {
-  // Map date format strings to locales
-  const formatToLocale: Record<string, string> = {
-    'MM/DD/YYYY': 'en-US',
-    'DD.MM.YYYY': 'ru-RU',
-    'DD/MM/YYYY': 'en-GB',
-  };
-
-  const _locale = formatToLocale[dateFormat] || 'en-US';
-  return formatDate(date, _locale);
+export function formatUserDate(date: Date): string {
+  // Format as DD.MM.YYYY
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const year = date.getFullYear();
+  
+  return `${day}.${month}.${year}`;
 }
 
 /**
@@ -36,30 +33,12 @@ export function formatNumber(number: number, locale: string = 'en-US'): string {
 }
 
 /**
- * Parse date string based on format
+ * Parse date string in DD.MM.YYYY format
  */
-export function parseUserDate(dateStr: string, dateFormat: string = 'MM/DD/YYYY'): Date {
-  const formatToLocale: Record<string, string> = {
-    'MM/DD/YYYY': 'en-US',
-    'DD.MM.YYYY': 'ru-RU',
-    'DD/MM/YYYY': 'en-GB',
-  };
-
-  const _locale = formatToLocale[dateFormat] || 'en-US';
-
-  if (dateFormat === 'MM/DD/YYYY') {
-    const [month, day, year] = dateStr.split('/').map(Number);
-    return new Date(year, month - 1, day);
-  } else if (dateFormat === 'DD.MM.YYYY') {
-    const [day, month, year] = dateStr.split('.').map(Number);
-    return new Date(year, month - 1, day);
-  } else if (dateFormat === 'DD/MM/YYYY') {
-    const [day, month, year] = dateStr.split('/').map(Number);
-    return new Date(year, month - 1, day);
-  }
-
-  // Fallback to default parsing
-  return new Date(dateStr);
+export function parseUserDate(dateStr: string): Date {
+  // Parse DD.MM.YYYY format
+  const [day, month, year] = dateStr.split('.').map(Number);
+  return new Date(year, month - 1, day);
 }
 
 /**
@@ -154,11 +133,11 @@ export function validateCurrencyInput(input: string, currency: Currency): boolea
 }
 
 /**
- * Validate date input based on format
+ * Validate date input in DD.MM.YYYY format
  */
-export function validateDateInput(dateStr: string, dateFormat: string): boolean {
+export function validateDateInput(dateStr: string): boolean {
   try {
-    const date = parseUserDate(dateStr, dateFormat);
+    const date = parseUserDate(dateStr);
     return !isNaN(date.getTime());
   } catch {
     return false;

@@ -21,6 +21,7 @@ import { Button } from '@/components/ui/button';
 import { Select } from '@/components/ui/select';
 import { ReportsSkeleton } from '@/components/reports/ReportsSkeleton';
 import { BarChart3, FileText, Calculator, Download } from 'lucide-react';
+import { useDateFormat } from '@/hooks/useDateFormat';
 
 export default function ReportsPage() {
   const [user, setUser] = useState<{ id: string; email?: string } | null>(null);
@@ -34,6 +35,7 @@ export default function ReportsPage() {
   } | null>(null);
   const router = useRouter();
   const supabase = createClient();
+  const { formatDateTime } = useDateFormat();
 
   useEffect(() => {
     const getUser = async () => {
@@ -204,7 +206,7 @@ export default function ReportsPage() {
                 <div>
                   <CardTitle>Report Results</CardTitle>
                   <CardDescription>
-                    Generated at {new Date(reportData.generated_at).toLocaleString()}
+                    Generated at {formatDateTime(reportData.generated_at)}
                   </CardDescription>
                 </div>
                 <div className="flex gap-2">

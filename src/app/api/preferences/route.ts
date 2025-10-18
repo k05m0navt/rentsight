@@ -32,7 +32,6 @@ export async function GET() {
         theme: 'system',
         reducedMotion: false,
         currency: 'USD',
-        dateFormat: 'MM/DD/YYYY',
         numberFormat: 'en-US',
         preferredPlatforms: [],
       });
@@ -42,7 +41,6 @@ export async function GET() {
       theme: preferences.theme,
       reducedMotion: preferences.reducedMotion,
       currency: preferences.currency,
-      dateFormat: preferences.dateFormat,
       numberFormat: preferences.numberFormat,
       preferredPlatforms: preferences.preferredPlatforms,
     });
@@ -71,7 +69,6 @@ export async function PUT(request: Request) {
       'theme',
       'reducedMotion',
       'currency',
-      'dateFormat',
       'numberFormat',
       'preferredPlatforms',
     ];
@@ -99,12 +96,10 @@ export async function PUT(request: Request) {
         theme: updates.theme ?? 'system',
         reducedMotion: updates.reducedMotion ?? false,
         currency: updates.currency ?? 'USD',
-        dateFormat: updates.dateFormat ?? 'MM/DD/YYYY',
         numberFormat: updates.numberFormat ?? 'en-US',
         preferredPlatforms: updates.preferredPlatforms ?? [],
         // Legacy fields for backward compatibility
         currency_format: updates.currency ?? 'USD',
-        date_format: updates.dateFormat ?? 'MM/DD/YYYY',
         language: 'en',
         default_view: 'dashboard',
       },
@@ -115,7 +110,6 @@ export async function PUT(request: Request) {
       theme: preferences.theme,
       reducedMotion: preferences.reducedMotion,
       currency: preferences.currency,
-      dateFormat: preferences.dateFormat,
       numberFormat: preferences.numberFormat,
       preferredPlatforms: preferences.preferredPlatforms,
     });

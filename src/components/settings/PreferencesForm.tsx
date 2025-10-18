@@ -18,7 +18,6 @@ import { useState } from 'react';
 interface PreferencesFormProps {
   initialData: {
     currency_format: string;
-    date_format: string;
     language: string;
     default_view: string;
     theme_preference?: string | null;
@@ -36,7 +35,6 @@ export function PreferencesForm({ initialData }: PreferencesFormProps) {
     resolver: zodResolver(userPreferencesSchema),
     defaultValues: {
       currency_format: initialData.currency_format,
-      date_format: initialData.date_format as 'MM/DD/YYYY' | 'DD/MM/YYYY' | 'YYYY-MM-DD',
       language: initialData.language,
       default_view: initialData.default_view as 'dashboard' | 'properties' | 'reports' | 'settings',
       theme_preference:
@@ -106,21 +104,6 @@ export function PreferencesForm({ initialData }: PreferencesFormProps) {
         )}
       </div>
 
-      <div>
-        <label htmlFor="date_format" className="block text-sm font-medium mb-2">
-          Date Format
-        </label>
-        <Select id="date_format" {...register('date_format')} aria-invalid={!!errors.date_format}>
-          <option value="MM/DD/YYYY">MM/DD/YYYY (US)</option>
-          <option value="DD/MM/YYYY">DD/MM/YYYY (European/Russian)</option>
-          <option value="YYYY-MM-DD">YYYY-MM-DD (ISO)</option>
-        </Select>
-        {errors.date_format && (
-          <p className="text-sm text-red-600 mt-1" role="alert">
-            {errors.date_format.message}
-          </p>
-        )}
-      </div>
 
       <div>
         <label htmlFor="language" className="block text-sm font-medium mb-2">

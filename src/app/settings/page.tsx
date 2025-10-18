@@ -60,7 +60,6 @@ export default async function SettingsPage() {
       data: {
         user_id: user.id,
         currency_format: 'USD',
-        date_format: 'MM/DD/YYYY',
         language: 'en',
         default_view: 'dashboard',
       },
