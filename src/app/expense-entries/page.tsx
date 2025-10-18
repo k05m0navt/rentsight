@@ -1,7 +1,9 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
+import { Suspense } from 'react';
 import { ExpenseEntryForm } from '@/components/forms/expense-entry-form';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { ExpenseEntrySkeleton } from '@/components/expense-entries/ExpenseEntrySkeleton';
 
 export const dynamic = 'force-dynamic';
 
@@ -22,15 +24,17 @@ export default async function ExpenseEntriesPage() {
         <p className="text-muted-foreground">Add and manage your rental property expenses</p>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Add New Expense Entry</CardTitle>
-          <CardDescription>Record expenses related to your rental properties</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ExpenseEntryForm userId={user.id} />
-        </CardContent>
-      </Card>
+      <Suspense fallback={<ExpenseEntrySkeleton />}>
+        <Card>
+          <CardHeader>
+            <CardTitle>Add New Expense Entry</CardTitle>
+            <CardDescription>Record expenses related to your rental properties</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ExpenseEntryForm userId={user.id} />
+          </CardContent>
+        </Card>
+      </Suspense>
     </div>
   );
 }

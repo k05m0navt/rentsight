@@ -30,7 +30,7 @@ function AccordionItem({ id, title, content, isOpen, onToggle }: AccordionItemPr
   const headerId = `accordion-header-${id}`;
 
   return (
-    <div className="border-b border-border dark:border-border-dark">
+    <div className="border-b border-border">
       <button
         id={headerId}
         type="button"
@@ -39,17 +39,17 @@ function AccordionItem({ id, title, content, isOpen, onToggle }: AccordionItemPr
         onClick={onToggle}
         className={cn(
           'flex w-full items-center justify-between py-4 text-left',
-          'text-base font-medium text-text dark:text-text-dark',
+          'text-base font-medium text-text',
           'transition-colors duration-200',
-          'hover:text-primary dark:hover:text-primary',
+          'hover:text-primary',
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/20 focus-visible:rounded-md',
         )}
       >
-        <span>{title}</span>
+        <span data-testid="faq-question">{title}</span>
         <ChevronDown
           className={cn(
             'h-5 w-5 shrink-0 transition-transform duration-200',
-            'text-muted dark:text-muted-dark',
+            'text-muted',
             isOpen && 'rotate-180',
           )}
         />
@@ -63,7 +63,7 @@ function AccordionItem({ id, title, content, isOpen, onToggle }: AccordionItemPr
           isOpen ? 'max-h-[500px] pb-4' : 'max-h-0',
         )}
       >
-        <div className="text-base text-muted dark:text-muted-dark">{content}</div>
+        <div className="text-base text-muted">{content}</div>
       </div>
     </div>
   );
@@ -104,7 +104,7 @@ function Accordion({
   };
 
   return (
-    <div className={cn('divide-y divide-border dark:divide-border-dark', className)}>
+    <div className={cn('divide-y divide-border', className)}>
       {items.map((item) => (
         <AccordionItem
           key={item.id}

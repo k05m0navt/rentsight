@@ -75,6 +75,29 @@ export function HelpSearch() {
     performSearch();
   }, [debouncedQuery]);
 
+  // Helper function to highlight search terms
+  const highlightText = (text: string, searchTerm: string) => {
+    if (!searchTerm) return text;
+
+    const regex = new RegExp(`(${searchTerm})`, 'gi');
+    const parts = text.split(regex);
+
+    return parts.map((part, index) => {
+      if (regex.test(part)) {
+        return (
+          <mark
+            key={index}
+            data-testid="highlighted-text"
+            className="bg-yellow-200 dark:bg-yellow-800 px-1 rounded"
+          >
+            {part}
+          </mark>
+        );
+      }
+      return part;
+    });
+  };
+
   return (
     <div className="space-y-4">
       {/* Search Input */}
@@ -96,20 +119,22 @@ export function HelpSearch() {
 
       {/* Results */}
       {!loading && results && query && (
-        <div className="space-y-4">
+        <div className="space-y-4" data-testid="search-results">
           {/* Articles */}
           {results.articles.length > 0 && (
             <div>
               <h3 className="text-lg font-semibold mb-3">Help Articles</h3>
               <div className="space-y-2">
                 {results.articles.map((article) => (
-                  <Card key={article.id}>
+                  <Card key={article.id} data-testid="search-result">
                     <CardHeader>
-                      <CardTitle className="text-base">{article.title}</CardTitle>
+                      <CardTitle className="text-base">
+                        {highlightText(article.title, query)}
+                      </CardTitle>
                     </CardHeader>
                     <CardContent>
                       <p className="text-sm text-muted dark:text-muted-dark line-clamp-2">
-                        {article.content}
+                        {highlightText(article.content, query)}
                       </p>
                     </CardContent>
                   </Card>
@@ -124,12 +149,16 @@ export function HelpSearch() {
               <h3 className="text-lg font-semibold mb-3">Frequently Asked Questions</h3>
               <div className="space-y-2">
                 {results.faqs.map((faq) => (
-                  <Card key={faq.id}>
+                  <Card key={faq.id} data-testid="search-result">
                     <CardHeader>
-                      <CardTitle className="text-base">{faq.question}</CardTitle>
+                      <CardTitle className="text-base">
+                        {highlightText(faq.question, query)}
+                      </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-sm text-muted dark:text-muted-dark">{faq.answer}</p>
+                      <p className="text-sm text-muted dark:text-muted-dark">
+                        {highlightText(faq.answer, query)}
+                      </p>
                     </CardContent>
                   </Card>
                 ))}

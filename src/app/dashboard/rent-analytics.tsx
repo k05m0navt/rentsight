@@ -19,6 +19,8 @@ import { TagManager } from '@/components/ui/tag-manager';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { MetricsCard } from '@/components/dashboard/MetricsCard';
+import { useDateFormat } from '@/hooks/useDateFormat';
+import { RentAnalyticsSkeleton } from '@/components/dashboard/RentAnalyticsSkeleton';
 
 interface Tag {
   id: string;
@@ -40,6 +42,7 @@ export function RentAnalytics({ userId }: { userId: string }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
+  const { formatDate } = useDateFormat();
 
   const fetchRentEntries = useCallback(async () => {
     setLoading(true);
@@ -71,11 +74,7 @@ export function RentAnalytics({ userId }: { userId: string }) {
   const averageIncome = rentEntries.length > 0 ? totalIncome / rentEntries.length : 0;
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center py-12">
-        <p className="text-muted dark:text-muted-dark">Loading rent analytics...</p>
-      </div>
-    );
+    return <RentAnalyticsSkeleton />;
   }
 
   if (error) {
@@ -148,7 +147,7 @@ export function RentAnalytics({ userId }: { userId: string }) {
                     <span>{entry.booked_days} days booked</span>
                   </div>
                   <p className="text-xs text-muted dark:text-muted-dark">
-                    {entry.start_date} → {entry.end_date}
+                    {formatDate(entry.start_date)} → {formatDate(entry.end_date)}
                   </p>
                   {entry.tags.length > 0 && (
                     <div className="flex flex-wrap gap-1 mt-2 pt-2 border-t border-border dark:border-border-dark">

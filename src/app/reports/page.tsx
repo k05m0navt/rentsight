@@ -13,13 +13,19 @@
 
 export const dynamic = 'force-dynamic';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { createClient } from '@/lib/supabase/client';
+import { useRouter } from 'next/navigation';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select } from '@/components/ui/select';
+import { ReportsSkeleton } from '@/components/reports/ReportsSkeleton';
 import { BarChart3, FileText, Calculator, Download } from 'lucide-react';
+import { useDateFormat } from '@/hooks/useDateFormat';
 
 export default function ReportsPage() {
+  const [user, setUser] = useState<{ id: string; email?: string } | null>(null);
+  const [loading, setLoading] = useState(true);
   const [reportType, setReportType] = useState('income_summary');
   const [generating, setGenerating] = useState(false);
   const [reportData, setReportData] = useState<{
@@ -27,6 +33,38 @@ export default function ReportsPage() {
     summary: { totalIncome: number; totalExpenses: number; netIncome: number; entryCount: number };
     data: unknown;
   } | null>(null);
+  const router = useRouter();
+  const { formatDateTime } = useDateFormat();
+
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const supabase = createClient();
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+        if (!user) {
+          router.push('/login');
+          return;
+        }
+        setUser(user);
+      } catch (error) {
+        console.error('Error getting user:', error);
+        router.push('/login');
+      } finally {
+        setLoading(false);
+      }
+    };
+    getUser();
+  }, [router]);
+
+  if (loading) {
+    return <ReportsSkeleton />;
+  }
+
+  if (!user) {
+    return null;
+  }
 
   const handleGenerate = async () => {
     setGenerating(true);
@@ -75,7 +113,7 @@ export default function ReportsPage() {
   };
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6" data-testid="reports-content">
       {/* Page Header */}
       <div>
         <h1 className="text-2xl font-bold">Reports</h1>
@@ -164,74 +202,78 @@ export default function ReportsPage() {
       </div>
 
       {/* Report Display */}
-      {reportData && (
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle>Report Results</CardTitle>
-                <CardDescription>
-                  Generated at {new Date(reportData.generated_at).toLocaleString()}
-                </CardDescription>
-              </div>
-              <div className="flex gap-2">
-                <Button variant="secondary" size="sm" onClick={() => handleExport('pdf')}>
-                  <Download className="h-4 w-4 mr-2" />
-                  PDF
-                </Button>
-                <Button variant="secondary" size="sm" onClick={() => handleExport('csv')}>
-                  <Download className="h-4 w-4 mr-2" />
-                  CSV
-                </Button>
-                <Button variant="secondary" size="sm" onClick={() => handleExport('excel')}>
-                  <Download className="h-4 w-4 mr-2" />
-                  Excel
-                </Button>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {/* Summary */}
-              <div className="grid gap-4 md:grid-cols-4">
-                <div className="p-4 rounded-lg bg-card dark:bg-card-dark border border-border dark:border-border-dark">
-                  <p className="text-sm text-muted dark:text-muted-dark mb-1">Total Income</p>
-                  <p className="text-xl font-bold text-success">
-                    ${reportData.summary.totalIncome.toFixed(2)}
-                  </p>
+      {generating ? (
+        <ReportsSkeleton />
+      ) : (
+        reportData && (
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle>Report Results</CardTitle>
+                  <CardDescription>
+                    Generated at {formatDateTime(reportData.generated_at)}
+                  </CardDescription>
                 </div>
-                <div className="p-4 rounded-lg bg-card dark:bg-card-dark border border-border dark:border-border-dark">
-                  <p className="text-sm text-muted dark:text-muted-dark mb-1">Total Expenses</p>
-                  <p className="text-xl font-bold text-red-500">
-                    ${reportData.summary.totalExpenses.toFixed(2)}
-                  </p>
-                </div>
-                <div className="p-4 rounded-lg bg-card dark:bg-card-dark border border-border dark:border-border-dark">
-                  <p className="text-sm text-muted dark:text-muted-dark mb-1">Net Income</p>
-                  <p className="text-xl font-bold text-primary">
-                    ${reportData.summary.netIncome.toFixed(2)}
-                  </p>
-                </div>
-                <div className="p-4 rounded-lg bg-card dark:bg-card-dark border border-border dark:border-border-dark">
-                  <p className="text-sm text-muted dark:text-muted-dark mb-1">Total Entries</p>
-                  <p className="text-xl font-bold">{reportData.summary.entryCount}</p>
+                <div className="flex gap-2">
+                  <Button variant="secondary" size="sm" onClick={() => handleExport('pdf')}>
+                    <Download className="h-4 w-4 mr-2" />
+                    PDF
+                  </Button>
+                  <Button variant="secondary" size="sm" onClick={() => handleExport('csv')}>
+                    <Download className="h-4 w-4 mr-2" />
+                    CSV
+                  </Button>
+                  <Button variant="secondary" size="sm" onClick={() => handleExport('excel')}>
+                    <Download className="h-4 w-4 mr-2" />
+                    Excel
+                  </Button>
                 </div>
               </div>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {/* Summary */}
+                <div className="grid gap-4 md:grid-cols-4">
+                  <div className="p-4 rounded-lg bg-card dark:bg-card-dark border border-border dark:border-border-dark">
+                    <p className="text-sm text-muted dark:text-muted-dark mb-1">Total Income</p>
+                    <p className="text-xl font-bold text-success">
+                      ${reportData.summary.totalIncome.toFixed(2)}
+                    </p>
+                  </div>
+                  <div className="p-4 rounded-lg bg-card dark:bg-card-dark border border-border dark:border-border-dark">
+                    <p className="text-sm text-muted dark:text-muted-dark mb-1">Total Expenses</p>
+                    <p className="text-xl font-bold text-red-500">
+                      ${reportData.summary.totalExpenses.toFixed(2)}
+                    </p>
+                  </div>
+                  <div className="p-4 rounded-lg bg-card dark:bg-card-dark border border-border dark:border-border-dark">
+                    <p className="text-sm text-muted dark:text-muted-dark mb-1">Net Income</p>
+                    <p className="text-xl font-bold text-primary">
+                      ${reportData.summary.netIncome.toFixed(2)}
+                    </p>
+                  </div>
+                  <div className="p-4 rounded-lg bg-card dark:bg-card-dark border border-border dark:border-border-dark">
+                    <p className="text-sm text-muted dark:text-muted-dark mb-1">Total Entries</p>
+                    <p className="text-xl font-bold">{reportData.summary.entryCount}</p>
+                  </div>
+                </div>
 
-              {/* Report Data Preview */}
-              <div className="p-4 rounded-lg bg-card dark:bg-card-dark border border-border dark:border-border-dark">
-                <p className="text-sm font-medium mb-2">Report Data:</p>
-                <pre className="text-xs overflow-auto max-h-96 text-muted dark:text-muted-dark">
-                  {JSON.stringify(reportData.data, null, 2)}
-                </pre>
+                {/* Report Data Preview */}
+                <div className="p-4 rounded-lg bg-card dark:bg-card-dark border border-border dark:border-border-dark">
+                  <p className="text-sm font-medium mb-2">Report Data:</p>
+                  <pre className="text-xs overflow-auto max-h-96 text-muted dark:text-muted-dark">
+                    {JSON.stringify(reportData.data, null, 2)}
+                  </pre>
+                </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        )
       )}
 
       {/* Empty State */}
-      {!reportData && (
+      {!reportData && !generating && (
         <Card>
           <CardContent className="py-12 text-center">
             <div className="p-4 rounded-full bg-card dark:bg-card-dark inline-block mb-4">

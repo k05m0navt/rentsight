@@ -53,7 +53,7 @@ export function PropertySelector({
   return (
     <div>
       <label htmlFor="property" className="block text-sm font-medium mb-2">
-        Property {!required && <span className="text-muted dark:text-muted-dark">(Optional)</span>}
+        Property {!required && <span className="text-muted">(Optional)</span>}
       </label>
       <Select
         id="property"
@@ -74,12 +74,12 @@ export function PropertySelector({
         ))}
       </Select>
       {error && (
-        <p className="text-sm text-red-600 dark:text-red-400 mt-1" role="alert">
+        <p className="text-sm text-red-600 mt-1" role="alert">
           {error}
         </p>
       )}
       {!required && properties.length === 0 && !loading && (
-        <p className="text-sm text-muted dark:text-muted-dark mt-1">
+        <p className="text-sm text-muted mt-1">
           No properties yet. Create one in the Properties page.
         </p>
       )}

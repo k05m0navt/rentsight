@@ -70,7 +70,7 @@ test.describe('Accessibility tests', () => {
 
         // Filter for color contrast violations
         const contrastViolations = accessibilityScanResults.violations.filter(
-          (v) => v.id === 'color-contrast'
+          (v) => v.id === 'color-contrast',
         );
 
         expect(contrastViolations).toEqual([]);
@@ -82,7 +82,7 @@ test.describe('Accessibility tests', () => {
 
         // Check primary button contrast
         const buttons = await page.locator('button[class*="primary"]').all();
-        
+
         if (buttons.length > 0) {
           const accessibilityScanResults = await new AxeBuilder({ page })
             .include('button[class*="primary"]')
@@ -90,7 +90,7 @@ test.describe('Accessibility tests', () => {
             .analyze();
 
           const contrastViolations = accessibilityScanResults.violations.filter(
-            (v) => v.id === 'color-contrast'
+            (v) => v.id === 'color-contrast',
           );
 
           expect(contrastViolations).toEqual([]);
@@ -105,13 +105,15 @@ test.describe('Accessibility tests', () => {
       await page.waitForLoadState('networkidle');
 
       // Get all interactive elements
-      const focusableElements = await page.locator('a, button, input, select, textarea, [tabindex]').all();
+      const focusableElements = await page
+        .locator('a, button, input, select, textarea, [tabindex]')
+        .all();
 
       if (focusableElements.length > 0) {
         // Tab through first few elements
         const firstElement = focusableElements[0];
         await firstElement.focus();
-        
+
         // Verify focus is visible
         const hasFocusRing = await page.evaluate(() => {
           const activeEl = document.activeElement;
@@ -129,7 +131,7 @@ test.describe('Accessibility tests', () => {
       await context.clearCookies();
       await page.goto('/login');
       await page.waitForLoadState('networkidle');
-      
+
       // Wait for input to be available
       await page.waitForSelector('input', { state: 'visible', timeout: 5000 });
 
@@ -149,7 +151,7 @@ test.describe('Accessibility tests', () => {
       });
 
       // Verify some form of focus indication exists
-      const hasFocusIndication = 
+      const hasFocusIndication =
         focusStyles.outline !== 'none' ||
         focusStyles.boxShadow !== 'none' ||
         focusStyles.outlineWidth !== '0px';
@@ -168,7 +170,7 @@ test.describe('Accessibility tests', () => {
         .analyze();
 
       const ariaViolations = accessibilityScanResults.violations.filter(
-        (v) => v.id.includes('aria') || v.id.includes('label')
+        (v) => v.id.includes('aria') || v.id.includes('label'),
       );
 
       expect(ariaViolations).toEqual([]);
@@ -179,12 +181,11 @@ test.describe('Accessibility tests', () => {
       await page.waitForLoadState('networkidle');
 
       // Check for proper semantic elements
-      const hasNav = await page.locator('nav').count() > 0;
-      const hasMain = await page.locator('main').count() > 0;
+      const hasNav = (await page.locator('nav').count()) > 0;
+      const hasMain = (await page.locator('main').count()) > 0;
 
       expect(hasNav).toBe(true);
       expect(hasMain).toBe(true);
     });
   });
 });
-

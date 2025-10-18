@@ -26,6 +26,8 @@ Go to the **Properties** page and click "Add First Property". Fill in:
 - **Start Date** (optional) - When you acquired or started renting the property
 - **Notes** (optional) - Any additional information
 
+> **💡 Quick Tip**: You can access the Properties page directly from the sidebar or by clicking [here](/properties){:target="_blank" rel="noopener noreferrer"}.
+
 ### 3. Create Tags for Organization
 
 Visit the **Tags** page to create custom tags like:
@@ -35,6 +37,8 @@ Visit the **Tags** page to create custom tags like:
 
 Tags help you filter and analyze your data in multiple ways.
 
+> **💡 Quick Tip**: Access the Tags page directly by clicking [here](/tags){:target="_blank" rel="noopener noreferrer"}.
+
 ### 4. Track Your Income
 
 On the **Dashboard**, add rent entries with:
@@ -43,6 +47,8 @@ On the **Dashboard**, add rent entries with:
 - Date range
 - Associated property (optional)
 - Relevant tags
+
+> **💡 Quick Tip**: The Dashboard is your command center. Access it directly by clicking [here](/dashboard){:target="_blank" rel="noopener noreferrer"}.
 
 ### 5. Track Your Expenses
 

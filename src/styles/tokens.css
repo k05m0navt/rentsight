@@ -8,23 +8,37 @@
  */
 
 :root {
-  /* Colors - Light Theme - Updated to match AI Hiring SaaS CRM design reference */
-  --color-background: #FFFFFF;
-  --color-card: #F5F5F5;
-  --color-primary: #FF6B35; /* Orange accent color from design reference */
+  /* Colors - Dark Theme Only */
+  --color-background: #0A0A0A;
+  --color-surface: #1A1A1A;
+  --color-card: #1F1F1F;
+  --color-primary: #EA580C; /* Orange */
+  --color-primary-hover: #C2410C;
   --color-primary-foreground: #FFFFFF;
-  --color-success: #1DCC5C; /* Green color from design reference */
+  --color-success: #16A34A; /* Green */
+  --color-success-hover: #15803D;
   --color-success-foreground: #FFFFFF;
-  --color-text: #1A1A1A;
-  --color-text-dark: #EEEEEE;
-  --color-muted: #666666;
-  --color-border: #E5E5E5;
-  --color-hover: #F8F8F8;
-  --color-focus: rgba(255, 107, 53, 0.2); /* Orange primary with 20% opacity */
-  --color-error: #DC2626;
-  --color-warning: #F59E0B;
-  --color-info: #3B82F6;
-  --color-disabled: #D1D5DB;
+  --color-text: #F5F5F5;
+  --color-text-secondary: #D4D4D4;
+  --color-muted: #A3A3A3;
+  --color-muted-foreground: #737373;
+  --color-border: #262626;
+  --color-border-strong: #404040;
+  --color-hover: #171717;
+  --color-focus: rgba(234, 88, 12, 0.3); /* Orange primary with 30% opacity */
+  --color-error: #DC2626; /* Red */
+  --color-error-hover: #B91C1C;
+  --color-warning: #D97706; /* Amber */
+  --color-warning-hover: #B45309;
+  --color-info: #2563EB; /* Blue */
+  --color-disabled: #525252;
+  
+  /* Elevation Shadows - Dark Theme */
+  --elevation-flat: none;
+  --elevation-raised: 0 2px 4px 0 rgb(0 0 0 / 0.3), 0 1px 2px -1px rgb(0 0 0 / 0.2);
+  --elevation-raised-hover: 0 6px 10px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+  --elevation-overlay: 0 12px 20px -3px rgb(0 0 0 / 0.5), 0 4px 8px -4px rgb(0 0 0 / 0.4);
+  --elevation-overlay-strong: 0 24px 32px -5px rgb(0 0 0 / 0.6), 0 8px 12px -6px rgb(0 0 0 / 0.5);
   
   /* Spacing (8-point scale) */
   --spacing-0: 0;
@@ -77,22 +91,6 @@
   --transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Dark Theme - Updated to match AI Hiring SaaS CRM design reference */
-.dark {
-  --color-background: #1A1A1A; /* Main background color from design reference */
-  --color-card: #2A2A2A; /* Card background color from design reference */
-  --color-text: #EEEEEE;
-  --color-muted: #AAAAAA;
-  --color-border: #333333;
-  --color-hover: #252525;
-  --color-focus: rgba(255, 107, 53, 0.4); /* Orange primary with 40% opacity for dark bg */
-  --color-disabled: #4B5563;
-  
-  /* Shadows - Dark Theme (more prominent) */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.5);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.7);
-}
 
 /**
  * IE11 Fallback Classes
@@ -101,20 +99,13 @@
 
 /* IE11 detection: Using @media for IE10+ */
 @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-  /* Light theme fallbacks - Updated to match design reference */
-  .bg-background { background-color: #FFFFFF; }
-  .bg-card { background-color: #F5F5F5; }
-  .bg-primary { background-color: #FF6B35; } /* Orange accent color */
-  .text-text { color: #1A1A1A; }
-  .text-muted { color: #666666; }
-  .border-border { border-color: #E5E5E5; }
-  
-  /* Dark theme fallbacks (requires .dark parent class) - Updated to match design reference */
-  .dark .bg-background { background-color: #1A1A1A; } /* Main background color */
-  .dark .bg-card { background-color: #2A2A2A; } /* Card background color */
-  .dark .text-text { color: #EEEEEE; }
-  .dark .text-muted { color: #AAAAAA; }
-  .dark .border-border { border-color: #333333; }
+  /* Dark theme fallbacks for IE11 */
+  .bg-background { background-color: #0A0A0A; }
+  .bg-card { background-color: #1F1F1F; }
+  .bg-primary { background-color: #EA580C; } /* Orange accent color */
+  .text-text { color: #F5F5F5; }
+  .text-muted { color: #A3A3A3; }
+  .border-border { border-color: #262626; }
   
   /* Disable animations in IE11 for performance */
   * {
@@ -124,7 +115,7 @@
 }
 
 /**
- * Base styles with fallbacks
+ * Base styles with fallbacks - Dark theme only
  * These styles use fallback values before custom properties
  */
 body {
@@ -134,15 +125,8 @@ body {
   font-size: var(--font-size-base);
   line-height: 24px;
   line-height: var(--line-height-base);
-  color: #1A1A1A;
+  color: #F5F5F5;
   color: var(--color-text);
-  background-color: #FFFFFF;
-  background-color: var(--color-background);
-}
-
-.dark body {
-  color: #EEEEEE;
-  color: var(--color-text);
-  background-color: #1A1A1A; /* Main background color from design reference */
+  background-color: #0A0A0A;
   background-color: var(--color-background);
 }

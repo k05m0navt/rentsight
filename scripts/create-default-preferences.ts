@@ -1,54 +1,86 @@
+/**
+ * Create Default Preferences Script
+ *
+ * This script creates default UserPreferences for all existing users
+ * who don't have preferences yet. This ensures backward compatibility
+ * after adding the new preference fields.
+ */
+
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-async function main() {
-  console.log('Starting data migration: Creating default preferences for existing users...');
+async function createDefaultPreferences() {
+  console.log('🔄 Creating default preferences for existing users...\n');
 
-  // Find all users without preferences
-  const usersWithoutPreferences = await prisma.user.findMany({
-    where: {
-      preferences: null,
-    },
-    select: {
-      id: true,
-      email: true,
-    },
-  });
+  try {
+    // Get all users without preferences
+    const usersWithoutPreferences = await prisma.user.findMany({
+      where: {
+        preferences: null,
+      },
+      select: {
+        id: true,
+        email: true,
+      },
+    });
 
-  console.log(`Found ${usersWithoutPreferences.length} users without preferences`);
-
-  // Create default preferences for each user
-  let created = 0;
-  for (const user of usersWithoutPreferences) {
-    try {
-      await prisma.userPreferences.create({
-        data: {
-          user_id: user.id,
-          currency_format: 'USD',
-          date_format: 'MM/DD/YYYY',
-          language: 'en',
-          default_view: 'dashboard',
-        },
-      });
-      created++;
-      console.log(`Created preferences for user: ${user.email}`);
-    } catch (error) {
-      console.error(`Failed to create preferences for user ${user.email}:`, error);
+    if (usersWithoutPreferences.length === 0) {
+      console.log('✅ All users already have preferences');
+      return;
     }
-  }
 
-  console.log(`\nData migration complete:`);
-  console.log(`- Total users checked: ${usersWithoutPreferences.length}`);
-  console.log(`- Preferences created: ${created}`);
+    console.log(`Found ${usersWithoutPreferences.length} users without preferences`);
+
+    // Create default preferences for each user
+    let successCount = 0;
+    let errorCount = 0;
+
+    for (const user of usersWithoutPreferences) {
+      try {
+        await prisma.userPreferences.create({
+          data: {
+            user_id: user.id,
+            theme: 'system',
+            reducedMotion: false,
+            currency: 'USD',
+            numberFormat: 'en-US',
+            preferredPlatforms: [],
+            // Legacy fields for backward compatibility
+            currency_format: 'USD',
+            language: 'en',
+            default_view: 'dashboard',
+          },
+        });
+
+        successCount++;
+        console.log(`✅ Created preferences for user: ${user.email}`);
+      } catch (error) {
+        errorCount++;
+        console.error(`❌ Failed to create preferences for user: ${user.email}`, error);
+      }
+    }
+
+    console.log(`\n📊 Summary:`);
+    console.log(`   ✅ Success: ${successCount} users`);
+    if (errorCount > 0) {
+      console.log(`   ❌ Errors: ${errorCount} users`);
+    }
+    console.log(`\n✨ Default preferences creation complete!`);
+  } catch (error) {
+    console.error('❌ Error running seed script:', error);
+    throw error;
+  } finally {
+    await prisma.$disconnect();
+  }
 }
 
-main()
-  .catch((error) => {
-    console.error('Migration failed:', error);
-    process.exit(1);
+// Run the script
+createDefaultPreferences()
+  .then(() => {
+    process.exit(0);
   })
-  .finally(async () => {
-    await prisma.$disconnect();
+  .catch((error) => {
+    console.error('Fatal error:', error);
+    process.exit(1);
   });
-

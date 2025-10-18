@@ -1,141 +1,173 @@
 /**
  * Animation Utilities
  *
- * GPU-accelerated animation helpers for optimal performance.
- * Per the redesign specification (FR-013), all animations use full motion
- * without reduced motion preference detection.
- *
- * IMPORTANT: Only use GPU-accelerated properties (opacity, transform) for
- * 60fps performance. Avoid animating layout properties (width, height, etc.)
+ * Reusable Framer Motion animation variants and configurations
  */
+
+import type { Variants, Transition } from 'framer-motion';
 
 /**
- * Performant transition classes
- * Only animates GPU-accelerated properties
+ * Standard transition configurations
  */
-export const performantTransition = {
-  // Only opacity
-  opacity: 'transition-opacity duration-200 ease-in-out',
-
-  // Only transform
-  transform: 'transition-transform duration-200 ease-in-out',
-
-  // Both opacity and transform
-  both: 'transition-[opacity,transform] duration-200 ease-in-out',
-
-  // Fast transitions (150ms)
-  fast: 'transition-[opacity,transform] duration-fast ease-in-out',
-
-  // Slow transitions (300ms)
-  slow: 'transition-[opacity,transform] duration-slow ease-in-out',
-} as const;
-
-/**
- * Common animation presets using GPU-accelerated properties
- */
-export const animations = {
-  // Fade in/out
-  fadeIn: 'animate-in fade-in duration-200',
-  fadeOut: 'animate-out fade-out duration-200',
-
-  // Slide animations
-  slideInFromRight: 'animate-in slide-in-from-right duration-200',
-  slideInFromLeft: 'animate-in slide-in-from-left duration-200',
-  slideInFromTop: 'animate-in slide-in-from-top duration-200',
-  slideInFromBottom: 'animate-in slide-in-from-bottom duration-200',
-
-  // Scale animations
-  scaleIn: 'animate-in zoom-in duration-200',
-  scaleOut: 'animate-out zoom-out duration-200',
-} as const;
-
-/**
- * Hover scale effect (subtle)
- * Optimized for buttons and interactive elements
- */
-export const hoverScale =
-  'transition-transform duration-fast hover:scale-[1.02] active:scale-[0.98]';
-
-/**
- * Smooth fade transition for theme changes
- */
-export const themeTransition = 'transition-[background-color,color] duration-200 ease-in-out';
-
-/**
- * Loading spinner animation (CSS-based for performance)
- * More efficient than JS-based animations
- */
-export const spinAnimation = 'animate-spin';
-
-/**
- * Pulse animation for loading states
- */
-export const pulseAnimation = 'animate-pulse';
-
-/**
- * Helper to apply will-change for performance hints
- * Use sparingly - only for elements that will definitely animate
- *
- * @param properties - CSS properties that will change
- */
-export function withWillChange(properties: string[]): string {
-  return `will-change-[${properties.join(',')}]`;
-}
-
-/**
- * Check if animations should be disabled (e.g., for IE11)
- * Returns true if animations should be instant
- */
-export function shouldDisableAnimations(): boolean {
-  if (typeof window === 'undefined') return false;
-
-  // Detect IE11
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const isIE11 = !!(window as any).MSInputMethodContext && !!(document as any).documentMode;
-
-  return isIE11;
-}
-
-/**
- * Get animation duration based on browser capabilities
- * Returns 0ms for IE11, normal duration otherwise
- */
-export function getAnimationDuration(duration: 'fast' | 'default' | 'slow' = 'default'): string {
-  if (shouldDisableAnimations()) {
-    return '0ms';
-  }
-
-  const durations = {
-    fast: '150ms',
-    default: '200ms',
-    slow: '300ms',
-  };
-
-  return durations[duration];
-}
-
-/**
- * Animation timing function (cubic-bezier)
- */
-export const easing = {
-  easeInOut: 'cubic-bezier(0.4, 0, 0.2, 1)',
-  easeOut: 'cubic-bezier(0, 0, 0.2, 1)',
-  easeIn: 'cubic-bezier(0.4, 0, 1, 1)',
-  linear: 'linear',
-} as const;
-
-/**
- * All animation utilities grouped for convenience
- */
-export const animationUtils = {
-  performantTransition,
-  animations,
-  hoverScale,
-  themeTransition,
-  spinAnimation,
-  pulseAnimation,
-  withWillChange,
-  shouldDisableAnimations,
-  getAnimationDuration,
-  easing,
+export const transitions = {
+  fast: { duration: 0.15, ease: 'easeOut' } as Transition,
+  normal: { duration: 0.2, ease: 'easeOut' } as Transition,
+  slow: { duration: 0.3, ease: 'easeOut' } as Transition,
+  spring: { type: 'spring', stiffness: 300, damping: 30 } as Transition,
 };
+
+/**
+ * Fade In Animation Variant
+ */
+export const fadeInVariants: Variants = {
+  hidden: {
+    opacity: 0,
+  },
+  visible: {
+    opacity: 1,
+    transition: transitions.normal,
+  },
+  exit: {
+    opacity: 0,
+    transition: transitions.fast,
+  },
+};
+
+/**
+ * Scale In Animation Variant (for modals/dialogs)
+ */
+export const scaleInVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    scale: 0.95,
+  },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: transitions.normal,
+  },
+  exit: {
+    opacity: 0,
+    scale: 0.95,
+    transition: transitions.fast,
+  },
+};
+
+/**
+ * Slide In Animation Variants
+ */
+export const slideInVariants = {
+  up: {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: transitions.normal },
+    exit: { opacity: 0, y: -20, transition: transitions.fast },
+  },
+  down: {
+    hidden: { opacity: 0, y: -20 },
+    visible: { opacity: 1, y: 0, transition: transitions.normal },
+    exit: { opacity: 0, y: 20, transition: transitions.fast },
+  },
+  left: {
+    hidden: { opacity: 0, x: 20 },
+    visible: { opacity: 1, x: 0, transition: transitions.normal },
+    exit: { opacity: 0, x: -20, transition: transitions.fast },
+  },
+  right: {
+    hidden: { opacity: 0, x: -20 },
+    visible: { opacity: 1, x: 0, transition: transitions.normal },
+    exit: { opacity: 0, x: 20, transition: transitions.fast },
+  },
+} as const;
+
+/**
+ * Stagger Children Configuration
+ */
+export const staggerChildrenVariants: Variants = {
+  hidden: {
+    opacity: 0,
+  },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.05, // 50ms delay between each child
+      delayChildren: 0.1, // Wait 100ms before starting
+    },
+  },
+};
+
+/**
+ * Stagger Child Item Variant
+ */
+export const staggerItemVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 10,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: transitions.normal,
+  },
+};
+
+/**
+ * Hover Scale Animation
+ */
+export const hoverScaleVariants: Variants = {
+  rest: {
+    scale: 1,
+  },
+  hover: {
+    scale: 1.02,
+    transition: transitions.fast,
+  },
+  tap: {
+    scale: 0.98,
+    transition: transitions.fast,
+  },
+};
+
+/**
+ * Page Transition Variants
+ */
+export const pageTransitionVariants: Variants = {
+  initial: {
+    opacity: 0,
+    y: 8,
+  },
+  animate: {
+    opacity: 1,
+    y: 0,
+    transition: transitions.slow,
+  },
+  exit: {
+    opacity: 0,
+    y: -8,
+    transition: transitions.fast,
+  },
+};
+
+/**
+ * Motion Configuration for respecting prefers-reduced-motion
+ */
+export const motionConfig = {
+  reducedMotion: 'user' as const, // Automatically respects user preference
+};
+
+/**
+ * Check if user prefers reduced motion
+ */
+export function prefersReducedMotion(): boolean {
+  if (typeof window === 'undefined') return false;
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+/**
+ * Get transition duration based on reduced motion preference
+ */
+export function getTransition(type: keyof typeof transitions = 'normal'): Transition {
+  if (prefersReducedMotion()) {
+    return { duration: 0 }; // Instant transitions for reduced motion
+  }
+  return transitions[type];
+}

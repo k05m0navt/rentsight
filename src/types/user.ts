@@ -10,7 +10,6 @@ export interface UserPreferences {
   id: string;
   user_id: string;
   currency_format: string;
-  date_format: string;
   language: string;
   default_view: string;
   theme_preference?: string | null;
@@ -21,7 +20,6 @@ export interface UserPreferences {
 
 export interface UserPreferencesUpdate {
   currency_format?: string;
-  date_format?: 'MM/DD/YYYY' | 'DD/MM/YYYY' | 'YYYY-MM-DD';
   language?: string;
   default_view?: 'dashboard' | 'properties' | 'reports' | 'settings';
   theme_preference?: 'light' | 'dark' | 'system';

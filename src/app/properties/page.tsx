@@ -14,44 +14,21 @@
 export const dynamic = 'force-dynamic';
 
 import { useState } from 'react';
-import { createClient } from '@/lib/supabase/client';
-import { redirect, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { PropertyList } from '@/components/properties/PropertyList';
 import { PropertyForm } from '@/components/properties/PropertyForm';
+import { PropertyListSkeleton } from '@/components/properties/PropertyListSkeleton';
 import { PropertyWithStats } from '@/types/property';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { AuthGuard } from '@/components/auth/AuthGuard';
 import { X } from 'lucide-react';
-import { useEffect } from 'react';
 
 export default function PropertiesPage() {
   const [showModal, setShowModal] = useState(false);
   const [editingProperty, setEditingProperty] = useState<PropertyWithStats | null>(null);
   const [deletingProperty, setDeletingProperty] = useState<PropertyWithStats | null>(null);
-  const [authenticated, setAuthenticated] = useState<boolean | null>(null);
   const router = useRouter();
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      const supabase = createClient();
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) {
-        redirect('/login');
-      }
-      setAuthenticated(true);
-    };
-    checkAuth();
-  }, []);
-
-  if (authenticated === null) {
-    return (
-      <div className="flex items-center justify-center py-20">
-        <p className="text-muted dark:text-muted-dark">Loading...</p>
-      </div>
-    );
-  }
 
   const handleAdd = () => {
     setEditingProperty(null);
@@ -98,86 +75,91 @@ export default function PropertiesPage() {
   };
 
   return (
-    <div className="flex flex-col gap-6">
-      {/* Page Header */}
-      <div>
-        <h1 className="text-2xl font-bold">Properties</h1>
-        <p className="text-sm text-muted dark:text-muted-dark mt-1">
-          Manage your rental properties and track their performance
-        </p>
-      </div>
+    <AuthGuard fallback={<PropertyListSkeleton />}>
+      <div className="flex flex-col gap-6">
+        {/* Page Header */}
+        <div>
+          <h1 className="text-2xl font-bold">Properties</h1>
+          <p className="text-sm text-muted dark:text-muted-dark mt-1">
+            Manage your rental properties and track their performance
+          </p>
+        </div>
 
-      {/* Property List */}
-      <PropertyList onAdd={handleAdd} onEdit={handleEdit} onDelete={handleDelete} />
+        {/* Property List */}
+        <PropertyList onAdd={handleAdd} onEdit={handleEdit} onDelete={handleDelete} />
 
-      {/* Add/Edit Modal */}
-      {showModal && (
-        <div
-          className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
-          onClick={() => setShowModal(false)}
-        >
-          <Card
-            className="w-full max-w-2xl max-h-[90vh] overflow-y-auto"
-            onClick={(e) => e.stopPropagation()}
+        {/* Add/Edit Modal */}
+        {showModal && (
+          <div
+            className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
+            onClick={() => setShowModal(false)}
           >
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle>{editingProperty ? 'Edit Property' : 'Add New Property'}</CardTitle>
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  onClick={() => setShowModal(false)}
-                  aria-label="Close"
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <PropertyForm
-                initialData={editingProperty || undefined}
-                onSuccess={handleFormSuccess}
-                onCancel={() => setShowModal(false)}
-              />
-            </CardContent>
-          </Card>
-        </div>
-      )}
+            <Card
+              className="w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle>{editingProperty ? 'Edit Property' : 'Add New Property'}</CardTitle>
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => setShowModal(false)}
+                    aria-label="Close"
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <PropertyForm
+                  initialData={editingProperty || undefined}
+                  onSuccess={handleFormSuccess}
+                  onCancel={() => setShowModal(false)}
+                />
+              </CardContent>
+            </Card>
+          </div>
+        )}
 
-      {/* Delete Confirmation Modal */}
-      {deletingProperty && (
-        <div
-          className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
-          onClick={() => setDeletingProperty(null)}
-        >
-          <Card className="w-full max-w-md" onClick={(e) => e.stopPropagation()}>
-            <CardHeader>
-              <CardTitle>Delete Property</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p>
-                Are you sure you want to delete <strong>{deletingProperty.name}</strong>?
-              </p>
-              {((deletingProperty._count?.rentEntries || 0) > 0 ||
-                (deletingProperty._count?.expenseEntries || 0) > 0) && (
-                <p className="text-sm text-muted dark:text-muted-dark bg-card dark:bg-card-dark p-3 rounded">
-                  This property has {deletingProperty._count?.rentEntries || 0} rent entries and{' '}
-                  {deletingProperty._count?.expenseEntries || 0} expense entries. These entries will
-                  not be deleted, but will no longer be associated with a property.
+        {/* Delete Confirmation Modal */}
+        {deletingProperty && (
+          <div
+            className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50"
+            onClick={() => setDeletingProperty(null)}
+          >
+            <Card className="w-full max-w-md" onClick={(e) => e.stopPropagation()}>
+              <CardHeader>
+                <CardTitle>Delete Property</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p>
+                  Are you sure you want to delete <strong>{deletingProperty.name}</strong>?
                 </p>
-              )}
-              <div className="flex gap-2 justify-end">
-                <Button variant="secondary" onClick={() => setDeletingProperty(null)}>
-                  Cancel
-                </Button>
-                <Button onClick={confirmDelete} className="bg-red-600 hover:bg-red-700 text-white">
-                  Delete Property
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      )}
-    </div>
+                {((deletingProperty._count?.rentEntries || 0) > 0 ||
+                  (deletingProperty._count?.expenseEntries || 0) > 0) && (
+                  <p className="text-sm text-muted dark:text-muted-dark bg-card dark:bg-card-dark p-3 rounded">
+                    This property has {deletingProperty._count?.rentEntries || 0} rent entries and{' '}
+                    {deletingProperty._count?.expenseEntries || 0} expense entries. These entries
+                    will not be deleted, but will no longer be associated with a property.
+                  </p>
+                )}
+                <div className="flex gap-2 justify-end">
+                  <Button variant="secondary" onClick={() => setDeletingProperty(null)}>
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={confirmDelete}
+                    className="bg-red-600 hover:bg-red-700 text-white"
+                  >
+                    Delete Property
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+      </div>
+    </AuthGuard>
   );
 }

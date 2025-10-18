@@ -2,33 +2,15 @@
 
 export const dynamic = 'force-dynamic';
 
-import { redirect } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client';
 import { TagListContainer } from '@/components/tags/TagListContainer';
 import { TagForm } from '@/components/tags/TagForm';
+import { TagListSkeleton } from '@/components/tags/TagListSkeleton';
+import { AuthGuard } from '@/components/auth/AuthGuard';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useEffect, useState } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function TagsPage() {
-  const [userId, setUserId] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      const supabase = createClient();
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-
-      if (!user) {
-        redirect('/login');
-      } else {
-        setUserId(user.id);
-      }
-      setLoading(false);
-    };
-    checkAuth();
-  }, []);
+  const { user } = useAuth();
 
   const handleTagSubmit = async (tag: { name: string; color?: string }) => {
     const response = await fetch('/api/tags', {
@@ -46,44 +28,38 @@ export default function TagsPage() {
     window.location.reload();
   };
 
-  if (loading || !userId) {
-    return (
-      <div className="container mx-auto max-w-4xl">
-        <p className="text-muted-foreground">Loading...</p>
-      </div>
-    );
-  }
-
   return (
-    <div className="container mx-auto max-w-4xl">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Tags</h1>
-        <p className="text-muted-foreground">Create and manage tags for organizing your entries</p>
-      </div>
+    <AuthGuard fallback={<TagListSkeleton />}>
+      <div className="container mx-auto max-w-4xl">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold mb-2">Tags</h1>
+          <p className="text-muted-foreground">
+            Create and manage tags for organizing your entries
+          </p>
+        </div>
 
-      <div className="grid gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Create New Tag</CardTitle>
-            <CardDescription>
-              Add a new tag to categorize your rent and expense entries
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <TagForm onSubmit={handleTagSubmit} />
-          </CardContent>
-        </Card>
+        <div className="grid gap-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Create New Tag</CardTitle>
+              <CardDescription>
+                Add a new tag to categorize your rent and expense entries
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <TagForm onSubmit={handleTagSubmit} />
+            </CardContent>
+          </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Your Tags</CardTitle>
-            <CardDescription>Manage and organize your existing tags</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <TagListContainer userId={userId} />
-          </CardContent>
-        </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Your Tags</CardTitle>
+              <CardDescription>Manage and organize your existing tags</CardDescription>
+            </CardHeader>
+            <CardContent>{user && <TagListContainer userId={user.id} />}</CardContent>
+          </Card>
+        </div>
       </div>
-    </div>
+    </AuthGuard>
   );
 }

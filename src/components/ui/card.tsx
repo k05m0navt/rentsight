@@ -15,13 +15,16 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
 const cardVariants = cva(
-  'rounded-lg bg-card dark:bg-card-dark text-text dark:text-text-dark flex flex-col gap-4 p-4 transition-[background-color,box-shadow] duration-200',
+  'rounded-xl bg-card text-text flex flex-col gap-4 p-6 transition-all duration-300 ease-out',
   {
     variants: {
       variant: {
-        default: 'shadow-md dark:shadow-dark-md',
-        bordered: 'border border-border dark:border-border-dark',
-        elevated: 'shadow-lg dark:shadow-dark-lg hover:shadow-xl',
+        default: 'border border-border shadow-lg hover:shadow-xl transform hover:-translate-y-1',
+        bordered: 'border-2 border-border shadow-md',
+        elevated: 'border border-border shadow-2xl hover:shadow-2xl transform hover:-translate-y-2',
+        flat: 'border border-border shadow-none',
+        interactive:
+          'border border-border shadow-lg hover:shadow-xl transform hover:-translate-y-1 cursor-pointer transition-all duration-200',
       },
     },
     defaultVariants: {
@@ -60,11 +63,7 @@ function CardTitle({
 
 function CardDescription({ className, ...props }: React.ComponentProps<'p'>) {
   return (
-    <p
-      data-slot="card-description"
-      className={cn('text-sm text-muted dark:text-muted-dark', className)}
-      {...props}
-    />
+    <p data-slot="card-description" className={cn('text-sm text-muted', className)} {...props} />
   );
 }
 
@@ -76,10 +75,7 @@ function CardFooter({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="card-footer"
-      className={cn(
-        'flex items-center gap-3 pt-4 border-t border-border dark:border-border-dark',
-        className,
-      )}
+      className={cn('flex items-center gap-3 pt-4 border-t border-border', className)}
       {...props}
     />
   );

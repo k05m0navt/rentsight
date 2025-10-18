@@ -144,7 +144,7 @@ export function TagManager({
   if (loading && tags.length === 0) {
     return (
       <div className="flex items-center justify-center py-8">
-        <div className="text-muted dark:text-muted-dark">Loading tags...</div>
+        <div className="text-muted">Loading tags...</div>
       </div>
     );
   }
@@ -159,14 +159,10 @@ export function TagManager({
       <div className="space-y-3">
         <div className="flex flex-wrap gap-2">
           {filteredTags.length === 0 && searchQuery && (
-            <p className="text-sm text-muted dark:text-muted-dark">
-              No tags found matching &quot;{searchQuery}&quot;
-            </p>
+            <p className="text-sm text-muted">No tags found matching &quot;{searchQuery}&quot;</p>
           )}
           {filteredTags.length === 0 && !searchQuery && (
-            <p className="text-sm text-muted dark:text-muted-dark">
-              No tags available. Create your first tag!
-            </p>
+            <p className="text-sm text-muted">No tags available. Create your first tag!</p>
           )}
           {filteredTags.map((tag) => (
             <TagItem
@@ -189,7 +185,7 @@ export function TagManager({
       {/* Search and Actions Header */}
       <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
         <div className="relative flex-1 w-full">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted dark:text-muted-dark" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
           <Input
             type="text"
             placeholder="Search tags..."
@@ -200,7 +196,7 @@ export function TagManager({
           {searchQuery && (
             <button
               onClick={() => setSearchQuery('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted dark:text-muted-dark hover:text-text dark:hover:text-text-dark transition-colors duration-200"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-text transition-colors duration-200"
               aria-label="Clear search"
             >
               <X className="w-4 h-4" />
@@ -211,13 +207,13 @@ export function TagManager({
         <div className="flex gap-2">
           {mode === 'manage' && (
             <>
-              <div className="flex border border-border dark:border-border-dark rounded-md overflow-hidden">
+              <div className="flex border border-border rounded-md overflow-hidden">
                 <button
                   onClick={() => setViewLayout('grid')}
                   className={`p-2 transition-colors duration-200 ${
                     viewLayout === 'grid'
                       ? 'bg-primary text-white'
-                      : 'bg-card dark:bg-card-dark text-muted dark:text-muted-dark hover:bg-hover dark:hover:bg-hover-dark'
+                      : 'bg-card text-muted hover:bg-hover'
                   }`}
                   aria-label="Grid view"
                 >
@@ -228,7 +224,7 @@ export function TagManager({
                   className={`p-2 transition-colors duration-200 ${
                     viewLayout === 'list'
                       ? 'bg-primary text-white'
-                      : 'bg-card dark:bg-card-dark text-muted dark:text-muted-dark hover:bg-hover dark:hover:bg-hover-dark'
+                      : 'bg-card text-muted hover:bg-hover'
                   }`}
                   aria-label="List view"
                 >
@@ -251,7 +247,7 @@ export function TagManager({
       {/* Search Results Info */}
       {searchQuery && (
         <div className="flex items-center justify-between text-sm">
-          <span className="text-muted dark:text-muted-dark">
+          <span className="text-muted">
             Found {filteredTags.length} tag{filteredTags.length !== 1 ? 's' : ''} matching &quot;
             {searchQuery}&quot;
           </span>
@@ -261,7 +257,7 @@ export function TagManager({
       {/* Create/Edit Form */}
       {(showCreateForm || editingTag) && mode === 'manage' && (
         <Card className="p-5">
-          <h3 className="text-lg font-bold text-text dark:text-text-dark mb-4">
+          <h3 className="text-lg font-bold text-text mb-4">
             {editingTag ? 'Edit Tag' : 'Create New Tag'}
           </h3>
           <TagForm
@@ -283,7 +279,7 @@ export function TagManager({
         />
       ) : filteredTags.length === 0 && searchQuery ? (
         <Card className="p-8 text-center">
-          <p className="text-muted dark:text-muted-dark">No tags found matching your search.</p>
+          <p className="text-muted">No tags found matching your search.</p>
         </Card>
       ) : mode === 'manage' ? (
         <TagList

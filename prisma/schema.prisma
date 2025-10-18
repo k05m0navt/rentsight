@@ -110,15 +110,28 @@ model Property {
 }
 
 model UserPreferences {
-  id               String   @id @default(uuid())
-  user_id          String   @unique
-  currency_format  String   @default("USD")
-  date_format      String   @default("MM/DD/YYYY")
-  language         String   @default("en")
-  default_view     String   @default("dashboard")
-  theme_preference String?
-  preferences      Json?
-  created_at       DateTime @default(now())
-  updated_at       DateTime @updatedAt
-  user             User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  id                  String   @id @default(uuid())
+  user_id             String   @unique
+  
+  // Theme preferences
+  theme               String   @default("system") // "light" | "dark" | "system"
+  reducedMotion       Boolean  @default(false)
+  
+  // Regional preferences  
+  currency            String   @default("USD") // ISO currency code (USD, EUR, RUB, etc.)
+  numberFormat        String   @default("en-US") // Locale for number formatting
+  
+  // Platform preferences
+  preferredPlatforms  String[] @default([])
+  
+  // Legacy fields (keep for backward compatibility)
+  currency_format     String   @default("USD")
+  language            String   @default("en")
+  default_view        String   @default("dashboard")
+  theme_preference    String?
+  preferences         Json?
+  
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
+  user                User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }

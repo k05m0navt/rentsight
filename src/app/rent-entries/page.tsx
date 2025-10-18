@@ -1,7 +1,9 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
+import { Suspense } from 'react';
 import { RentEntryForm } from '@/components/forms/rent-entry-form';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { RentEntrySkeleton } from '@/components/rent-entries/RentEntrySkeleton';
 
 export const dynamic = 'force-dynamic';
 
@@ -22,15 +24,17 @@ export default async function RentEntriesPage() {
         <p className="text-muted-foreground">Add and manage your rental income entries</p>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Add New Rent Entry</CardTitle>
-          <CardDescription>Record rental income from your properties</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <RentEntryForm userId={user.id} />
-        </CardContent>
-      </Card>
+      <Suspense fallback={<RentEntrySkeleton />}>
+        <Card>
+          <CardHeader>
+            <CardTitle>Add New Rent Entry</CardTitle>
+            <CardDescription>Record rental income from your properties</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <RentEntryForm userId={user.id} />
+          </CardContent>
+        </Card>
+      </Suspense>
     </div>
   );
 }

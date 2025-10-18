@@ -49,3 +49,10 @@ next-env.d.ts
 # Visual regression test screenshots
 /tests/__screenshots__/
 
+# Cache files
+.cache/
+*.cache
+
+# Animation build artifacts
+/src/components/animations/.build/
+

@@ -1,0 +1,479 @@
+openapi: 3.0.3
+info:
+  title: RentSight UX/UI Enhancement API
+  description: API endpoints for enhanced UX/UI features including preferences, cache management, and tag operations
+  version: 1.0.0
+  contact:
+    name: RentSight Team
+
+servers:
+  - url: http://localhost:3000/api
+    description: Local development server
+  - url: https://rentsight.app/api
+    description: Production server
+
+paths:
+  /preferences:
+    get:
+      summary: Get user preferences
+      description: Retrieve current user's UI and regional preferences
+      operationId: getUserPreferences
+      tags:
+        - Preferences
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: User preferences retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPreference'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
+    
+    put:
+      summary: Update user preferences
+      description: Update current user's UI and regional preferences (upsert)
+      operationId: updateUserPreferences
+      tags:
+        - Preferences
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPreferenceUpdate'
+      responses:
+        '200':
+          description: Preferences updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPreference'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /tags/{tagId}:
+    delete:
+      summary: Delete tag with cascade
+      description: Delete a tag and remove it from all associated properties and entries (with confirmation if in use)
+      operationId: deleteTag
+      tags:
+        - Tags
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: tagId
+          in: path
+          required: true
+          description: Tag ID to delete
+          schema:
+            type: string
+        - name: confirm
+          in: query
+          required: false
+          description: Confirmation flag (required if tag is in use)
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: Tag deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteTagResponse'
+        '409':
+          description: Tag is in use and requires confirmation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagUsageResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /tags/{tagId}/usage:
+    get:
+      summary: Get tag usage count
+      description: Get count of properties and entries using this tag
+      operationId: getTagUsage
+      tags:
+        - Tags
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: tagId
+          in: path
+          required: true
+          description: Tag ID to check
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Tag usage counts retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagUsageResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /cache/invalidate:
+    post:
+      summary: Invalidate cache entries
+      description: Manually invalidate client or server cache entries by pattern
+      operationId: invalidateCache
+      tags:
+        - Cache
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                pattern:
+                  type: string
+                  description: Cache key pattern (e.g., "dashboard", "properties")
+                  example: "properties"
+                layer:
+                  type: string
+                  enum: [client, server, both]
+                  default: both
+                  description: Which cache layer to invalidate
+              required:
+                - pattern
+      responses:
+        '200':
+          description: Cache invalidated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  invalidated:
+                    type: array
+                    items:
+                      type: string
+                    description: List of invalidated cache keys
+                  count:
+                    type: integer
+                    description: Number of entries invalidated
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /regional/currencies:
+    get:
+      summary: Get available currencies
+      description: Get list of supported currencies with formatting info
+      operationId: getCurrencies
+      tags:
+        - Regional
+      responses:
+        '200':
+          description: Currencies retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Currency'
+
+  /regional/platforms:
+    get:
+      summary: Get available platforms
+      description: Get list of booking platforms by region
+      operationId: getPlatforms
+      tags:
+        - Regional
+      parameters:
+        - name: region
+          in: query
+          required: false
+          description: Filter by region (ru, us, eu)
+          schema:
+            type: string
+            enum: [ru, us, eu]
+      responses:
+        '200':
+          description: Platforms retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Platform'
+                example:
+                  russian:
+                    - id: avito
+                      name: Avito
+                      url: https://www.avito.ru
+                    - id: cian
+                      name: CIAN
+                      url: https://www.cian.ru
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Supabase JWT token
+
+  schemas:
+    UserPreference:
+      type: object
+      properties:
+        id:
+          type: string
+          format: cuid
+          example: clxyz123abc
+        userId:
+          type: string
+          format: cuid
+        theme:
+          type: string
+          enum: [light, dark, system]
+          default: system
+        reducedMotion:
+          type: boolean
+          default: false
+        currency:
+          type: string
+          enum: [USD, EUR, RUB, GBP]
+          default: USD
+        dateFormat:
+          type: string
+          enum: [MM/DD/YYYY, DD.MM.YYYY]
+          default: MM/DD/YYYY
+        numberFormat:
+          type: string
+          enum: [en-US, ru-RU, de-DE]
+          default: en-US
+        preferredPlatforms:
+          type: array
+          items:
+            type: string
+          example: [avito, cian]
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    UserPreferenceUpdate:
+      type: object
+      properties:
+        theme:
+          type: string
+          enum: [light, dark, system]
+        reducedMotion:
+          type: boolean
+        currency:
+          type: string
+          enum: [USD, EUR, RUB, GBP]
+        dateFormat:
+          type: string
+          enum: [MM/DD/YYYY, DD.MM.YYYY]
+        numberFormat:
+          type: string
+          enum: [en-US, ru-RU, de-DE]
+        preferredPlatforms:
+          type: array
+          items:
+            type: string
+      example:
+        theme: dark
+        currency: RUB
+        preferredPlatforms: [avito, cian]
+
+    TagUsageResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [in_use, not_in_use]
+        usage:
+          type: object
+          properties:
+            properties:
+              type: integer
+              description: Number of properties using this tag
+            rentEntries:
+              type: integer
+              description: Number of rent entries using this tag
+            expenseEntries:
+              type: integer
+              description: Number of expense entries using this tag
+            total:
+              type: integer
+              description: Total usage count
+        message:
+          type: string
+          description: Human-readable message
+      example:
+        status: in_use
+        usage:
+          properties: 5
+          rentEntries: 12
+          expenseEntries: 8
+          total: 25
+        message: This tag is used by 5 properties, 12 rent entries, and 8 expense entries.
+
+    DeleteTagResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        deletedAssociations:
+          type: object
+          properties:
+            properties:
+              type: integer
+            rentEntries:
+              type: integer
+            expenseEntries:
+              type: integer
+      example:
+        success: true
+        message: Tag deleted successfully along with 25 associations
+        deletedAssociations:
+          properties: 5
+          rentEntries: 12
+          expenseEntries: 8
+
+    Currency:
+      type: object
+      properties:
+        code:
+          type: string
+          example: RUB
+        symbol:
+          type: string
+          example: ₽
+        name:
+          type: string
+          example: Russian Ruble
+        format:
+          type: string
+          description: Format pattern for displaying amounts
+          example: "# ###,## ₽"
+
+    Platform:
+      type: object
+      properties:
+        id:
+          type: string
+          example: avito
+        name:
+          type: string
+          example: Avito
+        url:
+          type: string
+          format: uri
+          example: https://www.avito.ru
+        region:
+          type: string
+          example: ru
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+        code:
+          type: string
+          description: Error code
+        details:
+          type: object
+          description: Additional error details
+      required:
+        - error
+
+  responses:
+    BadRequest:
+      description: Bad request - invalid input
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: Invalid currency code
+            code: INVALID_INPUT
+            details:
+              field: currency
+              value: INVALID
+
+    Unauthorized:
+      description: Unauthorized - authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: Authentication required
+            code: UNAUTHORIZED
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: Tag not found
+            code: NOT_FOUND
+
+    InternalError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: An unexpected error occurred
+            code: INTERNAL_ERROR
+
+tags:
+  - name: Preferences
+    description: User UI and regional preferences
+  - name: Tags
+    description: Tag management with cascade deletion
+  - name: Cache
+    description: Cache management and invalidation
+  - name: Regional
+    description: Regional configuration (currencies, platforms)
+

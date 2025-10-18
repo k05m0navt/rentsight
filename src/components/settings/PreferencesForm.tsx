@@ -18,7 +18,6 @@ import { useState } from 'react';
 interface PreferencesFormProps {
   initialData: {
     currency_format: string;
-    date_format: string;
     language: string;
     default_view: string;
     theme_preference?: string | null;
@@ -36,7 +35,6 @@ export function PreferencesForm({ initialData }: PreferencesFormProps) {
     resolver: zodResolver(userPreferencesSchema),
     defaultValues: {
       currency_format: initialData.currency_format,
-      date_format: initialData.date_format as 'MM/DD/YYYY' | 'DD/MM/YYYY' | 'YYYY-MM-DD',
       language: initialData.language,
       default_view: initialData.default_view as 'dashboard' | 'properties' | 'reports' | 'settings',
       theme_preference:
@@ -72,9 +70,7 @@ export function PreferencesForm({ initialData }: PreferencesFormProps) {
       {message && (
         <div
           className={`rounded-md p-3 text-sm ${
-            message.type === 'success'
-              ? 'bg-success/10 text-success dark:bg-success/20'
-              : 'bg-red-500/10 text-red-600 dark:bg-red-500/20 dark:text-red-400'
+            message.type === 'success' ? 'bg-success/10 text-success' : 'bg-red-500/10 text-red-600'
           }`}
           role="alert"
         >
@@ -97,26 +93,11 @@ export function PreferencesForm({ initialData }: PreferencesFormProps) {
           <option value="JPY">JPY (¥)</option>
           <option value="CAD">CAD (C$)</option>
           <option value="AUD">AUD (A$)</option>
+          <option value="RUB">RUB (₽)</option>
         </Select>
         {errors.currency_format && (
-          <p className="text-sm text-red-600 dark:text-red-400 mt-1" role="alert">
+          <p className="text-sm text-red-600 mt-1" role="alert">
             {errors.currency_format.message}
-          </p>
-        )}
-      </div>
-
-      <div>
-        <label htmlFor="date_format" className="block text-sm font-medium mb-2">
-          Date Format
-        </label>
-        <Select id="date_format" {...register('date_format')} aria-invalid={!!errors.date_format}>
-          <option value="MM/DD/YYYY">MM/DD/YYYY (US)</option>
-          <option value="DD/MM/YYYY">DD/MM/YYYY (European)</option>
-          <option value="YYYY-MM-DD">YYYY-MM-DD (ISO)</option>
-        </Select>
-        {errors.date_format && (
-          <p className="text-sm text-red-600 dark:text-red-400 mt-1" role="alert">
-            {errors.date_format.message}
           </p>
         )}
       </div>
@@ -131,9 +112,10 @@ export function PreferencesForm({ initialData }: PreferencesFormProps) {
           <option value="fr">Français</option>
           <option value="de">Deutsch</option>
           <option value="ja">日本語</option>
+          <option value="ru">Русский</option>
         </Select>
         {errors.language && (
-          <p className="text-sm text-red-600 dark:text-red-400 mt-1" role="alert">
+          <p className="text-sm text-red-600 mt-1" role="alert">
             {errors.language.message}
           </p>
         )}
@@ -154,11 +136,11 @@ export function PreferencesForm({ initialData }: PreferencesFormProps) {
           <option value="settings">Settings</option>
         </Select>
         {errors.default_view && (
-          <p className="text-sm text-red-600 dark:text-red-400 mt-1" role="alert">
+          <p className="text-sm text-red-600 mt-1" role="alert">
             {errors.default_view.message}
           </p>
         )}
-        <p className="text-sm text-muted dark:text-muted-dark mt-1">Page to show when you log in</p>
+        <p className="text-sm text-muted mt-1">Page to show when you log in</p>
       </div>
 
       <div>
@@ -176,7 +158,7 @@ export function PreferencesForm({ initialData }: PreferencesFormProps) {
           <option value="system">Follow System</option>
         </Select>
         {errors.theme_preference && (
-          <p className="text-sm text-red-600 dark:text-red-400 mt-1" role="alert">
+          <p className="text-sm text-red-600 mt-1" role="alert">
             {errors.theme_preference.message}
           </p>
         )}

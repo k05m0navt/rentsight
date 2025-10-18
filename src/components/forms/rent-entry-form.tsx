@@ -21,6 +21,8 @@ import { PropertySelector } from '@/components/properties/PropertySelector';
 import { FormField } from '@/components/forms/FormField';
 import { FormSelect } from '@/components/forms/FormSelect';
 import { ErrorMessage } from '@/components/ui/error-message';
+import { CurrencyInput } from '@/components/ui/currency-input';
+import { useUserCurrency } from '@/hooks/useUserCurrency';
 
 interface RentEntryFormProps {
   userId: string;
@@ -43,6 +45,8 @@ export function RentEntryForm({ userId }: RentEntryFormProps) {
   const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
   const [dateError, setDateError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  // Get user's currency preference
+  const { currency, loading: currencyLoading } = useUserCurrency(userId);
 
   useEffect(() => {
     if (startDate && endDate && startDate > endDate) {
@@ -111,7 +115,7 @@ export function RentEntryForm({ userId }: RentEntryFormProps) {
         <CardContent className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2">
             <FormField label="Amount" required>
-              <Input
+              <CurrencyInput
                 type="number"
                 id="amount"
                 value={amount}
@@ -120,6 +124,8 @@ export function RentEntryForm({ userId }: RentEntryFormProps) {
                 step="0.01"
                 min="0"
                 required
+                currency={currency}
+                loading={currencyLoading}
               />
             </FormField>
 

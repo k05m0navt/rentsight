@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
-import { updateTag, deleteTag } from '@/services/tagService';
+import { updateTag, deleteTagWithCascade } from '@/services/tagService';
 
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const supabase = createClient();
@@ -35,8 +35,35 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
 
   try {
     const { id } = await params;
-    await deleteTag(user.id, id);
-    return NextResponse.json(null, { status: 204 });
+
+    // Check for confirmation parameter
+    const url = new URL(request.url);
+    const confirmed = url.searchParams.get('confirm') === 'true';
+
+    // Use cascade deletion with confirmation logic
+    const result = await deleteTagWithCascade(user.id, id, confirmed);
+
+    if (result.status === 'requires_confirmation') {
+      // Return 409 Conflict with usage information
+      return NextResponse.json(
+        {
+          status: 'in_use',
+          usage: result.usage,
+          message: result.message,
+        },
+        { status: 409 },
+      );
+    }
+
+    // Success - return with deleted associations info
+    return NextResponse.json(
+      {
+        success: true,
+        message: result.message,
+        deletedAssociations: result.deletedAssociations,
+      },
+      { status: 200 },
+    );
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'An error occurred';
     return NextResponse.json({ error: message }, { status: 500 });

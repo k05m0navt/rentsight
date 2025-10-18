@@ -61,7 +61,7 @@ export function TagItem({
           ${
             selected
               ? 'border-primary bg-primary/10 text-primary'
-              : 'border-border dark:border-border-dark bg-card dark:bg-card-dark text-text dark:text-text-dark hover:bg-hover dark:hover:bg-hover-dark'
+              : 'border-border bg-card text-text hover:bg-hover'
           }
         `}
         onClick={onClick}
@@ -69,7 +69,7 @@ export function TagItem({
         <div className="flex items-center gap-2 flex-1">
           {tag.color && (
             <div
-              className="w-4 h-4 rounded-full border border-border dark:border-border-dark"
+              className="w-4 h-4 rounded-full border border-border"
               style={{ backgroundColor: tag.color }}
             />
           )}
@@ -108,18 +108,18 @@ export function TagItem({
   // Default variant
   return (
     <div
-      className="flex items-center gap-3 p-4 rounded-lg border border-border dark:border-border-dark bg-card dark:bg-card-dark transition-[opacity,transform] duration-200 hover:shadow-md cursor-pointer"
+      className="flex items-center gap-3 p-4 rounded-lg border border-border bg-card transition-[opacity,transform] duration-200 hover:shadow-md cursor-pointer"
       onClick={onClick}
     >
       <div className="flex items-center gap-3 flex-1">
         {tag.color && (
           <div
-            className="w-5 h-5 rounded-full border border-border dark:border-border-dark"
+            className="w-5 h-5 rounded-full border border-border"
             style={{ backgroundColor: tag.color }}
           />
         )}
         <div className="flex flex-col">
-          <span className="font-medium text-text dark:text-text-dark">{tag.name}</span>
+          <span className="font-medium text-text">{tag.name}</span>
           {selected && <span className="text-xs text-primary mt-1">Currently selected</span>}
         </div>
       </div>
@@ -130,7 +130,7 @@ export function TagItem({
               e.stopPropagation();
               onEdit();
             }}
-            className="p-2 text-muted dark:text-muted-dark hover:text-primary transition-colors duration-200 rounded-md hover:bg-hover dark:hover:bg-hover-dark"
+            className="p-2 text-muted hover:text-primary transition-colors duration-200 rounded-md hover:bg-hover"
             aria-label={`Edit ${tag.name}`}
           >
             <Edit2 className="w-4 h-4" />
@@ -142,7 +142,7 @@ export function TagItem({
               e.stopPropagation();
               onDelete();
             }}
-            className="p-2 text-muted dark:text-muted-dark hover:text-error transition-colors duration-200 rounded-md hover:bg-hover dark:hover:bg-hover-dark"
+            className="p-2 text-muted hover:text-error transition-colors duration-200 rounded-md hover:bg-hover"
             aria-label={`Delete ${tag.name}`}
           >
             <X className="w-4 h-4" />
