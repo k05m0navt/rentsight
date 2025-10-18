@@ -3,7 +3,7 @@
  * Handles regional formatting based on user preferences
  */
 
-import { formatCurrency, formatDate } from './regional-config';
+import { formatCurrency } from './regional-config';
 import type { Currency } from '@/types/regional';
 
 /**
@@ -21,7 +21,7 @@ export function formatUserDate(date: Date): string {
   const day = date.getDate().toString().padStart(2, '0');
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
   const year = date.getFullYear();
-  
+
   return `${day}.${month}.${year}`;
 }
 

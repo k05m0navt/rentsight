@@ -38,10 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
       </head>
       <body
-        className={cn(
-          'min-h-screen bg-background text-text font-sans antialiased',
-          inter.variable,
-        )}
+        className={cn('min-h-screen bg-background text-text font-sans antialiased', inter.variable)}
       >
         <ThemeProvider>
           <MotionProvider>

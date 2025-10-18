@@ -24,8 +24,7 @@ const badgeVariants = cva(
         primary: 'bg-primary text-white',
         success: 'bg-success text-white',
         muted: 'bg-muted text-white',
-        outline:
-          'border border-border text-text bg-transparent',
+        outline: 'border border-border text-text bg-transparent',
         error: 'bg-error text-white',
       },
     },

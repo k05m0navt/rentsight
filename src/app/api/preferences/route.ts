@@ -73,7 +73,7 @@ export async function PUT(request: Request) {
       'preferredPlatforms',
     ];
 
-    const updates: Record<string, any> = {};
+    const updates: Record<string, unknown> = {};
     for (const field of allowedFields) {
       if (body[field] !== undefined) {
         updates[field] = body[field];
@@ -81,7 +81,7 @@ export async function PUT(request: Request) {
     }
 
     // Validate theme value if provided
-    if (updates.theme && !['light', 'dark', 'system'].includes(updates.theme)) {
+    if (updates.theme && !['light', 'dark', 'system'].includes(updates.theme as string)) {
       return NextResponse.json(
         { error: 'Invalid theme value. Must be "light", "dark", or "system"' },
         { status: 400 },
@@ -93,13 +93,13 @@ export async function PUT(request: Request) {
       where: { user_id: user.id },
       create: {
         user_id: user.id,
-        theme: updates.theme ?? 'system',
-        reducedMotion: updates.reducedMotion ?? false,
-        currency: updates.currency ?? 'USD',
-        numberFormat: updates.numberFormat ?? 'en-US',
-        preferredPlatforms: updates.preferredPlatforms ?? [],
+        theme: (updates.theme as string) ?? 'system',
+        reducedMotion: (updates.reducedMotion as boolean) ?? false,
+        currency: (updates.currency as string) ?? 'USD',
+        numberFormat: (updates.numberFormat as string) ?? 'en-US',
+        preferredPlatforms: (updates.preferredPlatforms as string[]) ?? [],
         // Legacy fields for backward compatibility
-        currency_format: updates.currency ?? 'USD',
+        currency_format: (updates.currency as string) ?? 'USD',
         language: 'en',
         default_view: 'dashboard',
       },

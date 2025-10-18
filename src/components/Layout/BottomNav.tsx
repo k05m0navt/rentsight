@@ -17,7 +17,18 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import { LayoutDashboard, Building2, Home, Receipt, BarChart3, MoreHorizontal, Tag, Settings, HelpCircle, X } from 'lucide-react';
+import {
+  LayoutDashboard,
+  Building2,
+  Home,
+  Receipt,
+  BarChart3,
+  MoreHorizontal,
+  Tag,
+  Settings,
+  HelpCircle,
+  X,
+} from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const mainNavItems = [
@@ -85,9 +96,7 @@ export function BottomNav() {
                 href={item.href}
                 className={cn(
                   'flex flex-col items-center justify-center gap-1 px-2 py-2 text-xs font-medium min-w-12 transition-colors duration-200',
-                  isActive(item.href)
-                    ? 'text-primary'
-                    : 'text-muted hover:text-text',
+                  isActive(item.href) ? 'text-primary' : 'text-muted hover:text-text',
                 )}
               >
                 <Icon className="h-5 w-5" aria-hidden="true" />
@@ -95,13 +104,13 @@ export function BottomNav() {
               </Link>
             );
           })}
-          
+
           {/* More Menu Button */}
           <button
             onClick={() => setShowMoreMenu(true)}
             className={cn(
               'flex flex-col items-center justify-center gap-1 px-2 py-2 text-xs font-medium min-w-12 transition-colors duration-200',
-              moreNavItems.some(item => isActive(item.href))
+              moreNavItems.some((item) => isActive(item.href))
                 ? 'text-primary'
                 : 'text-muted hover:text-text',
             )}
@@ -114,7 +123,10 @@ export function BottomNav() {
 
       {/* More Menu Modal */}
       {showMoreMenu && (
-        <div className="md:hidden fixed inset-0 bg-black/50 z-50" onClick={() => setShowMoreMenu(false)}>
+        <div
+          className="md:hidden fixed inset-0 bg-black/50 z-50"
+          onClick={() => setShowMoreMenu(false)}
+        >
           <div className="absolute bottom-16 left-0 right-0 bg-card border-t border-border rounded-t-lg shadow-lg">
             <div className="p-4">
               <div className="flex items-center justify-between mb-4">

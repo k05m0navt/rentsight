@@ -7,7 +7,7 @@
 
 'use client';
 
-import { motion, MotionProps } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { ReactNode } from 'react';
 import { fadeInVariants } from '@/lib/animation-utils';
 

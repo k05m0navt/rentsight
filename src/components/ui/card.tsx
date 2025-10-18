@@ -19,11 +19,9 @@ const cardVariants = cva(
   {
     variants: {
       variant: {
-        default:
-          'border border-border shadow-lg hover:shadow-xl transform hover:-translate-y-1',
+        default: 'border border-border shadow-lg hover:shadow-xl transform hover:-translate-y-1',
         bordered: 'border-2 border-border shadow-md',
-        elevated:
-          'border border-border shadow-2xl hover:shadow-2xl transform hover:-translate-y-2',
+        elevated: 'border border-border shadow-2xl hover:shadow-2xl transform hover:-translate-y-2',
         flat: 'border border-border shadow-none',
         interactive:
           'border border-border shadow-lg hover:shadow-xl transform hover:-translate-y-1 cursor-pointer transition-all duration-200',
@@ -65,11 +63,7 @@ function CardTitle({
 
 function CardDescription({ className, ...props }: React.ComponentProps<'p'>) {
   return (
-    <p
-      data-slot="card-description"
-      className={cn('text-sm text-muted', className)}
-      {...props}
-    />
+    <p data-slot="card-description" className={cn('text-sm text-muted', className)} {...props} />
   );
 }
 
@@ -81,10 +75,7 @@ function CardFooter({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="card-footer"
-      className={cn(
-        'flex items-center gap-3 pt-4 border-t border-border',
-        className,
-      )}
+      className={cn('flex items-center gap-3 pt-4 border-t border-border', className)}
       {...props}
     />
   );

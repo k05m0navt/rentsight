@@ -82,7 +82,10 @@ export function Sidebar() {
   const { user, loading, logout } = useAuth();
 
   return (
-    <aside className="hidden md:flex fixed left-0 top-0 h-screen w-64 bg-card border-r border-border z-40 flex-col" data-testid="sidebar">
+    <aside
+      className="hidden md:flex fixed left-0 top-0 h-screen w-64 bg-card border-r border-border z-40 flex-col"
+      data-testid="sidebar"
+    >
       {/* Logo/Brand */}
       <div className="p-4 border-b border-border">
         <Link href="/" className="flex items-center gap-2">
@@ -103,9 +106,7 @@ export function Sidebar() {
               href={item.href}
               className={cn(
                 'flex items-center gap-3 px-3 py-3 rounded-md font-medium transition-[background-color,color] duration-200',
-                isActive
-                  ? 'bg-primary/10 text-primary'
-                  : 'text-text hover:bg-hover',
+                isActive ? 'bg-primary/10 text-primary' : 'text-text hover:bg-hover',
               )}
             >
               <Icon className="h-5 w-5" aria-hidden="true" />

@@ -97,7 +97,7 @@ export function TagListContainer({ userId }: TagListContainerProps) {
         throw new Error(errorData.error || 'Failed to delete tag');
       }
 
-      const result = await response.json();
+      await response.json();
 
       // Show success message (T059)
       const message =

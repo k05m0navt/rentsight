@@ -46,7 +46,6 @@ export function ExpenseEntryForm({ userId }: ExpenseEntryFormProps) {
   const [propertyId, setPropertyId] = useState<string | undefined>(undefined);
   const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
-  
   // Get user's currency preference
   const { currency, loading: currencyLoading } = useUserCurrency(userId);
 

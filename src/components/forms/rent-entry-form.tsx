@@ -45,7 +45,6 @@ export function RentEntryForm({ userId }: RentEntryFormProps) {
   const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
   const [dateError, setDateError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
-  
   // Get user's currency preference
   const { currency, loading: currencyLoading } = useUserCurrency(userId);
 

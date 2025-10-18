@@ -17,12 +17,7 @@ interface CurrencyDisplayProps {
   showSymbol?: boolean;
 }
 
-export function CurrencyDisplay({
-  value,
-  currency = 'USD',
-  className = '',
-  showSymbol = true,
-}: CurrencyDisplayProps) {
+export function CurrencyDisplay({ value, currency = 'USD', className = '' }: CurrencyDisplayProps) {
   const formattedValue = formatAmount(value, currency);
 
   return <span className={className}>{formattedValue}</span>;

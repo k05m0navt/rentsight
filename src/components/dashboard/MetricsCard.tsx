@@ -18,8 +18,8 @@ import { cn } from '@/lib/utils';
 
 export interface MetricsCardProps {
   title: string;
-  value: string | number;
-  subtitle?: string;
+  value: string | number | React.ReactNode;
+  subtitle?: string | React.ReactNode;
   icon?: LucideIcon;
   trend?: 'up' | 'down' | 'neutral';
   trendValue?: string;
@@ -59,10 +59,10 @@ export function MetricsCard({
       </CardHeader>
       <CardContent>
         <div className="flex flex-col gap-1">
-          <p className={cn('text-2xl font-bold', variantColors[variant])}>
+          <div className={cn('text-2xl font-bold', variantColors[variant])}>
             {typeof value === 'number' ? value.toLocaleString() : value}
-          </p>
-          {subtitle && <p className="text-xs text-muted">{subtitle}</p>}
+          </div>
+          {subtitle && <div className="text-xs text-muted">{subtitle}</div>}
           {trend && trendValue && (
             <p className={cn('text-xs font-medium', trendColors[trend])}>
               {trend === 'up' && '↑ '}

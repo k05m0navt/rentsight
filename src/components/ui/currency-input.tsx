@@ -140,7 +140,6 @@ const currencySymbols: Record<string, string> = {
   VUV: 'Vt',
   FJD: 'FJ$',
   PGK: 'K',
-  SBD: 'SI$',
   NZD: 'NZ$',
 };
 

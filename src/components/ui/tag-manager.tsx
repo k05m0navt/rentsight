@@ -159,14 +159,10 @@ export function TagManager({
       <div className="space-y-3">
         <div className="flex flex-wrap gap-2">
           {filteredTags.length === 0 && searchQuery && (
-            <p className="text-sm text-muted">
-              No tags found matching &quot;{searchQuery}&quot;
-            </p>
+            <p className="text-sm text-muted">No tags found matching &quot;{searchQuery}&quot;</p>
           )}
           {filteredTags.length === 0 && !searchQuery && (
-            <p className="text-sm text-muted">
-              No tags available. Create your first tag!
-            </p>
+            <p className="text-sm text-muted">No tags available. Create your first tag!</p>
           )}
           {filteredTags.map((tag) => (
             <TagItem

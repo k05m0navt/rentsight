@@ -30,7 +30,6 @@ const Navbar: React.FC = () => {
           {/* Placeholder for mobile menu button */}
           <Button variant="ghost">Menu</Button>
         </div>
-
       </div>
     </nav>
   );

@@ -17,11 +17,7 @@ interface StaggerChildrenProps {
   staggerDelay?: number;
 }
 
-export function StaggerChildren({
-  children,
-  className,
-  staggerDelay = 0.05,
-}: StaggerChildrenProps) {
+export function StaggerChildren({ children, className }: StaggerChildrenProps) {
   return (
     <motion.div
       className={className}

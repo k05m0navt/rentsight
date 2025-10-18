@@ -63,7 +63,7 @@ export function createCrossRequestCache<T extends unknown[], R>(
  * Caches dashboard statistics and summary data
  */
 export const getCachedDashboard = createCrossRequestCache(
-  async (_userId: string) => {
+  async () => {
     // This would typically call your dashboard service
     // For now, we'll return a placeholder
     return {
@@ -85,7 +85,7 @@ export const getCachedDashboard = createCrossRequestCache(
  * Caches the user's properties list
  */
 export const getCachedProperties = createCrossRequestCache(
-  async (_userId: string) => {
+  async () => {
     // This would typically call your property service
     // For now, we'll return a placeholder
     return [];
@@ -100,7 +100,7 @@ export const getCachedProperties = createCrossRequestCache(
  * Caches the user's tags list
  */
 export const getCachedTags = createCrossRequestCache(
-  async (_userId: string) => {
+  async () => {
     // This would typically call your tag service
     // For now, we'll return a placeholder
     return [];
@@ -114,7 +114,7 @@ export const getCachedTags = createCrossRequestCache(
  * User preferences cache
  * Caches user preferences (theme, currency, etc.)
  */
-export const getCachedUserPreferences = createRequestCache(async (_userId: string) => {
+export const getCachedUserPreferences = createRequestCache(async () => {
   // This would typically call your user service
   // For now, we'll return default preferences
   return {
@@ -202,10 +202,10 @@ export async function warmCache(userId: string) {
 
     // Pre-load commonly accessed data
     await Promise.allSettled([
-      getCachedDashboard(userId),
-      getCachedProperties(userId),
-      getCachedTags(userId),
-      getCachedUserPreferences(userId),
+      getCachedDashboard(),
+      getCachedProperties(),
+      getCachedTags(),
+      getCachedUserPreferences(),
     ]);
 
     console.log(`Cache warmed for user: ${userId}`);

@@ -34,8 +34,7 @@ const buttonVariants = cva(
           'bg-warning text-white shadow-lg hover:shadow-xl hover:bg-warning-hover focus-visible:ring-warning/50 border border-warning/20',
         destructive:
           'bg-error text-white shadow-lg hover:shadow-xl hover:bg-error-hover focus-visible:ring-error/50 border border-error/20',
-        ghost:
-          'bg-transparent text-text hover:bg-hover focus-visible:ring-border shadow-none',
+        ghost: 'bg-transparent text-text hover:bg-hover focus-visible:ring-border shadow-none',
         link: 'text-primary underline-offset-4 hover:underline focus-visible:ring-primary/50 shadow-none',
       },
       size: {

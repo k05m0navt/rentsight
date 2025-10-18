@@ -70,9 +70,7 @@ export function PreferencesForm({ initialData }: PreferencesFormProps) {
       {message && (
         <div
           className={`rounded-md p-3 text-sm ${
-            message.type === 'success'
-              ? 'bg-success/10 text-success'
-              : 'bg-red-500/10 text-red-600'
+            message.type === 'success' ? 'bg-success/10 text-success' : 'bg-red-500/10 text-red-600'
           }`}
           role="alert"
         >
@@ -103,7 +101,6 @@ export function PreferencesForm({ initialData }: PreferencesFormProps) {
           </p>
         )}
       </div>
-
 
       <div>
         <label htmlFor="language" className="block text-sm font-medium mb-2">

@@ -65,7 +65,7 @@ export function SkeletonMetricsCard({ className }: { className?: string }) {
           <Skeleton className="h-5 w-5 rounded" />
         </div>
       </div>
-      
+
       {/* CardContent */}
       <div className="px-6 pb-6">
         <div className="flex flex-col gap-1">

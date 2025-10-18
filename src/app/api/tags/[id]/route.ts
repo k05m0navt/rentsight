@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
-import { updateTag, deleteTag, deleteTagWithCascade } from '@/services/tagService';
+import { updateTag, deleteTagWithCascade } from '@/services/tagService';
 
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const supabase = createClient();
