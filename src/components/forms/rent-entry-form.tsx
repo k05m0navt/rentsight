@@ -200,7 +200,7 @@ export function RentEntryForm({ userId }: RentEntryFormProps) {
           </div>
 
           <FormField label="Platform" required>
-            <div className="flex gap-2">
+            <div className="space-y-3">
               <FormSelect
                 id="platform"
                 value={platform}
@@ -208,15 +208,17 @@ export function RentEntryForm({ userId }: RentEntryFormProps) {
                 options={platformOptions}
                 placeholder="Select platform"
                 required
-                className="flex-1"
+                className="w-full"
               />
-              <PlatformManagementModal
-                userId={userId}
-                onPlatformChange={() => {
-                  // Refresh custom platforms when they change
-                  fetchCustomPlatforms();
-                }}
-              />
+              <div className="flex justify-end">
+                <PlatformManagementModal
+                  userId={userId}
+                  onPlatformChange={() => {
+                    // Refresh custom platforms when they change
+                    fetchCustomPlatforms();
+                  }}
+                />
+              </div>
             </div>
           </FormField>
 

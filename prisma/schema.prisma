@@ -24,6 +24,7 @@ model User {
   properties      Property[]
   preferences     UserPreferences?
   customPlatforms CustomPlatform[]
+  customCategories CustomCategory[]
 }
 
 model RentEntry {
@@ -46,18 +47,19 @@ model RentEntry {
 }
 
 model ExpenseEntry {
-  id          String    @id @default(uuid())
-  user_id     String
-  amount      Float
-  category    String
-  description String?
-  date        DateTime  @db.Date
-  property_id String?
-  created_at  DateTime  @default(now())
-  updated_at  DateTime  @updatedAt
-  user        User      @relation(fields: [user_id], references: [id])
-  property    Property? @relation(fields: [property_id], references: [id], onDelete: SetNull)
-  tags        ExpenseEntryTag[]
+  id                   String    @id @default(uuid())
+  user_id              String
+  amount               Float
+  category             String
+  custom_category_name String?   // New field for custom category names
+  description          String?
+  date                 DateTime  @db.Date
+  property_id          String?
+  created_at           DateTime  @default(now())
+  updated_at           DateTime  @updatedAt
+  user                 User      @relation(fields: [user_id], references: [id])
+  property             Property? @relation(fields: [property_id], references: [id], onDelete: SetNull)
+  tags                 ExpenseEntryTag[]
   
   @@index([property_id])
 }
@@ -139,6 +141,20 @@ model UserPreferences {
 }
 
 model CustomPlatform {
+  id          String   @id @default(uuid())
+  user_id     String
+  name        String
+  usage_count Int      @default(0)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  
+  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  
+  @@unique([user_id, name])
+  @@index([user_id])
+}
+
+model CustomCategory {
   id          String   @id @default(uuid())
   user_id     String
   name        String

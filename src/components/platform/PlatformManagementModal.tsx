@@ -174,12 +174,13 @@ export function PlatformManagementModal({ onPlatformChange }: PlatformManagement
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="secondary" size="sm">
+        <Button variant="secondary" size="sm" className="w-full sm:w-auto">
           <Settings className="h-4 w-4 mr-2" />
-          Manage Platforms
+          <span className="hidden sm:inline">Manage Platforms</span>
+          <span className="sm:hidden">Manage</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+      <DialogContent className="w-full max-w-2xl max-h-[80vh] overflow-y-auto mx-4 sm:mx-6">
         <DialogHeader>
           <DialogTitle>Manage Custom Platforms</DialogTitle>
         </DialogHeader>

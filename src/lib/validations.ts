@@ -126,3 +126,14 @@ export const rentEntryWithPlatformSchema = z
   );
 
 export type RentEntryWithPlatformForm = z.infer<typeof rentEntryWithPlatformSchema>;
+
+// Custom Category Validation
+export const customCategorySchema = z.object({
+  name: z
+    .string()
+    .min(2, 'Category name must be at least 2 characters')
+    .max(100, 'Category name must be less than 100 characters')
+    .regex(/^[a-zA-Zа-яА-Я0-9\s\-_.,()]+$/, 'Category name contains invalid characters'),
+});
+
+export type CustomCategoryForm = z.infer<typeof customCategorySchema>;

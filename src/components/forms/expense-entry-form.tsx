@@ -12,7 +12,7 @@
  */
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
@@ -22,12 +22,13 @@ import { FormField } from '@/components/forms/FormField';
 import { FormSelect } from '@/components/forms/FormSelect';
 import { CurrencyInput } from '@/components/ui/currency-input';
 import { useUserCurrency } from '@/hooks/useUserCurrency';
+import { CategoryManagementModal } from '@/components/category/CategoryManagementModal';
 
 interface ExpenseEntryFormProps {
   userId: string;
 }
 
-const categoryOptions = [
+const predefinedCategories = [
   { value: 'maintenance', label: 'Maintenance' },
   { value: 'utilities', label: 'Utilities' },
   { value: 'cleaning', label: 'Cleaning' },
@@ -41,13 +42,38 @@ const categoryOptions = [
 export function ExpenseEntryForm({ userId }: ExpenseEntryFormProps) {
   const [amount, setAmount] = useState<string>('');
   const [category, setCategory] = useState<string>('');
+  const [customCategoryName, setCustomCategoryName] = useState<string>('');
+  const [customCategoryError, setCustomCategoryError] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [date, setDate] = useState<string>('');
   const [propertyId, setPropertyId] = useState<string | undefined>(undefined);
   const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
+  const [categoryOptions, setCategoryOptions] = useState(predefinedCategories);
   // Get user's currency preference
   const { currency, loading: currencyLoading } = useUserCurrency(userId);
+
+  // Fetch custom categories and update options
+  const fetchCustomCategories = async () => {
+    try {
+      const response = await fetch('/api/categories/custom');
+      if (response.ok) {
+        const customCategories = await response.json();
+        const customOptions = customCategories.map((cat: { name: string }) => ({
+          value: cat.name,
+          label: cat.name,
+        }));
+        setCategoryOptions([...predefinedCategories, ...customOptions]);
+      }
+    } catch (error) {
+      console.error('Error fetching custom categories:', error);
+    }
+  };
+
+  // Load custom categories on component mount
+  React.useEffect(() => {
+    fetchCustomCategories();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,6 +89,7 @@ export function ExpenseEntryForm({ userId }: ExpenseEntryFormProps) {
           user_id: userId,
           amount: parseFloat(amount),
           category,
+          custom_category_name: category === 'other' ? customCategoryName : null,
           description,
           date,
           property_id: propertyId || null,
@@ -78,6 +105,8 @@ export function ExpenseEntryForm({ userId }: ExpenseEntryFormProps) {
       // Reset form on success
       setAmount('');
       setCategory('');
+      setCustomCategoryName('');
+      setCustomCategoryError('');
       setDescription('');
       setDate('');
       setPropertyId(undefined);
@@ -101,23 +130,23 @@ export function ExpenseEntryForm({ userId }: ExpenseEntryFormProps) {
           <CardTitle>Expense Details</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-2">
-            <FormField label="Amount" required>
-              <CurrencyInput
-                type="number"
-                id="amount"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                placeholder="0.00"
-                step="0.01"
-                min="0"
-                required
-                currency={currency}
-                loading={currencyLoading}
-              />
-            </FormField>
+          <FormField label="Amount" required>
+            <CurrencyInput
+              type="number"
+              id="amount"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              placeholder="0.00"
+              step="0.01"
+              min="0"
+              required
+              currency={currency}
+              loading={currencyLoading}
+            />
+          </FormField>
 
-            <FormField label="Category" required>
+          <FormField label="Category" required>
+            <div className="space-y-3">
               <FormSelect
                 id="category"
                 value={category}
@@ -125,9 +154,50 @@ export function ExpenseEntryForm({ userId }: ExpenseEntryFormProps) {
                 options={categoryOptions}
                 placeholder="Select category"
                 required
+                className="w-full"
+              />
+              <div className="flex justify-end">
+                <CategoryManagementModal
+                  onCategoryChange={() => {
+                    // Refresh custom categories when they change
+                    fetchCustomCategories();
+                  }}
+                />
+              </div>
+            </div>
+          </FormField>
+
+          {category === 'other' && (
+            <FormField
+              label="Custom Category Name"
+              required
+              error={customCategoryError || undefined}
+            >
+              <Input
+                type="text"
+                id="customCategoryName"
+                value={customCategoryName}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setCustomCategoryName(value);
+
+                  // Client-side validation
+                  if (value.length > 0 && value.length < 2) {
+                    setCustomCategoryError('Category name must be at least 2 characters');
+                  } else if (value.length > 100) {
+                    setCustomCategoryError('Category name must be less than 100 characters');
+                  } else if (value.length > 0 && !/^[a-zA-Zа-яА-Я0-9\s\-_.,()]+$/.test(value)) {
+                    setCustomCategoryError('Category name contains invalid characters');
+                  } else {
+                    setCustomCategoryError('');
+                  }
+                }}
+                placeholder="Enter custom category name"
+                maxLength={100}
+                required
               />
             </FormField>
-          </div>
+          )}
 
           <FormField label="Date" required>
             <Input
