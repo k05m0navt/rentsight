@@ -1,0 +1,459 @@
+openapi: 3.0.3
+info:
+  title: RentSight PWA API
+  description: API endpoints for Progressive Web App functionality
+  version: 1.0.0
+  contact:
+    name: RentSight Development Team
+servers:
+  - url: https://api.rentsight.com/v1
+    description: Production server
+  - url: https://staging-api.rentsight.com/v1
+    description: Staging server
+
+paths:
+  /manifest:
+    get:
+      summary: Get web app manifest
+      description: Returns the web app manifest configuration
+      tags:
+        - PWA
+      responses:
+        '200':
+          description: Web app manifest
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebAppManifest'
+        '404':
+          description: Manifest not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /service-worker:
+    get:
+      summary: Get service worker script
+      description: Returns the service worker JavaScript file
+      tags:
+        - PWA
+      responses:
+        '200':
+          description: Service worker script
+          content:
+            application/javascript:
+              schema:
+                type: string
+        '404':
+          description: Service worker not found
+
+  /push/subscribe:
+    post:
+      summary: Subscribe to push notifications
+      description: Register user for push notifications
+      tags:
+        - Push Notifications
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PushSubscription'
+      responses:
+        '201':
+          description: Successfully subscribed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionResponse'
+        '400':
+          description: Invalid subscription data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /push/unsubscribe:
+    delete:
+      summary: Unsubscribe from push notifications
+      description: Remove user push notification subscription
+      tags:
+        - Push Notifications
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: endpoint
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uri
+          description: Push subscription endpoint to remove
+      responses:
+        '200':
+          description: Successfully unsubscribed
+        '400':
+          description: Invalid endpoint
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Subscription not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /push/send:
+    post:
+      summary: Send push notification
+      description: Send push notification to subscribed users
+      tags:
+        - Push Notifications
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PushMessage'
+      responses:
+        '200':
+          description: Notification sent successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PushResponse'
+        '400':
+          description: Invalid message data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /sync/offline-data:
+    post:
+      summary: Sync offline data
+      description: Synchronize offline data changes with server
+      tags:
+        - Data Sync
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OfflineDataSync'
+      responses:
+        '200':
+          description: Data synchronized successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyncResponse'
+        '400':
+          description: Invalid sync data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Conflict - data modified on server
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConflictResponse'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    WebAppManifest:
+      type: object
+      required:
+        - name
+        - short_name
+        - start_url
+        - display
+        - icons
+      properties:
+        name:
+          type: string
+          description: Application name
+          maxLength: 45
+        short_name:
+          type: string
+          description: Short application name
+          maxLength: 12
+        description:
+          type: string
+          description: Application description
+        start_url:
+          type: string
+          description: Start URL
+        display:
+          type: string
+          enum: [standalone, fullscreen, minimal-ui]
+          description: Display mode
+        orientation:
+          type: string
+          enum: [portrait, landscape, any]
+          description: Preferred orientation
+        theme_color:
+          type: string
+          pattern: '^#[0-9A-Fa-f]{6}$'
+          description: Theme color
+        background_color:
+          type: string
+          pattern: '^#[0-9A-Fa-f]{6}$'
+          description: Background color
+        icons:
+          type: array
+          items:
+            $ref: '#/components/schemas/ManifestIcon'
+        categories:
+          type: array
+          items:
+            type: string
+          description: App categories
+        lang:
+          type: string
+          pattern: '^[a-z]{2}(-[A-Z]{2})?$'
+          description: Primary language
+
+    ManifestIcon:
+      type: object
+      required:
+        - src
+        - sizes
+      properties:
+        src:
+          type: string
+          description: Icon URL
+        sizes:
+          type: string
+          description: Icon sizes (e.g., "192x192 512x512")
+        type:
+          type: string
+          description: MIME type
+        purpose:
+          type: string
+          enum: [monochrome, maskable, any]
+          description: Icon purpose
+
+    PushSubscription:
+      type: object
+      required:
+        - endpoint
+        - keys
+      properties:
+        endpoint:
+          type: string
+          format: uri
+          description: Push service endpoint
+        keys:
+          type: object
+          required:
+            - p256dh
+            - auth
+          properties:
+            p256dh:
+              type: string
+              description: P-256 Diffie-Hellman key
+            auth:
+              type: string
+              description: Authentication secret
+
+    SubscriptionResponse:
+      type: object
+      properties:
+        subscription_id:
+          type: string
+          description: Unique subscription identifier
+        expires_at:
+          type: string
+          format: date-time
+          description: Subscription expiration
+
+    PushMessage:
+      type: object
+      required:
+        - title
+        - body
+        - user_ids
+      properties:
+        title:
+          type: string
+          description: Notification title
+        body:
+          type: string
+          description: Notification body
+        icon:
+          type: string
+          description: Notification icon URL
+        badge:
+          type: string
+          description: Notification badge URL
+        data:
+          type: object
+          description: Custom data payload
+        user_ids:
+          type: array
+          items:
+            type: string
+          description: Target user IDs
+        notification_types:
+          type: array
+          items:
+            type: string
+          description: Notification types to send
+
+    PushResponse:
+      type: object
+      properties:
+        sent_count:
+          type: integer
+          description: Number of notifications sent
+        failed_count:
+          type: integer
+          description: Number of failed deliveries
+        errors:
+          type: array
+          items:
+            type: string
+          description: Error messages
+
+    OfflineDataSync:
+      type: object
+      required:
+        - records
+      properties:
+        records:
+          type: array
+          items:
+            $ref: '#/components/schemas/OfflineRecord'
+        last_sync:
+          type: string
+          format: date-time
+          description: Last successful sync timestamp
+
+    OfflineRecord:
+      type: object
+      required:
+        - table_name
+        - record_id
+        - operation
+        - data
+        - timestamp
+      properties:
+        table_name:
+          type: string
+          description: Database table name
+        record_id:
+          type: string
+          description: Record identifier
+        operation:
+          type: string
+          enum: [create, update, delete]
+          description: Operation type
+        data:
+          type: object
+          description: Record data
+        timestamp:
+          type: string
+          format: date-time
+          description: Operation timestamp
+
+    SyncResponse:
+      type: object
+      properties:
+        synced_count:
+          type: integer
+          description: Number of records synchronized
+        conflict_count:
+          type: integer
+          description: Number of conflicts detected
+        errors:
+          type: array
+          items:
+            type: string
+          description: Error messages
+        conflicts:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConflictRecord'
+
+    ConflictRecord:
+      type: object
+      properties:
+        table_name:
+          type: string
+          description: Database table name
+        record_id:
+          type: string
+          description: Record identifier
+        local_data:
+          type: object
+          description: Local version of data
+        server_data:
+          type: object
+          description: Server version of data
+        conflict_type:
+          type: string
+          enum: [modified, deleted]
+          description: Type of conflict
+
+    ConflictResponse:
+      type: object
+      properties:
+        conflicts:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConflictRecord'
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Error message
+        details:
+          type: object
+          description: Additional error details

@@ -11,12 +11,16 @@
  */
 
 import { Inter } from 'next/font/google';
+import { Metadata } from 'next';
 import './globals.css';
 import { cn } from '@/lib/utils';
 import ThemeProvider from '@/components/ThemeProvider';
 import { MotionProvider } from '@/components/MotionProvider';
 import { Sidebar } from '@/components/Layout/Sidebar';
 import { BottomNav } from '@/components/Layout/BottomNav';
+import { InstallPrompt } from '@/components/InstallPrompt';
+import { OfflineIndicator, OfflineIndicatorCompact } from '@/components/OfflineIndicator';
+import { PWAUpdateNotification } from '@/components/PWAUpdateNotification';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -24,10 +28,29 @@ const inter = Inter({
   display: 'swap', // Optimize font loading
 });
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'RentSight - Rental Analytics Dashboard',
   description:
     'Modern analytics platform for rental property management. Track income, expenses, and performance across all your properties.',
+  manifest: '/manifest.json',
+  openGraph: {
+    type: 'website',
+    siteName: 'RentSight',
+    title: 'RentSight - Rental Analytics Dashboard',
+    description: 'Modern analytics platform for rental property management.',
+  },
+  icons: {
+    icon: '/icons/icon-192x192.png',
+    apple: '/icons/apple-touch-icon.png',
+  },
+};
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  themeColor: '#f97316',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -57,6 +80,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <main className="min-h-screen pb-20 md:pb-12 pl-8 pr-8 py-10 md:pl-80 md:pr-16 md:py-12 transition-[padding] duration-200">
               {children}
             </main>
+
+            {/* PWA Install Prompt */}
+            <InstallPrompt />
+
+            {/* PWA Update Notification */}
+            <PWAUpdateNotification />
+
+            {/* Offline Indicators */}
+            <OfflineIndicator />
+            <OfflineIndicatorCompact />
+
           </MotionProvider>
         </ThemeProvider>
       </body>

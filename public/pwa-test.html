@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PWA Test - RentSight</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#f97316">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .status {
+            background: white;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .success { border-left: 4px solid #4CAF50; }
+        .error { border-left: 4px solid #f44336; }
+        .warning { border-left: 4px solid #ff9800; }
+        button {
+            background: #f97316;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #e8620c; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        .icon-test img {
+            width: 64px;
+            height: 64px;
+            margin: 5px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>PWA Installation Test</h1>
+    
+    <div id="status-container">
+        <div class="status">
+            <h3>Testing PWA Requirements...</h3>
+            <p>This page will check all PWA installation requirements.</p>
+        </div>
+    </div>
+
+    <div class="status">
+        <h3>Install Actions</h3>
+        <button id="install-btn" disabled>Install App</button>
+        <button onclick="checkRequirements()">Refresh Tests</button>
+        <button onclick="clearStorage()">Clear Storage</button>
+    </div>
+
+    <div class="status">
+        <h3>Icon Tests</h3>
+        <div class="icon-test">
+            <img src="/icons/icon-192x192.png" alt="192x192 icon" onerror="this.style.border='2px solid red'">
+            <img src="/icons/icon-512x512.png" alt="512x512 icon" onerror="this.style.border='2px solid red'">
+        </div>
+    </div>
+
+    <script>
+        let deferredPrompt;
+        const statusContainer = document.getElementById('status-container');
+        const installBtn = document.getElementById('install-btn');
+
+        function addStatus(message, type = 'status') {
+            const div = document.createElement('div');
+            div.className = `status ${type}`;
+            div.innerHTML = `<strong>${message}</strong>`;
+            statusContainer.appendChild(div);
+        }
+
+        function checkRequirements() {
+            statusContainer.innerHTML = '';
+            addStatus('Checking PWA Requirements...', 'warning');
+
+            // Test 1: HTTPS
+            const isHTTPS = location.protocol === 'https:' || location.hostname === 'localhost';
+            addStatus(`HTTPS: ${isHTTPS ? '✅' : '❌'} ${location.protocol}//${location.hostname}`, isHTTPS ? 'success' : 'error');
+
+            // Test 2: Service Worker
+            const hasSW = 'serviceWorker' in navigator;
+            addStatus(`Service Worker Support: ${hasSW ? '✅' : '❌'}`, hasSW ? 'success' : 'error');
+
+            // Test 3: Manifest
+            const manifestLink = document.querySelector('link[rel="manifest"]');
+            addStatus(`Manifest Link: ${manifestLink ? '✅' : '❌'}`, manifestLink ? 'success' : 'error');
+
+            // Test 4: Display Mode
+            const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+            addStatus(`Standalone Mode: ${isStandalone ? '✅' : '❌'}`, isStandalone ? 'success' : 'warning');
+
+            // Test 5: User Engagement (simulated)
+            const engagementTime = sessionStorage.getItem('engagement-time') || 0;
+            addStatus(`User Engagement: ${engagementTime > 30 ? '✅' : '❌'} ${engagementTime}s`, engagementTime > 30 ? 'success' : 'warning');
+
+            // Test 6: Install Prompt Available
+            addStatus(`Install Prompt Available: ${deferredPrompt ? '✅' : '❌'}`, deferredPrompt ? 'success' : 'error');
+
+            // Test 7: Icons
+            fetch('/icons/icon-192x192.png')
+                .then(response => {
+                    addStatus(`192x192 Icon: ${response.ok ? '✅' : '❌'}`, response.ok ? 'success' : 'error');
+                })
+                .catch(() => {
+                    addStatus('192x192 Icon: ❌', 'error');
+                });
+
+            fetch('/icons/icon-512x512.png')
+                .then(response => {
+                    addStatus(`512x512 Icon: ${response.ok ? '✅' : '❌'}`, response.ok ? 'success' : 'error');
+                })
+                .catch(() => {
+                    addStatus('512x512 Icon: ❌', 'error');
+                });
+        }
+
+        function clearStorage() {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistrations().then(registrations => {
+                    registrations.forEach(registration => registration.unregister());
+                });
+            }
+            localStorage.clear();
+            sessionStorage.clear();
+            addStatus('Storage cleared. Please refresh the page.', 'warning');
+        }
+
+        // Listen for beforeinstallprompt
+        window.addEventListener('beforeinstallprompt', (e) => {
+            console.log('beforeinstallprompt event fired');
+            e.preventDefault();
+            deferredPrompt = e;
+            installBtn.disabled = false;
+            installBtn.textContent = 'Install App';
+            addStatus('✅ Install prompt is available!', 'success');
+        });
+
+        // Listen for appinstalled
+        window.addEventListener('appinstalled', () => {
+            console.log('App was installed');
+            addStatus('✅ App was installed successfully!', 'success');
+            deferredPrompt = null;
+            installBtn.disabled = true;
+            installBtn.textContent = 'App Installed';
+        });
+
+        // Install button click
+        installBtn.addEventListener('click', async () => {
+            if (!deferredPrompt) return;
+
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            
+            if (outcome === 'accepted') {
+                addStatus('✅ User accepted the install prompt', 'success');
+            } else {
+                addStatus('❌ User dismissed the install prompt', 'warning');
+            }
+            
+            deferredPrompt = null;
+            installBtn.disabled = true;
+        });
+
+        // Track engagement time
+        let startTime = Date.now();
+        setInterval(() => {
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            sessionStorage.setItem('engagement-time', elapsed);
+        }, 1000);
+
+        // Initial check
+        setTimeout(checkRequirements, 1000);
+    </script>
+</body>
+</html>

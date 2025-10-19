@@ -12,7 +12,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { userPreferencesSchema, UserPreferencesForm } from '@/lib/validations';
 import { Button } from '@/components/ui/button';
-import { Select } from '@/components/ui/select';
+import { FormSelect } from '@/components/forms/FormSelect';
 import { useState } from 'react';
 
 interface PreferencesFormProps {
@@ -77,19 +77,21 @@ export function PreferencesForm({ initialData }: PreferencesFormProps) {
         <label htmlFor="currency_format" className="block text-sm font-medium mb-2">
           Currency Format
         </label>
-        <Select
+        <FormSelect
           id="currency_format"
           {...register('currency_format')}
+          options={[
+            { value: 'USD', label: 'USD ($)' },
+            { value: 'EUR', label: 'EUR (€)' },
+            { value: 'GBP', label: 'GBP (£)' },
+            { value: 'JPY', label: 'JPY (¥)' },
+            { value: 'CAD', label: 'CAD (C$)' },
+            { value: 'AUD', label: 'AUD (A$)' },
+            { value: 'RUB', label: 'RUB (₽)' },
+          ]}
+          className="w-full"
           aria-invalid={!!errors.currency_format}
-        >
-          <option value="USD">USD ($)</option>
-          <option value="EUR">EUR (€)</option>
-          <option value="GBP">GBP (£)</option>
-          <option value="JPY">JPY (¥)</option>
-          <option value="CAD">CAD (C$)</option>
-          <option value="AUD">AUD (A$)</option>
-          <option value="RUB">RUB (₽)</option>
-        </Select>
+        />
         {errors.currency_format && (
           <p className="text-sm text-red-600 mt-1" role="alert">
             {errors.currency_format.message}
@@ -101,16 +103,18 @@ export function PreferencesForm({ initialData }: PreferencesFormProps) {
         <label htmlFor="default_view" className="block text-sm font-medium mb-2">
           Default View
         </label>
-        <Select
+        <FormSelect
           id="default_view"
           {...register('default_view')}
+          options={[
+            { value: 'dashboard', label: 'Dashboard' },
+            { value: 'properties', label: 'Properties' },
+            { value: 'reports', label: 'Reports' },
+            { value: 'settings', label: 'Settings' },
+          ]}
+          className="w-full"
           aria-invalid={!!errors.default_view}
-        >
-          <option value="dashboard">Dashboard</option>
-          <option value="properties">Properties</option>
-          <option value="reports">Reports</option>
-          <option value="settings">Settings</option>
-        </Select>
+        />
         {errors.default_view && (
           <p className="text-sm text-red-600 mt-1" role="alert">
             {errors.default_view.message}

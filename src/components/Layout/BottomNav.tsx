@@ -15,7 +15,7 @@
  */
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import {
   LayoutDashboard,
@@ -28,8 +28,11 @@ import {
   Settings,
   HelpCircle,
   X,
+  LogOut,
+  LogIn,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/hooks/useAuth';
 
 const mainNavItems = [
   {
@@ -59,27 +62,66 @@ const mainNavItems = [
   },
 ];
 
-const moreNavItems = [
-  {
-    href: '/tags',
-    icon: Tag,
-    label: 'Tags',
-  },
-  {
-    href: '/settings',
-    icon: Settings,
-    label: 'Settings',
-  },
-  {
-    href: '/help',
-    icon: HelpCircle,
-    label: 'Help',
-  },
-];
+interface MoreNavItem {
+  href: string;
+  icon: any;
+  label: string;
+  onClick?: () => void;
+}
+
+interface BaseNavItem {
+  href: string;
+  icon: any;
+  label: string;
+}
+
+const getMoreNavItems = (user: any, logout: () => void): MoreNavItem[] => {
+  const baseItems: BaseNavItem[] = [
+    {
+      href: '/tags',
+      icon: Tag,
+      label: 'Tags',
+    },
+    {
+      href: '/settings',
+      icon: Settings,
+      label: 'Settings',
+    },
+    {
+      href: '/help',
+      icon: HelpCircle,
+      label: 'Help',
+    },
+  ];
+
+  // Add authentication item based on user state
+  if (user) {
+    return [
+      ...baseItems,
+      {
+        href: '#',
+        icon: LogOut,
+        label: 'Log Out',
+        onClick: logout,
+      },
+    ];
+  } else {
+    return [
+      ...baseItems,
+      {
+        href: '/login',
+        icon: LogIn,
+        label: 'Sign In',
+      },
+    ];
+  }
+};
 
 export function BottomNav() {
   const pathname = usePathname();
+  const router = useRouter();
   const [showMoreMenu, setShowMoreMenu] = useState(false);
+  const { user, loading, logout } = useAuth();
 
   const isActive = (href: string) => pathname === href || pathname?.startsWith(`${href}/`);
 
@@ -107,13 +149,27 @@ export function BottomNav() {
 
           {/* More Menu Button */}
           <button
-            onClick={() => setShowMoreMenu(true)}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setShowMoreMenu(true);
+            }}
+            onTouchStart={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+            onTouchEnd={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setShowMoreMenu(true);
+            }}
             className={cn(
-              'flex flex-col items-center justify-center gap-1 px-2 py-2 text-xs font-medium min-w-12 transition-colors duration-200',
-              moreNavItems.some((item) => isActive(item.href))
+              'flex flex-col items-center justify-center gap-1 px-2 py-2 text-xs font-medium min-w-12 transition-colors duration-200 touch-manipulation',
+              getMoreNavItems(user, logout).some((item) => isActive(item.href))
                 ? 'text-primary'
-                : 'text-muted hover:text-text',
+                : 'text-muted hover:text-text active:text-primary',
             )}
+            aria-label="More options"
           >
             <MoreHorizontal className="h-5 w-5" aria-hidden="true" />
             <span className="text-center">More</span>
@@ -124,33 +180,121 @@ export function BottomNav() {
       {/* More Menu Modal */}
       {showMoreMenu && (
         <div
-          className="md:hidden fixed inset-0 bg-black/50 z-50"
-          onClick={() => setShowMoreMenu(false)}
+          className="md:hidden fixed inset-0 bg-black/50 z-[60]"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setShowMoreMenu(false);
+          }}
+          onTouchStart={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}
         >
-          <div className="absolute bottom-16 left-0 right-0 bg-card border-t border-border rounded-t-lg shadow-lg">
+          <div
+            className="absolute bottom-16 left-0 right-0 bg-card border-t border-border rounded-t-lg shadow-lg animate-in slide-in-from-bottom duration-300"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+            onTouchStart={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+          >
             <div className="p-4">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-text">More Options</h3>
                 <button
-                  onClick={() => setShowMoreMenu(false)}
-                  className="p-2 text-muted hover:text-text transition-colors"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setShowMoreMenu(false);
+                  }}
+                  onTouchStart={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
+                  onTouchEnd={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setShowMoreMenu(false);
+                  }}
+                  className="p-2 text-muted hover:text-text active:text-primary transition-colors touch-manipulation"
+                  aria-label="Close more options"
                 >
                   <X className="h-5 w-5" />
                 </button>
               </div>
               <div className="grid grid-cols-1 gap-2">
-                {moreNavItems.map((item) => {
+                {getMoreNavItems(user, logout).map((item) => {
                   const Icon = item.icon;
+
+                  // Handle logout button differently
+                  if (item.onClick) {
+                    return (
+                      <button
+                        key={item.label}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setShowMoreMenu(false);
+                          // Execute logout after closing modal
+                          setTimeout(() => {
+                            item.onClick!();
+                          }, 100);
+                        }}
+                        onTouchStart={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                        }}
+                        onTouchEnd={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setShowMoreMenu(false);
+                          setTimeout(() => {
+                            item.onClick!();
+                          }, 100);
+                        }}
+                        className="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors duration-200 touch-manipulation text-text hover:bg-hover active:bg-primary/20"
+                      >
+                        <Icon className="h-5 w-5" aria-hidden="true" />
+                        <span className="font-medium">{item.label}</span>
+                      </button>
+                    );
+                  }
+
+                  // Handle regular navigation items
                   return (
                     <Link
                       key={item.href}
                       href={item.href}
-                      onClick={() => setShowMoreMenu(false)}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setShowMoreMenu(false);
+                        // Use Next.js router for proper middleware handling
+                        setTimeout(() => {
+                          router.push(item.href);
+                        }, 100);
+                      }}
+                      onTouchStart={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }}
+                      onTouchEnd={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setShowMoreMenu(false);
+                        setTimeout(() => {
+                          router.push(item.href);
+                        }, 100);
+                      }}
                       className={cn(
-                        'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors duration-200',
+                        'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors duration-200 touch-manipulation active:bg-primary/20',
                         isActive(item.href)
                           ? 'bg-primary/10 text-primary'
-                          : 'text-text hover:bg-hover',
+                          : 'text-text hover:bg-hover active:bg-primary/20',
                       )}
                     >
                       <Icon className="h-5 w-5" aria-hidden="true" />

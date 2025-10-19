@@ -16,13 +16,11 @@ import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
 import { DashboardContent } from '@/components/dashboard-content';
 import { DashboardSkeleton } from '@/components/dashboard/DashboardSkeleton';
+import { ProtectedRoute } from '@/components/ProtectedRoute';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata = {
-  title: 'Dashboard - RentSight',
-  description: 'Analytics dashboard for rental property management',
-};
+// Dynamic metadata will be set by the ProtectedRoute component
 
 export default async function DashboardPage() {
   const supabase = createClient();
@@ -31,25 +29,23 @@ export default async function DashboardPage() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) {
-    return redirect('/login');
-  }
-
   return (
-    <div className="flex flex-col gap-6">
-      {/* Page Header */}
-      <div>
-        <h1 className="text-2xl font-bold">Analytics Dashboard</h1>
-        <p className="text-sm text-muted dark:text-muted-dark mt-1">
-          Track your rental performance and expenses
-        </p>
-      </div>
+    <ProtectedRoute>
+      <div className="flex flex-col gap-6">
+        {/* Page Header */}
+        <div>
+          <h1 className="text-2xl font-bold">Analytics Dashboard</h1>
+          <p className="text-sm text-muted dark:text-muted-dark mt-1">
+            Track your rental performance and expenses
+          </p>
+        </div>
 
-      {/* Dashboard Content with Loading State */}
-      <Suspense fallback={<DashboardSkeleton />}>
-        <DashboardContent userId={user.id} />
-      </Suspense>
-    </div>
+        {/* Dashboard Content with Loading State */}
+        <Suspense fallback={<DashboardSkeleton />}>
+          {user ? <DashboardContent userId={user.id} /> : <DashboardSkeleton />}
+        </Suspense>
+      </div>
+    </ProtectedRoute>
   );
 }
 

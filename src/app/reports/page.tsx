@@ -18,7 +18,7 @@ import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Select } from '@/components/ui/select';
+import { FormSelect } from '@/components/forms/FormSelect';
 import { ReportsSkeleton } from '@/components/reports/ReportsSkeleton';
 import { BarChart3, FileText, Calculator, Download } from 'lucide-react';
 import { useDateFormat } from '@/hooks/useDateFormat';
@@ -133,15 +133,17 @@ export default function ReportsPage() {
             <label htmlFor="reportType" className="block text-sm font-medium mb-2">
               Report Type
             </label>
-            <Select
+            <FormSelect
               id="reportType"
               value={reportType}
               onChange={(e) => setReportType(e.target.value)}
-            >
-              <option value="income_summary">Income Summary</option>
-              <option value="expense_breakdown">Expense Breakdown</option>
-              <option value="tax_report">Tax Report</option>
-            </Select>
+              options={[
+                { value: 'income_summary', label: 'Income Summary' },
+                { value: 'expense_breakdown', label: 'Expense Breakdown' },
+                { value: 'tax_report', label: 'Tax Report' },
+              ]}
+              className="w-full"
+            />
           </div>
 
           <Button onClick={handleGenerate} disabled={generating}>

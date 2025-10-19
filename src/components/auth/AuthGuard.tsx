@@ -37,7 +37,10 @@ export function AuthGuard({ children, fallback }: AuthGuardProps) {
       if (!user) {
         console.log('[AuthGuard] Not authenticated, redirecting to /login');
         // Use window.location for hard redirect to avoid client-side state issues
-        window.location.href = '/login';
+        const currentPath = window.location.pathname;
+        const redirectTo =
+          currentPath !== '/login' ? `?redirectTo=${encodeURIComponent(currentPath)}` : '';
+        window.location.href = `/login${redirectTo}`;
         return;
       }
 
@@ -55,7 +58,10 @@ export function AuthGuard({ children, fallback }: AuthGuardProps) {
 
       if (!session) {
         console.log('[AuthGuard] Session lost, redirecting to /login');
-        window.location.href = '/login';
+        const currentPath = window.location.pathname;
+        const redirectTo =
+          currentPath !== '/login' ? `?redirectTo=${encodeURIComponent(currentPath)}` : '';
+        window.location.href = `/login${redirectTo}`;
       } else {
         setIsAuthenticated(true);
       }

@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { BarChart3, TrendingUp, FileText, Tag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { InstallButton } from '@/components/InstallButton';
 
 export default function Home() {
   return (
@@ -29,6 +30,7 @@ export default function Home() {
           <Button asChild variant="secondary" size="lg">
             <Link href="/login">Sign In</Link>
           </Button>
+          <InstallButton variant="secondary" size="lg" />
         </div>
       </section>
 
