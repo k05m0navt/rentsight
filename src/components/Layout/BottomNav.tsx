@@ -191,7 +191,7 @@ export function BottomNav() {
             e.stopPropagation();
           }}
         >
-          <div 
+          <div
             className="absolute bottom-16 left-0 right-0 bg-card border-t border-border rounded-t-lg shadow-lg animate-in slide-in-from-bottom duration-300"
             onClick={(e) => {
               e.preventDefault();
@@ -226,83 +226,83 @@ export function BottomNav() {
                   <X className="h-5 w-5" />
                 </button>
               </div>
-                    <div className="grid grid-cols-1 gap-2">
-                      {getMoreNavItems(user, logout).map((item) => {
-                        const Icon = item.icon;
-                        
-                        // Handle logout button differently
-                        if (item.onClick) {
-                          return (
-                            <button
-                              key={item.label}
-                              onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                setShowMoreMenu(false);
-                                // Execute logout after closing modal
-                                setTimeout(() => {
-                                  item.onClick!();
-                                }, 100);
-                              }}
-                              onTouchStart={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                              }}
-                              onTouchEnd={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                setShowMoreMenu(false);
-                                setTimeout(() => {
-                                  item.onClick!();
-                                }, 100);
-                              }}
-                              className="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors duration-200 touch-manipulation text-text hover:bg-hover active:bg-primary/20"
-                            >
-                              <Icon className="h-5 w-5" aria-hidden="true" />
-                              <span className="font-medium">{item.label}</span>
-                            </button>
-                          );
-                        }
-                        
-                        // Handle regular navigation items
-                        return (
-                          <Link
-                            key={item.href}
-                            href={item.href}
-                            onClick={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              setShowMoreMenu(false);
-                              // Use Next.js router for proper middleware handling
-                              setTimeout(() => {
-                                router.push(item.href);
-                              }, 100);
-                            }}
-                            onTouchStart={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                            }}
-                            onTouchEnd={(e) => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              setShowMoreMenu(false);
-                              setTimeout(() => {
-                                router.push(item.href);
-                              }, 100);
-                            }}
-                            className={cn(
-                              'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors duration-200 touch-manipulation active:bg-primary/20',
-                              isActive(item.href)
-                                ? 'bg-primary/10 text-primary'
-                                : 'text-text hover:bg-hover active:bg-primary/20',
-                            )}
-                          >
-                            <Icon className="h-5 w-5" aria-hidden="true" />
-                            <span className="font-medium">{item.label}</span>
-                          </Link>
-                        );
-                      })}
-                    </div>
+              <div className="grid grid-cols-1 gap-2">
+                {getMoreNavItems(user, logout).map((item) => {
+                  const Icon = item.icon;
+
+                  // Handle logout button differently
+                  if (item.onClick) {
+                    return (
+                      <button
+                        key={item.label}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setShowMoreMenu(false);
+                          // Execute logout after closing modal
+                          setTimeout(() => {
+                            item.onClick!();
+                          }, 100);
+                        }}
+                        onTouchStart={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                        }}
+                        onTouchEnd={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setShowMoreMenu(false);
+                          setTimeout(() => {
+                            item.onClick!();
+                          }, 100);
+                        }}
+                        className="flex items-center gap-3 px-4 py-3 rounded-lg transition-colors duration-200 touch-manipulation text-text hover:bg-hover active:bg-primary/20"
+                      >
+                        <Icon className="h-5 w-5" aria-hidden="true" />
+                        <span className="font-medium">{item.label}</span>
+                      </button>
+                    );
+                  }
+
+                  // Handle regular navigation items
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setShowMoreMenu(false);
+                        // Use Next.js router for proper middleware handling
+                        setTimeout(() => {
+                          router.push(item.href);
+                        }, 100);
+                      }}
+                      onTouchStart={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }}
+                      onTouchEnd={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setShowMoreMenu(false);
+                        setTimeout(() => {
+                          router.push(item.href);
+                        }, 100);
+                      }}
+                      className={cn(
+                        'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors duration-200 touch-manipulation active:bg-primary/20',
+                        isActive(item.href)
+                          ? 'bg-primary/10 text-primary'
+                          : 'text-text hover:bg-hover active:bg-primary/20',
+                      )}
+                    >
+                      <Icon className="h-5 w-5" aria-hidden="true" />
+                      <span className="font-medium">{item.label}</span>
+                    </Link>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>

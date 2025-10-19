@@ -1,6 +1,6 @@
 /**
  * PWA Utility Functions
- * 
+ *
  * Provides safe access to PWA APIs with proper error handling
  * to prevent JavaScript errors in environments where PWA features aren't supported.
  */
@@ -31,10 +31,7 @@ export const getServiceWorkerRegistration = async (): Promise<ServiceWorkerRegis
 /**
  * Safely add event listener to service worker
  */
-export const addServiceWorkerEventListener = (
-  event: string,
-  listener: EventListener
-): void => {
+export const addServiceWorkerEventListener = (event: string, listener: EventListener): void => {
   if (!isServiceWorkerSupported()) {
     return;
   }
@@ -50,22 +47,14 @@ export const addServiceWorkerEventListener = (
  * Safely check if push notifications are supported
  */
 export const isPushNotificationSupported = (): boolean => {
-  return (
-    isServiceWorkerSupported() &&
-    'PushManager' in window &&
-    'Notification' in window
-  );
+  return isServiceWorkerSupported() && 'PushManager' in window && 'Notification' in window;
 };
 
 /**
  * Safely check if PWA is installable
  */
 export const isPWAInstallable = (): boolean => {
-  return (
-    typeof window !== 'undefined' &&
-    'serviceWorker' in navigator &&
-    'PushManager' in window
-  );
+  return typeof window !== 'undefined' && 'serviceWorker' in navigator && 'PushManager' in window;
 };
 
 /**

@@ -126,7 +126,6 @@ interface LazyComponentProps {
  * LazyLoader component for wrapping content with Suspense
  */
 export const LazyLoader = ({ children, fallback, className, delay = 0 }: LazyLoaderProps) => {
-  // eslint-disable-line @typescript-eslint/no-unused-vars
   const fallbackComponent = fallback || <DefaultSkeleton className={className} />;
 
   return <Suspense fallback={fallbackComponent}>{children}</Suspense>;

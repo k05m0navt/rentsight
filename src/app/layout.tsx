@@ -92,15 +92,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               {children}
             </main>
 
-                   {/* PWA Install Prompt */}
-                   <InstallPrompt />
+            {/* PWA Install Prompt */}
+            <InstallPrompt />
 
-                   {/* PWA Update Notification */}
-                   <PWAUpdateNotification />
+            {/* PWA Update Notification */}
+            <PWAUpdateNotification />
 
-                   {/* Offline Indicators */}
-                   <OfflineIndicator />
-                   <OfflineIndicatorCompact />
+            {/* Offline Indicators */}
+            <OfflineIndicator />
+            <OfflineIndicatorCompact />
 
             {/* Performance Monitoring */}
             <PerformanceMonitor pageName="root" />

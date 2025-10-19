@@ -53,7 +53,7 @@ export const NotificationSettings = ({ className }: NotificationSettingsProps) =
       try {
         setIsSupported(pushNotificationService.isPushSupported());
         setPushSettings(pushNotificationService.getSettings());
-        
+
         // Load user preferences from localStorage
         const savedPreferences = localStorage.getItem('notificationPreferences');
         if (savedPreferences) {
@@ -134,9 +134,7 @@ export const NotificationSettings = ({ className }: NotificationSettingsProps) =
               <Settings className="h-5 w-5" />
               General Settings
             </CardTitle>
-            <CardDescription>
-              Configure how you receive notifications
-            </CardDescription>
+            <CardDescription>Configure how you receive notifications</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             {/* Sound Settings */}

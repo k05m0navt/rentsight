@@ -33,14 +33,14 @@ export async function middleware(request: NextRequest) {
       const redirectUrl = new URL('/login', request.url);
       // Add the originally requested URL as a redirect parameter
       redirectUrl.searchParams.set('redirectTo', request.nextUrl.pathname);
-      
+
       // Use 307 Temporary Redirect to preserve the original request method
       const redirectResponse = NextResponse.redirect(redirectUrl, { status: 307 });
 
       // Clear any auth-related cookies to prevent stale state
       redirectResponse.cookies.delete('sb-access-token');
       redirectResponse.cookies.delete('sb-refresh-token');
-      
+
       // Add headers to prevent caching of the redirect
       redirectResponse.headers.set('Cache-Control', 'no-cache, no-store, must-revalidate');
       redirectResponse.headers.set('Pragma', 'no-cache');

@@ -2,7 +2,7 @@
 
 /**
  * PWA Audit Script
- * 
+ *
  * Runs a comprehensive PWA audit to check:
  * - Lighthouse PWA score
  * - Manifest validation
@@ -60,7 +60,7 @@ class PWAAuditor {
 
   async runAudit() {
     logHeader('PWA Audit Starting');
-    
+
     await this.checkManifest();
     await this.checkServiceWorker();
     await this.checkIcons();
@@ -68,15 +68,15 @@ class PWAAuditor {
     await this.checkPerformance();
     await this.checkAccessibility();
     await this.checkSEO();
-    
+
     this.generateReport();
   }
 
   async checkManifest() {
     logHeader('Manifest Validation');
-    
+
     const manifestPath = path.join(process.cwd(), 'public', 'manifest.json');
-    
+
     if (!fs.existsSync(manifestPath)) {
       this.addError('Manifest file not found');
       return;
@@ -84,10 +84,10 @@ class PWAAuditor {
 
     try {
       const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
-      
+
       // Required fields
       const requiredFields = ['name', 'short_name', 'start_url', 'display', 'icons'];
-      requiredFields.forEach(field => {
+      requiredFields.forEach((field) => {
         if (manifest[field]) {
           logSuccess(`Manifest has ${field}`);
           this.score += 10;
@@ -128,26 +128,20 @@ class PWAAuditor {
 
   async checkServiceWorker() {
     logHeader('Service Worker Validation');
-    
+
     const swPath = path.join(process.cwd(), 'public', 'sw.js');
-    
+
     if (!fs.existsSync(swPath)) {
       this.addError('Service worker not found');
       return;
     }
 
     const swContent = fs.readFileSync(swPath, 'utf8');
-    
-    // Check for essential service worker features
-    const essentialFeatures = [
-      'install',
-      'activate',
-      'fetch',
-      'push',
-      'notificationclick'
-    ];
 
-    essentialFeatures.forEach(feature => {
+    // Check for essential service worker features
+    const essentialFeatures = ['install', 'activate', 'fetch', 'push', 'notificationclick'];
+
+    essentialFeatures.forEach((feature) => {
       if (swContent.includes(`addEventListener('${feature}'`)) {
         logSuccess(`Service worker handles ${feature} events`);
         this.score += 5;
@@ -169,17 +163,17 @@ class PWAAuditor {
 
   async checkIcons() {
     logHeader('Icon Validation');
-    
+
     const iconSizes = [72, 96, 128, 144, 152, 192, 384, 512];
     const iconDir = path.join(process.cwd(), 'public', 'icons');
-    
+
     if (!fs.existsSync(iconDir)) {
       this.addError('Icons directory not found');
       return;
     }
 
     let foundIcons = 0;
-    iconSizes.forEach(size => {
+    iconSizes.forEach((size) => {
       const iconPath = path.join(iconDir, `icon-${size}x${size}.png`);
       if (fs.existsSync(iconPath)) {
         logSuccess(`Icon ${size}x${size} found`);
@@ -210,7 +204,7 @@ class PWAAuditor {
 
   async checkHTTPS() {
     logHeader('Security Validation');
-    
+
     // This would typically check if the site is served over HTTPS
     // For development, we'll just check the configuration
     logInfo('HTTPS check skipped in development mode');
@@ -221,18 +215,18 @@ class PWAAuditor {
 
   async checkPerformance() {
     logHeader('Performance Validation');
-    
+
     // Check for performance optimizations in the codebase
     const nextConfigPath = path.join(process.cwd(), 'next.config.ts');
-    
+
     if (fs.existsSync(nextConfigPath)) {
       const config = fs.readFileSync(nextConfigPath, 'utf8');
-      
+
       if (config.includes('pwa') || config.includes('PWA')) {
         logSuccess('PWA configuration found in Next.js config');
         this.score += 10;
       }
-      
+
       if (config.includes('compression') || config.includes('gzip')) {
         logSuccess('Compression configuration found');
         this.score += 5;
@@ -242,7 +236,7 @@ class PWAAuditor {
     // Check for image optimization
     const imageComponents = ['OptimizedImage', 'Image'];
     const srcDir = path.join(process.cwd(), 'src');
-    
+
     if (fs.existsSync(srcDir)) {
       const hasImageOptimization = this.checkDirectoryForComponents(srcDir, imageComponents);
       if (hasImageOptimization) {
@@ -256,7 +250,7 @@ class PWAAuditor {
 
   async checkAccessibility() {
     logHeader('Accessibility Validation');
-    
+
     // Check for accessibility features
     const accessibilityFeatures = [
       'aria-label',
@@ -264,7 +258,7 @@ class PWAAuditor {
       'role=',
       'alt=',
       'aria-expanded',
-      'aria-hidden'
+      'aria-hidden',
     ];
 
     const srcDir = path.join(process.cwd(), 'src');
@@ -283,16 +277,9 @@ class PWAAuditor {
 
   async checkSEO() {
     logHeader('SEO Validation');
-    
+
     // Check for meta tags and SEO features
-    const seoFeatures = [
-      'title',
-      'description',
-      'viewport',
-      'og:',
-      'twitter:',
-      'canonical'
-    ];
+    const seoFeatures = ['title', 'description', 'viewport', 'og:', 'twitter:', 'canonical'];
 
     const appDir = path.join(process.cwd(), 'src', 'app');
     if (fs.existsSync(appDir)) {
@@ -311,17 +298,17 @@ class PWAAuditor {
   checkDirectoryForComponents(dir, components) {
     try {
       const files = fs.readdirSync(dir, { withFileTypes: true });
-      
+
       for (const file of files) {
         const filePath = path.join(dir, file.name);
-        
+
         if (file.isDirectory()) {
           if (this.checkDirectoryForComponents(filePath, components)) {
             return true;
           }
         } else if (file.name.endsWith('.tsx') || file.name.endsWith('.ts')) {
           const content = fs.readFileSync(filePath, 'utf8');
-          if (components.some(component => content.includes(component))) {
+          if (components.some((component) => content.includes(component))) {
             return true;
           }
         }
@@ -329,24 +316,24 @@ class PWAAuditor {
     } catch (error) {
       // Directory might not be readable
     }
-    
+
     return false;
   }
 
   checkDirectoryForPatterns(dir, patterns) {
     try {
       const files = fs.readdirSync(dir, { withFileTypes: true });
-      
+
       for (const file of files) {
         const filePath = path.join(dir, file.name);
-        
+
         if (file.isDirectory()) {
           if (this.checkDirectoryForPatterns(filePath, patterns)) {
             return true;
           }
         } else if (file.name.endsWith('.tsx') || file.name.endsWith('.ts')) {
           const content = fs.readFileSync(filePath, 'utf8');
-          if (patterns.some(pattern => content.includes(pattern))) {
+          if (patterns.some((pattern) => content.includes(pattern))) {
             return true;
           }
         }
@@ -354,7 +341,7 @@ class PWAAuditor {
     } catch (error) {
       // Directory might not be readable
     }
-    
+
     return false;
   }
 
@@ -370,11 +357,11 @@ class PWAAuditor {
 
   generateReport() {
     logHeader('PWA Audit Report');
-    
+
     const totalScore = this.checks > 0 ? Math.round((this.score / (this.checks * 20)) * 100) : 0;
-    
+
     log(`\n${colors.bright}Overall PWA Score: ${totalScore}/100${colors.reset}`);
-    
+
     if (totalScore >= 90) {
       log('🎉 Excellent! Your PWA meets high standards.', colors.green);
     } else if (totalScore >= 70) {
@@ -382,28 +369,28 @@ class PWAAuditor {
     } else {
       log('⚠️  Needs improvement. Consider addressing the issues below.', colors.red);
     }
-    
+
     if (this.issues.length > 0) {
       logHeader('Critical Issues');
-      this.issues.forEach(issue => logError(`• ${issue}`));
+      this.issues.forEach((issue) => logError(`• ${issue}`));
     }
-    
+
     if (this.warnings.length > 0) {
       logHeader('Warnings');
-      this.warnings.forEach(warning => logWarning(`• ${warning}`));
+      this.warnings.forEach((warning) => logWarning(`• ${warning}`));
     }
-    
+
     if (this.issues.length === 0 && this.warnings.length === 0) {
       logSuccess('No issues found! Your PWA is well-configured.');
     }
-    
+
     logHeader('Recommendations');
     logInfo('• Test your PWA in Chrome DevTools Lighthouse audit');
     logInfo('• Validate your manifest using Web App Manifest Validator');
     logInfo('• Test service worker functionality in different browsers');
     logInfo('• Ensure all icons are properly sized and optimized');
     logInfo('• Test offline functionality thoroughly');
-    
+
     return totalScore;
   }
 }

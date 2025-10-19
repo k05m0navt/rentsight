@@ -4,9 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "dev:pwa": "ENABLE_PWA=true next dev",
     "build": "next build",
-    "build:pwa": "next build -c next.config.js",
     "start": "next start",
     "lint": "eslint",
     "test:e2e": "playwright test",

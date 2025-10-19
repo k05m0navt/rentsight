@@ -2,7 +2,7 @@
 
 /**
  * ProtectedRoute Component
- * 
+ *
  * Client-side authentication guard that prevents protected content from rendering
  * until authentication is confirmed. This prevents the flash of protected content
  * before the server-side redirect takes effect.
@@ -26,14 +26,15 @@ export function ProtectedRoute({ children, fallback }: ProtectedRouteProps) {
     // If not loading and no user, redirect to login immediately
     if (!loading && !user && !hasRedirected) {
       setHasRedirected(true);
-      
+
       // Set page title to indicate redirecting
       document.title = 'Redirecting... - RentSight';
-      
+
       // Get the current pathname to preserve it for redirect after login
       const currentPath = window.location.pathname;
-      const redirectTo = currentPath !== '/login' ? `?redirectTo=${encodeURIComponent(currentPath)}` : '';
-      
+      const redirectTo =
+        currentPath !== '/login' ? `?redirectTo=${encodeURIComponent(currentPath)}` : '';
+
       // Use window.location.href to force a full page navigation and trigger middleware
       window.location.href = `/login${redirectTo}`;
     }

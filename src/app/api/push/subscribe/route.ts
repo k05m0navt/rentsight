@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import webpush from 'web-push';
 
-// Configure VAPID keys
-webpush.setVapidDetails(
-  process.env.VAPID_SUBJECT || 'mailto:admin@rentsight.com',
-  process.env.VAPID_PUBLIC_KEY || '',
-  process.env.VAPID_PRIVATE_KEY || ''
-);
+// Configure VAPID keys only if they exist
+const vapidPublicKey = process.env.VAPID_PUBLIC_KEY;
+const vapidPrivateKey = process.env.VAPID_PRIVATE_KEY;
+const vapidSubject = process.env.VAPID_SUBJECT || 'mailto:admin@rentsight.com';
+
+if (vapidPublicKey && vapidPrivateKey) {
+  webpush.setVapidDetails(vapidSubject, vapidPublicKey, vapidPrivateKey);
+}
 
 interface SubscriptionData {
   subscription: {
@@ -37,10 +39,7 @@ export async function POST(request: NextRequest) {
 
     // Validate subscription data
     if (!subscription?.endpoint || !subscription?.keys?.p256dh || !subscription?.keys?.auth) {
-      return NextResponse.json(
-        { error: 'Invalid subscription data' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Invalid subscription data' }, { status: 400 });
     }
 
     // Store subscription
@@ -51,10 +50,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Failed to store push subscription:', error);
-    return NextResponse.json(
-      { error: 'Failed to store subscription' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to store subscription' }, { status: 500 });
   }
 }
 
@@ -66,9 +62,6 @@ export async function GET() {
     });
   } catch (error) {
     console.error('Failed to retrieve push subscriptions:', error);
-    return NextResponse.json(
-      { error: 'Failed to retrieve subscriptions' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to retrieve subscriptions' }, { status: 500 });
   }
 }

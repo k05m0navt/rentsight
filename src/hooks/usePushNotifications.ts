@@ -103,10 +103,7 @@ export const usePushNotifications = () => {
     }
   }, []);
 
-  const sendNotification = useCallback(async (
-    type: string,
-    context: NotificationContext = {}
-  ) => {
+  const sendNotification = useCallback(async (type: string, context: NotificationContext = {}) => {
     try {
       const template = getNotificationTemplate(type, context);
       await pushNotificationService.showNotification(template);

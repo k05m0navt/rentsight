@@ -71,7 +71,6 @@ export const usePerformance = () => {
       const clsObserver = new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
           if (!(entry as any).hadRecentInput) {
-            // eslint-disable-line @typescript-eslint/no-explicit-any
             clsValue += (entry as any).value; // eslint-disable-line @typescript-eslint/no-explicit-any
             clsEntries.push(entry);
           }

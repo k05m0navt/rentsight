@@ -6,10 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import {
-  pushNotificationService,
-  type NotificationSettings,
-} from '@/lib/pushNotificationService';
+import { pushNotificationService, type NotificationSettings } from '@/lib/pushNotificationService';
 
 interface PushSubscriptionSettingsProps {
   className?: string;
@@ -129,8 +126,8 @@ export const PushSubscriptionSettings = ({ className }: PushSubscriptionSettings
             Push Notifications Not Supported
           </CardTitle>
           <CardDescription>
-            Your browser does not support push notifications. Please use a modern browser like Chrome,
-            Firefox, or Safari.
+            Your browser does not support push notifications. Please use a modern browser like
+            Chrome, Firefox, or Safari.
           </CardDescription>
         </CardHeader>
       </Card>
@@ -162,7 +159,9 @@ export const PushSubscriptionSettings = ({ className }: PushSubscriptionSettings
           {/* Subscription Status */}
           <div className="flex items-center justify-between">
             <span className="text-sm font-medium">Subscription Status</span>
-            <span className={`text-sm ${isSubscribed ? 'text-green-500' : 'text-muted-foreground'}`}>
+            <span
+              className={`text-sm ${isSubscribed ? 'text-green-500' : 'text-muted-foreground'}`}
+            >
               {isSubscribed ? 'Subscribed' : 'Not subscribed'}
             </span>
           </div>
@@ -224,7 +223,7 @@ export const PushSubscriptionSettings = ({ className }: PushSubscriptionSettings
           {isSubscribed && (
             <div className="space-y-4 pt-4 border-t">
               <h4 className="text-sm font-medium">Notification Types</h4>
-              
+
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <div>

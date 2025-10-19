@@ -274,7 +274,7 @@ export class NotificationTemplates {
       title: 'Achievement Unlocked!',
       body: context.propertyName
         ? `You've reached a milestone with ${context.propertyName}`
-        : 'You\'ve reached a new milestone!',
+        : "You've reached a new milestone!",
       icon: this.baseIcon,
       badge: this.baseBadge,
       tag: 'achievement',
@@ -344,13 +344,7 @@ export class NotificationTemplates {
    * Validate notification template
    */
   static validateTemplate(template: NotificationTemplate): boolean {
-    return !!(
-      template.title &&
-      template.body &&
-      template.icon &&
-      template.tag &&
-      template.data
-    );
+    return !!(template.title && template.body && template.icon && template.tag && template.data);
   }
 }
 

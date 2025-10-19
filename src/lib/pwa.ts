@@ -27,7 +27,7 @@ export const isInstalled = (): boolean => {
  * Check if the browser supports PWA installation
  */
 export const canInstall = (): boolean => {
-  return typeof window !== 'undefined' && 'serviceWorker' in navigator && 'PushManager' in window;
+  return typeof window !== 'undefined' && 'serviceWorker' in navigator;
 };
 
 /**
@@ -90,7 +90,7 @@ export const getPWAState = async (): Promise<PWAState> => {
   return {
     isOnline: isOnline(),
     isInstalled: isInstalled(),
-    canInstall: canInstall(),
+    canInstall: canInstall() && installPrompt !== null,
     installPrompt,
     serviceWorkerReady: isServiceWorkerSupported(),
     pushSubscription: null, // Will be set by push notification service

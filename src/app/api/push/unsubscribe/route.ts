@@ -14,10 +14,7 @@ export async function POST(request: NextRequest) {
     const { endpoint } = body;
 
     if (!endpoint) {
-      return NextResponse.json(
-        { error: 'Endpoint is required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Endpoint is required' }, { status: 400 });
     }
 
     // Remove subscription
@@ -27,16 +24,10 @@ export async function POST(request: NextRequest) {
       console.log('Push subscription removed:', endpoint);
       return NextResponse.json({ success: true });
     } else {
-      return NextResponse.json(
-        { error: 'Subscription not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Subscription not found' }, { status: 404 });
     }
   } catch (error) {
     console.error('Failed to remove push subscription:', error);
-    return NextResponse.json(
-      { error: 'Failed to remove subscription' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to remove subscription' }, { status: 500 });
   }
 }

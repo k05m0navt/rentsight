@@ -5,7 +5,11 @@ import { Download, RefreshCw, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import { isServiceWorkerSupported, getServiceWorkerRegistration, addServiceWorkerEventListener } from '@/lib/pwaUtils';
+import {
+  isServiceWorkerSupported,
+  getServiceWorkerRegistration,
+  addServiceWorkerEventListener,
+} from '@/lib/pwaUtils';
 
 interface PWAUpdateNotificationProps {
   className?: string;
@@ -31,7 +35,7 @@ export const PWAUpdateNotification = ({ className }: PWAUpdateNotificationProps)
           const reg = await getServiceWorkerRegistration();
           if (reg) {
             setRegistration(reg);
-            
+
             // Check for updates
             const newReg = await reg.update();
             if (newReg.waiting) {
@@ -71,11 +75,11 @@ export const PWAUpdateNotification = ({ className }: PWAUpdateNotificationProps)
     if (!registration || !registration.waiting) return;
 
     setIsUpdating(true);
-    
+
     try {
       // Send message to waiting service worker to skip waiting
       registration.waiting.postMessage({ type: 'SKIP_WAITING' });
-      
+
       // The controllerchange event will trigger a reload
       setUpdateAvailable(false);
     } catch (error) {
@@ -97,7 +101,7 @@ export const PWAUpdateNotification = ({ className }: PWAUpdateNotificationProps)
       const dismissedTime = parseInt(dismissed);
       const now = Date.now();
       const hoursSinceDismissed = (now - dismissedTime) / (1000 * 60 * 60);
-      
+
       if (hoursSinceDismissed < 24) {
         setUpdateAvailable(false);
       }
@@ -112,7 +116,7 @@ export const PWAUpdateNotification = ({ className }: PWAUpdateNotificationProps)
     <div
       className={cn(
         'fixed bottom-4 left-4 right-4 z-50 md:left-auto md:right-4 md:w-96',
-        className
+        className,
       )}
     >
       <Card className="bg-background border-border shadow-lg">
@@ -129,12 +133,7 @@ export const PWAUpdateNotification = ({ className }: PWAUpdateNotificationProps)
                 </CardDescription>
               </div>
             </div>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleDismiss}
-              className="h-8 w-8 p-0"
-            >
+            <Button variant="ghost" size="sm" onClick={handleDismiss} className="h-8 w-8 p-0">
               <X className="h-4 w-4" />
             </Button>
           </div>
@@ -183,7 +182,7 @@ export const usePWAUpdate = () => {
           const reg = await navigator.serviceWorker.getRegistration();
           if (reg) {
             setRegistration(reg);
-            
+
             // Check for updates
             const newReg = await reg.update();
             if (newReg.waiting) {

@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import webpush from 'web-push';
 
-// Configure VAPID keys
-webpush.setVapidDetails(
-  process.env.VAPID_SUBJECT || 'mailto:admin@rentsight.com',
-  process.env.VAPID_PUBLIC_KEY || '',
-  process.env.VAPID_PRIVATE_KEY || ''
-);
+// Configure VAPID keys only if they exist
+const vapidPublicKey = process.env.VAPID_PUBLIC_KEY;
+const vapidPrivateKey = process.env.VAPID_PRIVATE_KEY;
+const vapidSubject = process.env.VAPID_SUBJECT || 'mailto:admin@rentsight.com';
+
+if (vapidPublicKey && vapidPrivateKey) {
+  webpush.setVapidDetails(vapidSubject, vapidPublicKey, vapidPrivateKey);
+}
 
 interface NotificationPayload {
   title: string;
@@ -37,14 +39,19 @@ const subscriptions = new Map<string, any>();
 
 export async function POST(request: NextRequest) {
   try {
+    // Check if VAPID keys are configured
+    if (!vapidPublicKey || !vapidPrivateKey) {
+      return NextResponse.json(
+        { error: 'VAPID keys not configured' },
+        { status: 500 }
+      );
+    }
+
     const body: SendNotificationRequest = await request.json();
     const { type, payload, targetEndpoint } = body;
 
     if (!type || !payload) {
-      return NextResponse.json(
-        { error: 'Type and payload are required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Type and payload are required' }, { status: 400 });
     }
 
     const results = {
@@ -75,7 +82,7 @@ export async function POST(request: NextRequest) {
               auth: subscription.subscription.keys.auth,
             },
           },
-          JSON.stringify(payload)
+          JSON.stringify(payload),
         );
         results.sent++;
       } catch (error) {
@@ -83,9 +90,9 @@ export async function POST(request: NextRequest) {
         results.errors.push(
           `Failed to send to ${subscription.subscription.endpoint}: ${
             error instanceof Error ? error.message : 'Unknown error'
-          }`
+          }`,
         );
-        
+
         // Remove invalid subscriptions
         if (error instanceof Error && error.message.includes('410')) {
           subscriptions.delete(subscription.subscription.endpoint);
@@ -101,10 +108,7 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error('Failed to send push notification:', error);
-    return NextResponse.json(
-      { error: 'Failed to send notification' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to send notification' }, { status: 500 });
   }
 }
 
@@ -121,7 +125,7 @@ export async function GET() {
       },
       rentReminders: {
         title: 'Rent Payment Reminder',
-        body: 'Don\'t forget about upcoming rent payments',
+        body: "Don't forget about upcoming rent payments",
         icon: '/icons/icon-192x192.png',
         tag: 'rent-reminder',
         data: { type: 'rentReminder', url: '/dashboard' },
@@ -152,9 +156,6 @@ export async function GET() {
     return NextResponse.json({ templates });
   } catch (error) {
     console.error('Failed to get notification templates:', error);
-    return NextResponse.json(
-      { error: 'Failed to get templates' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to get templates' }, { status: 500 });
   }
 }

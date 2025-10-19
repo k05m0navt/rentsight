@@ -61,7 +61,9 @@ export default async function Login({
 
     if (!data.user) {
       const redirectParam = redirectTo ? `&redirectTo=${encodeURIComponent(redirectTo)}` : '';
-      return redirect(`/login?error=${encodeURIComponent('Authentication failed')}${redirectParam}`);
+      return redirect(
+        `/login?error=${encodeURIComponent('Authentication failed')}${redirectParam}`,
+      );
     }
 
     // Revalidate the layout to ensure sidebar updates

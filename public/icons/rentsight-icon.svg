@@ -1,0 +1,46 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="256" cy="256" r="240" fill="#f97316" stroke="#e8620c" stroke-width="8"/>
+  
+  <!-- Building/house structure -->
+  <rect x="180" y="200" width="152" height="120" rx="8" fill="white" stroke="#f97316" stroke-width="2"/>
+  
+  <!-- Building roof -->
+  <polygon points="256,150 180,200 332,200" fill="white" stroke="#f97316" stroke-width="2"/>
+  
+  <!-- Windows -->
+  <rect x="200" y="220" width="20" height="20" rx="2" fill="#f97316"/>
+  <rect x="240" y="220" width="20" height="20" rx="2" fill="#f97316"/>
+  <rect x="280" y="220" width="20" height="20" rx="2" fill="#f97316"/>
+  <rect x="200" y="260" width="20" height="20" rx="2" fill="#f97316"/>
+  <rect x="240" y="260" width="20" height="20" rx="2" fill="#f97316"/>
+  <rect x="280" y="260" width="20" height="20" rx="2" fill="#f97316"/>
+  
+  <!-- Door -->
+  <rect x="240" y="280" width="32" height="40" rx="2" fill="#f97316"/>
+  <circle cx="265" cy="300" r="2" fill="white"/>
+  
+  <!-- Chart/analytics elements -->
+  <!-- Bar chart -->
+  <rect x="100" y="120" width="12" height="40" fill="white" rx="2"/>
+  <rect x="120" y="110" width="12" height="50" fill="white" rx="2"/>
+  <rect x="140" y="130" width="12" height="30" fill="white" rx="2"/>
+  <rect x="160" y="105" width="12" height="55" fill="white" rx="2"/>
+  
+  <!-- Line chart -->
+  <path d="M 360 140 Q 380 120 400 140 Q 420 160 440 140" stroke="white" stroke-width="4" fill="none"/>
+  <circle cx="360" cy="140" r="4" fill="white"/>
+  <circle cx="380" cy="120" r="4" fill="white"/>
+  <circle cx="400" cy="140" r="4" fill="white"/>
+  <circle cx="420" cy="160" r="4" fill="white"/>
+  <circle cx="440" cy="140" r="4" fill="white"/>
+  
+  <!-- Dollar sign -->
+  <text x="256" y="380" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="white" text-anchor="middle">$</text>
+  
+  <!-- Small decorative elements -->
+  <circle cx="120" cy="100" r="6" fill="white"/>
+  <circle cx="400" cy="100" r="6" fill="white"/>
+  <circle cx="120" cy="400" r="6" fill="white"/>
+  <circle cx="400" cy="400" r="6" fill="white"/>
+</svg>

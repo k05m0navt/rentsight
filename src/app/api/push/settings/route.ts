@@ -22,10 +22,7 @@ export async function POST(request: NextRequest) {
     const { endpoint, settings } = body;
 
     if (!endpoint) {
-      return NextResponse.json(
-        { error: 'Endpoint is required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Endpoint is required' }, { status: 400 });
     }
 
     // Update settings for existing subscription
@@ -33,20 +30,14 @@ export async function POST(request: NextRequest) {
     if (existingSubscription) {
       existingSubscription.settings = settings;
       subscriptions.set(endpoint, existingSubscription);
-      
+
       console.log('Push notification settings updated:', endpoint, settings);
       return NextResponse.json({ success: true });
     } else {
-      return NextResponse.json(
-        { error: 'Subscription not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Subscription not found' }, { status: 404 });
     }
   } catch (error) {
     console.error('Failed to update push notification settings:', error);
-    return NextResponse.json(
-      { error: 'Failed to update settings' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to update settings' }, { status: 500 });
   }
 }

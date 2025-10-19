@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { getInstallPrompt, registerServiceWorker, getPWAState, PWAState } from '@/lib/pwa';
-import { installService, trackInstallEvent } from '@/lib/installService';
+import { registerServiceWorker, PWAState } from '@/lib/pwa';
+import { installService, trackInstallEvent, subscribeToInstallPrompt } from '@/lib/installService';
 import { InstallPromptEvent } from '@/types/pwa';
 
 export const usePWA = () => {
@@ -19,15 +19,29 @@ export const usePWA = () => {
     const initializePWA = async () => {
       try {
         setLoading(true);
-        // Get initial PWA state
-        const state = await getPWAState();
-        setPwaState(state);
+
+        // Initialize basic state
+        setPwaState((prev) => ({
+          ...prev,
+          isOnline: navigator.onLine,
+          isInstalled: installService.isInstalled(),
+          serviceWorkerReady: 'serviceWorker' in navigator,
+        }));
 
         // Register service worker
         const registration = await registerServiceWorker();
         if (registration) {
           setPwaState((prev) => ({ ...prev, serviceWorkerReady: true }));
         }
+
+        // Subscribe to install prompt changes
+        const unsubscribeInstallPrompt = subscribeToInstallPrompt((installPrompt) => {
+          setPwaState((prev) => ({
+            ...prev,
+            installPrompt,
+            canInstall: installPrompt !== null,
+          }));
+        });
 
         // Set up event listeners
         const handleOnline = () => setPwaState((prev) => ({ ...prev, isOnline: true }));
@@ -36,29 +50,13 @@ export const usePWA = () => {
         window.addEventListener('online', handleOnline);
         window.addEventListener('offline', handleOffline);
 
-        // Listen for beforeinstallprompt
-        const handleBeforeInstallPrompt = (e: Event) => {
-          e.preventDefault();
-          setPwaState((prev) => ({ ...prev, installPrompt: e as InstallPromptEvent }));
-        };
-
-        window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-
-        // Listen for appinstalled
-        const handleAppInstalled = () => {
-          setPwaState((prev) => ({ ...prev, isInstalled: true, installPrompt: null }));
-        };
-
-        window.addEventListener('appinstalled', handleAppInstalled);
-
         setLoading(false);
 
         // Cleanup function
         return () => {
           window.removeEventListener('online', handleOnline);
           window.removeEventListener('offline', handleOffline);
-          window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-          window.removeEventListener('appinstalled', handleAppInstalled);
+          unsubscribeInstallPrompt();
         };
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to initialize PWA');
@@ -87,21 +85,11 @@ export const usePWA = () => {
     }
   };
 
-  const refreshInstallPrompt = async () => {
-    try {
-      const prompt = await getInstallPrompt();
-      setPwaState((prev) => ({ ...prev, installPrompt: prompt }));
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to refresh install prompt');
-    }
-  };
-
   return {
     ...pwaState,
     loading,
     error,
     installApp,
-    refreshInstallPrompt,
     // Convenience getters
     isOnline: pwaState.isOnline,
     isInstalled: pwaState.isInstalled,
