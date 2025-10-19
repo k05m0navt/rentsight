@@ -16,6 +16,8 @@ Auto-generated from all feature plans. Last updated: 2025-10-09
 - TypeScript 5.x with Next.js 15.5.4 (App Router) (006-make-the-ux)
 - TypeScript 5.x, Next.js 15.5.4 + React 18, Prisma 6.17.0, Supabase SSR 0.7.0, Radix UI, Framer Motion (007-i-need-to)
 - PostgreSQL via Prisma ORM, Supabase Auth (007-i-need-to)
+- TypeScript 5.x, Next.js 15.5.4, React 19.1.0 + next-pwa, workbox-webpack-plugin, @types/serviceworker (008-as-a-user)
+- Browser Cache API, IndexedDB for offline data, existing PostgreSQL backend (008-as-a-user)
 
 ## Project Structure
 ```
@@ -30,9 +32,9 @@ npm test [ONLY COMMANDS FOR ACTIVE TECHNOLOGIES][ONLY COMMANDS FOR ACTIVE TECHNO
 TypeScript (latest stable): Follow standard conventions
 
 ## Recent Changes
+- 008-as-a-user: Added TypeScript 5.x, Next.js 15.5.4, React 19.1.0 + next-pwa, workbox-webpack-plugin, @types/serviceworker
 - 007-i-need-to: Added TypeScript 5.x, Next.js 15.5.4 + React 18, Prisma 6.17.0, Supabase SSR 0.7.0, Radix UI, Framer Motion
 - 006-make-the-ux: Added TypeScript 5.x with Next.js 15.5.4 (App Router)
-- 005-create-other-pages: Added TypeScript 5.x with Next.js 15.5.4 (React 19.1.0)
 
 <!-- MANUAL ADDITIONS START -->
 <!-- MANUAL ADDITIONS END -->

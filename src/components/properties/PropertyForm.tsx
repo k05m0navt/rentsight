@@ -13,7 +13,7 @@ import { propertySchema, PropertyForm as PropertyFormType } from '@/lib/validati
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Select } from '@/components/ui/select';
+import { FormSelect } from '@/components/forms/FormSelect';
 import { useState } from 'react';
 
 interface PropertyFormProps {
@@ -145,19 +145,21 @@ export function PropertyForm({ initialData, onSuccess, onCancel }: PropertyFormP
         <label htmlFor="property_type" className="block text-sm font-medium mb-2">
           Property Type
         </label>
-        <Select
+        <FormSelect
           id="property_type"
           {...register('property_type')}
+          options={[
+            { value: '', label: 'Select type...' },
+            { value: 'apartment', label: 'Apartment' },
+            { value: 'house', label: 'House' },
+            { value: 'condo', label: 'Condo' },
+            { value: 'townhouse', label: 'Townhouse' },
+            { value: 'duplex', label: 'Duplex' },
+            { value: 'other', label: 'Other' },
+          ]}
+          className="w-full"
           aria-invalid={!!errors.property_type}
-        >
-          <option value="">Select type...</option>
-          <option value="apartment">Apartment</option>
-          <option value="house">House</option>
-          <option value="condo">Condo</option>
-          <option value="townhouse">Townhouse</option>
-          <option value="duplex">Duplex</option>
-          <option value="other">Other</option>
-        </Select>
+        />
         {errors.property_type && (
           <p className="text-sm text-red-600 dark:text-red-400 mt-1" role="alert">
             {errors.property_type.message}

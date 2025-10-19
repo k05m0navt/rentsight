@@ -25,7 +25,7 @@ export const metadata = {
 export default async function Login({
   searchParams,
 }: {
-  searchParams: Promise<{ message: string; error: string }>;
+  searchParams: Promise<{ message: string; error: string; redirectTo?: string }>;
 }) {
   const supabase = createClient();
 
@@ -33,12 +33,14 @@ export default async function Login({
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (user) {
-    const defaultView = await getCurrentUserDefaultView();
-    return redirect(defaultView);
-  }
+  const { message, error, redirectTo } = await searchParams;
 
-  const { message, error } = await searchParams;
+  if (user) {
+    // If user is already authenticated, redirect to the originally requested URL
+    // or their default view if no specific redirect was requested
+    const targetUrl = redirectTo || (await getCurrentUserDefaultView());
+    return redirect(targetUrl);
+  }
 
   const signIn = async (formData: FormData) => {
     'use server';
@@ -52,21 +54,25 @@ export default async function Login({
     });
 
     if (error) {
-      return redirect(`/login?error=${error.message}`);
+      // Preserve redirectTo parameter when showing error
+      const redirectParam = redirectTo ? `&redirectTo=${encodeURIComponent(redirectTo)}` : '';
+      return redirect(`/login?error=${encodeURIComponent(error.message)}${redirectParam}`);
     }
 
     if (!data.user) {
-      return redirect('/login?error=Authentication failed');
+      const redirectParam = redirectTo ? `&redirectTo=${encodeURIComponent(redirectTo)}` : '';
+      return redirect(`/login?error=${encodeURIComponent('Authentication failed')}${redirectParam}`);
     }
 
     // Revalidate the layout to ensure sidebar updates
     const { revalidatePath } = await import('next/cache');
     revalidatePath('/', 'layout');
 
-    // Get user's default view preference
+    // Redirect to the originally requested URL or user's default view
     const { getUserDefaultView } = await import('@/lib/user-preferences');
     const defaultView = await getUserDefaultView(data.user.id);
-    return redirect(defaultView);
+    const targetUrl = redirectTo || defaultView;
+    return redirect(targetUrl);
   };
 
   return (

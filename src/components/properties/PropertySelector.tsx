@@ -7,7 +7,7 @@
 
 'use client';
 
-import { Select } from '@/components/ui/select';
+import { FormSelect } from '@/components/forms/FormSelect';
 import { useEffect, useState } from 'react';
 import { Property } from '@/types/property';
 
@@ -50,29 +50,33 @@ export function PropertySelector({
     onChange(newValue === '' ? undefined : newValue);
   };
 
+  // Convert properties to FormSelect options format
+  const propertyOptions = [
+    {
+      value: '',
+      label: loading ? 'Loading properties...' : 'No property (use tags for categorization)',
+    },
+    ...properties.map((property) => ({
+      value: property.id,
+      label: `${property.name}${property.address ? ` - ${property.address}` : ''}`,
+    })),
+  ];
+
   return (
     <div>
       <label htmlFor="property" className="block text-sm font-medium mb-2">
         Property {!required && <span className="text-muted">(Optional)</span>}
       </label>
-      <Select
+      <FormSelect
         id="property"
         value={value || ''}
         onChange={handleChange}
+        options={propertyOptions}
         disabled={loading}
         aria-invalid={!!error}
         required={required}
-      >
-        <option value="">
-          {loading ? 'Loading properties...' : 'No property (use tags for categorization)'}
-        </option>
-        {properties.map((property) => (
-          <option key={property.id} value={property.id}>
-            {property.name}
-            {property.address && ` - ${property.address}`}
-          </option>
-        ))}
-      </Select>
+        className="w-full"
+      />
       {error && (
         <p className="text-sm text-red-600 mt-1" role="alert">
           {error}
