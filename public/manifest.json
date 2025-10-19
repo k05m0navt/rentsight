@@ -4,7 +4,6 @@
   "description": "Modern analytics platform for rental property management. Track income, expenses, and performance across all your properties.",
   "start_url": "/",
   "display": "standalone",
-  "orientation": "portrait-primary",
   "theme_color": "#f97316",
   "background_color": "#0f172a",
   "lang": "en",
@@ -48,10 +47,5 @@
       "type": "image/png",
       "form_factor": "narrow"
     }
-  ],
-  "categories": [
-    "business",
-    "productivity",
-    "finance"
   ]
 }

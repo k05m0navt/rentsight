@@ -21,7 +21,6 @@ import { BottomNav } from '@/components/Layout/BottomNav';
 import { InstallPrompt } from '@/components/InstallPrompt';
 import { OfflineIndicator, OfflineIndicatorCompact } from '@/components/OfflineIndicator';
 import { PWAUpdateNotification } from '@/components/PWAUpdateNotification';
-import { PerformanceMonitor } from '@/components/PerformanceMonitor';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -34,14 +33,6 @@ export const metadata: Metadata = {
   description:
     'Modern analytics platform for rental property management. Track income, expenses, and performance across all your properties.',
   manifest: '/manifest.json',
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: 'default',
-    title: 'RentSight',
-  },
-  formatDetection: {
-    telephone: false,
-  },
   openGraph: {
     type: 'website',
     siteName: 'RentSight',
@@ -50,7 +41,6 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: '/icons/icon-192x192.png',
-    shortcut: '/icons/icon-192x192.png',
     apple: '/icons/apple-touch-icon.png',
   },
 };
@@ -60,7 +50,6 @@ export const viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  viewportFit: 'cover',
   themeColor: '#f97316',
 };
 
@@ -102,8 +91,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <OfflineIndicator />
             <OfflineIndicatorCompact />
 
-            {/* Performance Monitoring */}
-            <PerformanceMonitor pageName="root" />
           </MotionProvider>
         </ThemeProvider>
       </body>

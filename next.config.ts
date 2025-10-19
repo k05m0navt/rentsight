@@ -15,6 +15,19 @@ const nextConfig: NextConfig = {
     // your project has type errors.
     ignoreBuildErrors: true,
   },
+  async headers() {
+    return [
+      {
+        source: '/manifest.json',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'application/manifest+json',
+          },
+        ],
+      },
+    ];
+  },
 };
 
 // Only apply PWA configuration in production
@@ -25,9 +38,20 @@ if (isProduction) {
     register: true,
     skipWaiting: true,
     disable: false,
-    buildExcludes: [/middleware-manifest\.json$/],
+    buildExcludes: [
+      /middleware-manifest\.json$/,
+      /app-build-manifest\.json$/,
+      /build-manifest\.json$/,
+      /_next\/static\/.*buildManifest\.js$/,
+      /_next\/static\/.*ssgManifest\.js$/,
+      /_next\/static\/.*_buildManifest\.js$/,
+      /_next\/static\/.*_ssgManifest\.js$/,
+    ],
     publicExcludes: ['!robots.txt', '!sitemap.xml'],
     reloadOnOnline: false,
+    fallbacks: {
+      document: '/offline.html',
+    },
     runtimeCaching: [
       // API routes with NetworkFirst for real-time data
       {
