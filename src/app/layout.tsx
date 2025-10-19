@@ -22,6 +22,7 @@ import { InstallPrompt } from '@/components/InstallPrompt';
 import { OfflineIndicator, OfflineIndicatorCompact } from '@/components/OfflineIndicator';
 import { PWAUpdateNotification } from '@/components/PWAUpdateNotification';
 import { Analytics } from '@vercel/analytics/next';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -65,6 +66,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         className={cn('min-h-screen bg-background text-text font-sans antialiased', inter.variable)}
       >
         <Analytics />
+        <SpeedInsights />
         <ThemeProvider>
           <MotionProvider>
             {/* Desktop/Tablet: Sidebar Navigation */}
