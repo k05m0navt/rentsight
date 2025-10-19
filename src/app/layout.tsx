@@ -21,6 +21,7 @@ import { BottomNav } from '@/components/Layout/BottomNav';
 import { InstallPrompt } from '@/components/InstallPrompt';
 import { OfflineIndicator, OfflineIndicatorCompact } from '@/components/OfflineIndicator';
 import { PWAUpdateNotification } from '@/components/PWAUpdateNotification';
+import { Analytics } from '@vercel/analytics/next';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -63,6 +64,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body
         className={cn('min-h-screen bg-background text-text font-sans antialiased', inter.variable)}
       >
+        <Analytics />
         <ThemeProvider>
           <MotionProvider>
             {/* Desktop/Tablet: Sidebar Navigation */}
@@ -90,7 +92,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             {/* Offline Indicators */}
             <OfflineIndicator />
             <OfflineIndicatorCompact />
-
           </MotionProvider>
         </ThemeProvider>
       </body>
