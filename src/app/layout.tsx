@@ -16,6 +16,10 @@ import './globals.css';
 import { cn } from '@/lib/utils';
 import ThemeProvider from '@/components/ThemeProvider';
 import { MotionProvider } from '@/components/MotionProvider';
+import { NavigationProvider } from '@/context/NavigationContext';
+import { PageTransition } from '@/components/PageTransition';
+import { LoadingOverlay } from '@/components/LoadingOverlay';
+import { LoadingOverlayWrapper } from '@/components/LoadingOverlayWrapper';
 import { Sidebar } from '@/components/Layout/Sidebar';
 import { BottomNav } from '@/components/Layout/BottomNav';
 import { InstallPrompt } from '@/components/InstallPrompt';
@@ -69,31 +73,38 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SpeedInsights />
         <ThemeProvider>
           <MotionProvider>
-            {/* Desktop/Tablet: Sidebar Navigation */}
-            <Sidebar />
+            <NavigationProvider>
+              {/* Desktop/Tablet: Sidebar Navigation */}
+              <Sidebar />
 
-            {/* Mobile: Bottom Navigation Bar */}
-            <BottomNav />
+              {/* Mobile: Bottom Navigation Bar */}
+              <BottomNav />
 
-            {/* Main content area with responsive padding */}
-            {/* pb-20 for bottom nav on mobile, md:pb-12 for desktop */}
-            {/* md:pl-80 = 320px (256px sidebar + 64px space) */}
-            {/* md:pr-16 = 64px for equal spacing on both sides */}
-            {/* px-8 py-10 for spacing on mobile (32px horizontal, 40px vertical) */}
-            {/* md:pr-16 md:py-12 for spacing on desktop (64px right, 48px vertical) */}
-            <main className="min-h-screen pb-20 md:pb-12 pl-8 pr-8 py-10 md:pl-80 md:pr-16 md:py-12 transition-[padding] duration-200">
-              {children}
-            </main>
+              {/* Main content area with responsive padding and page transitions */}
+              {/* pb-20 for bottom nav on mobile, md:pb-12 for desktop */}
+              {/* md:pl-80 = 320px (256px sidebar + 64px space) */}
+              {/* md:pr-16 = 64px for equal spacing on both sides */}
+              {/* px-8 py-10 for spacing on mobile (32px horizontal, 40px vertical) */}
+              {/* md:pr-16 md:py-12 for spacing on desktop (64px right, 48px vertical) */}
+              <main className="min-h-screen pb-20 md:pb-12 pl-8 pr-8 py-10 md:pl-80 md:pr-16 md:py-12 transition-[padding] duration-200">
+                <PageTransition>
+                  {children}
+                </PageTransition>
+              </main>
 
-            {/* PWA Install Prompt */}
-            <InstallPrompt />
+              {/* Global Loading Overlay */}
+              <LoadingOverlayWrapper />
 
-            {/* PWA Update Notification */}
-            <PWAUpdateNotification />
+              {/* PWA Install Prompt */}
+              <InstallPrompt />
 
-            {/* Offline Indicators */}
-            <OfflineIndicator />
-            <OfflineIndicatorCompact />
+              {/* PWA Update Notification */}
+              <PWAUpdateNotification />
+
+              {/* Offline Indicators */}
+              <OfflineIndicator />
+              <OfflineIndicatorCompact />
+            </NavigationProvider>
           </MotionProvider>
         </ThemeProvider>
       </body>

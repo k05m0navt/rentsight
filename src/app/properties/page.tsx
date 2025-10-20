@@ -56,7 +56,6 @@ export default function PropertiesPage() {
         setDeletingProperty(null);
         // Refresh page to update list
         router.refresh();
-        window.location.reload();
       } else {
         const errorData = await response.json();
         alert(errorData.error || 'Failed to delete property');
@@ -71,7 +70,6 @@ export default function PropertiesPage() {
     setEditingProperty(null);
     // Refresh page to update list
     router.refresh();
-    window.location.reload();
   };
 
   return (

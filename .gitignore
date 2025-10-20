@@ -56,3 +56,5 @@ next-env.d.ts
 # Animation build artifacts
 /src/components/animations/.build/
 
+public/sw.js
+public/fallback-*.js

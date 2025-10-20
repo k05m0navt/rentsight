@@ -48,16 +48,19 @@ export function DashboardContent({ userId }: { userId: string }) {
   useEffect(() => {
     async function fetchData() {
       try {
-        // Fetch analytics summary
-        const summaryResponse = await fetch('/api/analytics/summary');
+        // Fetch both requests in parallel for faster loading
+        const [summaryResponse, preferencesResponse] = await Promise.all([
+          fetch('/api/analytics/summary'),
+          fetch('/api/user/preferences')
+        ]);
+
         if (!summaryResponse.ok) {
           throw new Error(`Error: ${summaryResponse.status}`);
         }
+        
         const summaryData: AnalyticsSummary = await summaryResponse.json();
         setSummary(summaryData);
 
-        // Fetch user preferences
-        const preferencesResponse = await fetch('/api/user/preferences');
         if (preferencesResponse.ok) {
           const preferencesData: UserPreferences = await preferencesResponse.json();
           setPreferences(preferencesData);

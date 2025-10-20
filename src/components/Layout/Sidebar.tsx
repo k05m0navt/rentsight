@@ -33,6 +33,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
+import { NavigationLink } from '@/components/ui/navigation-link';
 
 const navItems = [
   {
@@ -97,21 +98,16 @@ export function Sidebar() {
       {/* Navigation - Grows to push bottom section down */}
       <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
         {navItems.map((item) => {
-          const isActive = pathname === item.href || pathname?.startsWith(`${item.href}/`);
           const Icon = item.icon;
 
           return (
-            <Link
+            <NavigationLink
               key={item.href}
               href={item.href}
-              className={cn(
-                'flex items-center gap-3 px-3 py-3 rounded-md font-medium transition-[background-color,color] duration-200',
-                isActive ? 'bg-primary/10 text-primary' : 'text-text hover:bg-hover',
-              )}
+              icon={Icon}
             >
-              <Icon className="h-5 w-5" aria-hidden="true" />
-              <span>{item.label}</span>
-            </Link>
+              {item.label}
+            </NavigationLink>
           );
         })}
       </nav>
