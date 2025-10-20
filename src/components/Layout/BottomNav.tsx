@@ -33,6 +33,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/hooks/useAuth';
+import { useNavigation } from '@/context/NavigationContext';
 
 const mainNavItems = [
   {
@@ -122,6 +123,7 @@ export function BottomNav() {
   const router = useRouter();
   const [showMoreMenu, setShowMoreMenu] = useState(false);
   const { user, loading, logout } = useAuth();
+  const { navigateWithTransition } = useNavigation();
 
   const isActive = (href: string) => pathname === href || pathname?.startsWith(`${href}/`);
 
@@ -133,9 +135,12 @@ export function BottomNav() {
             const Icon = item.icon;
 
             return (
-              <Link
+              <button
                 key={item.href}
-                href={item.href}
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigateWithTransition(item.href);
+                }}
                 className={cn(
                   'flex flex-col items-center justify-center gap-1 px-2 py-2 text-xs font-medium min-w-12 transition-colors duration-200',
                   isActive(item.href) ? 'text-primary' : 'text-muted hover:text-text',
@@ -143,7 +148,7 @@ export function BottomNav() {
               >
                 <Icon className="h-5 w-5" aria-hidden="true" />
                 <span className="text-center">{item.label}</span>
-              </Link>
+              </button>
             );
           })}
 
@@ -266,16 +271,15 @@ export function BottomNav() {
 
                   // Handle regular navigation items
                   return (
-                    <Link
+                    <button
                       key={item.href}
-                      href={item.href}
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
                         setShowMoreMenu(false);
-                        // Use Next.js router for proper middleware handling
+                        // Use smooth navigation transition
                         setTimeout(() => {
-                          router.push(item.href);
+                          navigateWithTransition(item.href);
                         }, 100);
                       }}
                       onTouchStart={(e) => {
@@ -287,11 +291,11 @@ export function BottomNav() {
                         e.stopPropagation();
                         setShowMoreMenu(false);
                         setTimeout(() => {
-                          router.push(item.href);
+                          navigateWithTransition(item.href);
                         }, 100);
                       }}
                       className={cn(
-                        'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors duration-200 touch-manipulation active:bg-primary/20',
+                        'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors duration-200 touch-manipulation active:bg-primary/20 w-full text-left',
                         isActive(item.href)
                           ? 'bg-primary/10 text-primary'
                           : 'text-text hover:bg-hover active:bg-primary/20',
@@ -299,7 +303,7 @@ export function BottomNav() {
                     >
                       <Icon className="h-5 w-5" aria-hidden="true" />
                       <span className="font-medium">{item.label}</span>
-                    </Link>
+                    </button>
                   );
                 })}
               </div>
