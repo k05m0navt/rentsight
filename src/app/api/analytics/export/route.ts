@@ -1,11 +1,9 @@
 import { createClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/lib/prisma';
 // For PDF and Excel, we'd typically use a library like 'jspdf' or 'exceljs'
 // These are client-side or require a more complex server-side setup (e.g., headless browser for PDF)
 // For this task, we'll focus on CSV export as a primary example.
-
-const prisma = new PrismaClient();
 
 export async function GET(request: Request) {
   const supabase = createClient();
