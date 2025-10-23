@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { propertySchema } from '@/lib/validations';
 import { prisma } from '@/lib/prisma';
+import { syncCurrentUser } from '@/lib/user-sync';
 
 export async function GET(request: Request) {
   const supabase = createClient();
@@ -68,6 +69,16 @@ export async function POST(request: Request) {
 
   if (authError || !user) {
     return NextResponse.json({ error: 'Unauthorized', code: 'UNAUTHORIZED' }, { status: 401 });
+  }
+
+  // Ensure user is synced to Prisma database
+  const syncResult = await syncCurrentUser();
+  if (!syncResult.success) {
+    console.error('Failed to sync user:', syncResult.error);
+    return NextResponse.json(
+      { error: 'User synchronization failed', code: 'SYNC_ERROR' },
+      { status: 500 }
+    );
   }
 
   try {
